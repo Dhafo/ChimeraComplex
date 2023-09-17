@@ -50,7 +50,7 @@ void PlayerBody::Render( float scale )
     float orientationDegrees = orientation * 180.0f / M_PI ;
 
     SDL_SetRenderDrawColor(renderer, 255, 15, 15, 0);
-    SDL_RenderDrawLine(renderer, square.x + 8, square.y + 8, square.x + 20000, square.y + 8);
+    SDL_RenderDrawLine(renderer, pos.x, pos.y, pos.x + vel.x * 5, pos.y + vel.y * 5);
 
     SDL_RenderCopyEx( renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE );
@@ -64,8 +64,5 @@ void PlayerBody::Update( float deltaTime )
 {
     // Update position, call Update from base class
     // Note that would update velocity too, and rotation motion
-
-    Body::Update( deltaTime );
-
 }
 

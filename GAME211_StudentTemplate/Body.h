@@ -11,10 +11,9 @@ using namespace MATH;
 class Body {
 protected:
 	// inherited classes can access this
-	Vec3 vel;
 	Vec3 accel;
 	float mass;
-    float orientation;		// facing this direction
+    
     float rotation;			// rotating at this speed (radians per second?)
     float angular;          // angular acceleration
     float radius;           // for getting near walls
@@ -25,6 +24,8 @@ protected:
 
 public:
     Vec3 pos; //fix this later
+    Vec3 vel; 
+    float orientation;		// facing this direction
     Body();
 	Body(
         Vec3 pos_, Vec3 vel_, Vec3 accel_,

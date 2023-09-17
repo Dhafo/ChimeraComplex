@@ -12,6 +12,7 @@
 #include "Body.h"
 #include "GameManager.h"
 
+#define PI 3.1415926535
 class PlayerBody : public Body
 {
 protected:

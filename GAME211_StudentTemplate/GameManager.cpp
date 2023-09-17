@@ -45,8 +45,9 @@ bool GameManager::OnCreate() {
     float rotation = 0.0f;
     float angular = 0.0f;
     Vec3 position(0.5f * currentScene->getxAxis(), 0.5f * currentScene->getyAxis(), 0.0f);
-    Vec3 velocity(0.0f, 0.0f, 0.0f);
+    Vec3 velocity(cos(orientation) * 5, sin(orientation) * 5, 0.0f);
     Vec3 acceleration(0.0f, 0.0f, 0.0f);
+    
 
     player = new PlayerBody
     (
@@ -126,16 +127,30 @@ void GameManager::handleEvents()
                 LoadScene(1);
                 break;
             case SDL_SCANCODE_W: //fix this later
-                player->pos.y += .1;
+                player->pos.x += player->vel.x;
+                player->pos.y += player->vel.y;
                 break;
             case SDL_SCANCODE_A:
-                player->pos.x -= .1;
+                player->orientation -= 0.1;
+                if(player->orientation < 0)
+                {
+                    player->orientation += 2 * PI;   
+                }
+                player->vel.x = cos(player->orientation) * 5;
+                player->vel.y = sin(player->orientation) * 5;
                 break;
             case SDL_SCANCODE_S:
-                player->pos.y -= .1;
+                player->pos.x -= player->vel.x;
+                player->pos.y -= player->vel.y;
                 break;
             case SDL_SCANCODE_D:
-                player->pos.x += .1;
+                player->orientation += 0.1;
+                if (player->orientation > 2 * PI)
+                {
+                    player->orientation -= 2 * PI;  
+                }
+                player->vel.x = cos(player->orientation) * 5;
+                player->vel.y = sin(player->orientation) * 5;
                 break;
             default:
                 break;
