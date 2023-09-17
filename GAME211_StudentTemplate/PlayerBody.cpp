@@ -41,8 +41,8 @@ void PlayerBody::Render( float scale )
     // where SDL will draw the .png image.
     // The 0.5f * w/h offset is to place the .png so that pos represents the center
     // (Note the y axis for screen coords points downward, hence subtraction!!!!)
-    square.x = static_cast<int>(screenCoords.x - 0.5f * w);
-    square.y = static_cast<int>(screenCoords.y - 0.5f * h);
+    square.x = pos.x - 8;
+    square.y = pos.y - 8;
     square.w = static_cast<int>(w);
     square.h = static_cast<int>(h);
 
