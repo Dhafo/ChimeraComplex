@@ -23,6 +23,7 @@ bool Scene1::OnCreate() {
 
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
+
 	// Set player image to PacMan
 
 	SDL_Surface* image;
@@ -45,18 +46,15 @@ void Scene1::Update(const float deltaTime) {
 }
 
 void Scene1::Render() {
-	SDL_SetRenderDrawColor(renderer, 15,15, 15, 0);
-	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer); 
 
     drawMap2D();
 
 	// render the player
 	game->RenderPlayer(1.0f);
- 
-    
 
 	SDL_RenderPresent(renderer);
-
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)
@@ -73,7 +71,7 @@ void Scene1::drawMap2D()
         for (x = 0; x < mapX; x++)
         {
             if (map[y * mapX + x] == 1)
-            { 
+            {
                 SDL_SetRenderDrawColor(renderer, 240, 240, 240, 0);
 
             }
@@ -89,7 +87,7 @@ void Scene1::drawMap2D()
             //glVertex2i(xo+mapS, yo+mapS):
             //glVertex2i(xo+mapS, yo);
             //glEnd();
-            SDL_Rect rect = { ((int)mapS * x), ((int)mapS * y), mapS, mapS};
+            SDL_Rect rect = { ((int)mapS * x), ((int)mapS * y), mapS, mapS };
             SDL_RenderFillRect(renderer, &rect);
 
         }

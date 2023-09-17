@@ -11,7 +11,6 @@ using namespace MATH;
 class Body {
 protected:
 	// inherited classes can access this
-	
 	Vec3 vel;
 	Vec3 accel;
 	float mass;
@@ -25,7 +24,7 @@ protected:
     SDL_Texture* texture;
 
 public:
-    Vec3 pos; //fix later
+    Vec3 pos; //fix this later
     Body();
 	Body(
         Vec3 pos_, Vec3 vel_, Vec3 accel_,

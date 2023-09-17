@@ -46,6 +46,7 @@ public:
 	void handleEvents();
 	void LoadScene( int i );
     bool ValidateCurrentScene();
+    
 };
 #endif
 

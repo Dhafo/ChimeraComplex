@@ -10,7 +10,6 @@
 bool PlayerBody::OnCreate()
 {
     image = IMG_Load( "Pacman.png" );
-    pos = Vec3(6, 5, 0);
     SDL_Renderer *renderer = game->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
     if (image == nullptr) {
@@ -51,7 +50,7 @@ void PlayerBody::Render( float scale )
     float orientationDegrees = orientation * 180.0f / M_PI ;
 
     SDL_SetRenderDrawColor(renderer, 255, 15, 15, 0);
-    SDL_RenderDrawLine(renderer, square.x + 8, square.y + 8 , square.x + 20000, square.y + 8);
+    SDL_RenderDrawLine(renderer, square.x + 8, square.y + 8, square.x + 20000, square.y + 8);
 
     SDL_RenderCopyEx( renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE );
@@ -59,7 +58,6 @@ void PlayerBody::Render( float scale )
 
 void PlayerBody::HandleEvents( const SDL_Event& event )
 {
-
 }
 
 void PlayerBody::Update( float deltaTime )

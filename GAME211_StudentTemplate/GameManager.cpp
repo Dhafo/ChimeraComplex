@@ -125,7 +125,7 @@ void GameManager::handleEvents()
             case SDL_SCANCODE_1:
                 LoadScene(1);
                 break;
-            case SDL_SCANCODE_W:
+            case SDL_SCANCODE_W: //fix this later
                 player->pos.y += .1;
                 break;
             case SDL_SCANCODE_A:
