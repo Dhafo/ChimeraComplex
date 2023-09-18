@@ -46,6 +46,7 @@ public:
     };
 
     void drawMap2D();
+    void draw3D();
 };
 
 #endif

@@ -49,9 +49,6 @@ void PlayerBody::Render( float scale )
     // Convert character orientation from radians to degrees.
     float orientationDegrees = orientation * 180.0f / M_PI ;
 
-    SDL_SetRenderDrawColor(renderer, 255, 15, 15, 0);
-    SDL_RenderDrawLine(renderer, pos.x, pos.y, pos.x + vel.x * 5, pos.y + vel.y * 5);
-
     SDL_RenderCopyEx( renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE );
 }

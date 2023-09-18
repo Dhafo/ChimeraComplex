@@ -44,7 +44,7 @@ bool GameManager::OnCreate() {
     float orientation = 0.0f;
     float rotation = 0.0f;
     float angular = 0.0f;
-    Vec3 position(0.5f * currentScene->getxAxis(), 0.5f * currentScene->getyAxis(), 0.0f);
+    Vec3 position(0.5f * currentScene->getxAxis() - 300, 0.5f * currentScene->getyAxis(), 0.0f);
     Vec3 velocity(cos(orientation) * 5, sin(orientation) * 5, 0.0f);
     Vec3 acceleration(0.0f, 0.0f, 0.0f);
     
