@@ -126,36 +126,11 @@ void GameManager::handleEvents()
             case SDL_SCANCODE_1:
                 LoadScene(1);
                 break;
-            case SDL_SCANCODE_W: //fix this later
-                player->pos.x += player->vel.x;
-                player->pos.y += player->vel.y;
-                break;
-            case SDL_SCANCODE_A:
-                player->orientation -= 0.1;
-                if(player->orientation < 0)
-                {
-                    player->orientation += 2 * PI;   
-                }
-                player->vel.x = cos(player->orientation) * 5;
-                player->vel.y = sin(player->orientation) * 5;
-                break;
-            case SDL_SCANCODE_S:
-                player->pos.x -= player->vel.x;
-                player->pos.y -= player->vel.y;
-                break;
-            case SDL_SCANCODE_D:
-                player->orientation += 0.1;
-                if (player->orientation > 2 * PI)
-                {
-                    player->orientation -= 2 * PI;  
-                }
-                player->vel.x = cos(player->orientation) * 5;
-                player->vel.y = sin(player->orientation) * 5;
-                break;
             default:
                 break;
             }
         }
+    
         currentScene->HandleEvents(event);
     }
 }

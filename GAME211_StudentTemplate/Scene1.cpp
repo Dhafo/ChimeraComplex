@@ -61,9 +61,80 @@ void Scene1::Render() {
 
 void Scene1::HandleEvents(const SDL_Event& event)
 {
-	// send events to player as needed
-	game->getPlayer()->HandleEvents(event);
+
+        if (event.type == SDL_KEYDOWN)
+        {
+            
+            if (event.key.keysym.scancode == SDL_SCANCODE_A) 
+            {
+                game->getPlayer()->orientation -= 0.1;
+                if (game->getPlayer()->orientation < 0)
+                {
+                    game->getPlayer()->orientation += 2 * PI;
+                }
+                game->getPlayer()->vel.x = cos(game->getPlayer()->orientation) * 5;
+                game->getPlayer()->vel.y = sin(game->getPlayer()->orientation) * 5;
+            }
+            if (event.key.keysym.scancode == SDL_SCANCODE_D) 
+            {
+                game->getPlayer()->orientation += 0.1;
+                if (game->getPlayer()->orientation > 2 * PI)
+                {
+                    game->getPlayer()->orientation -= 2 * PI;
+                }
+                game->getPlayer()->vel.x = cos(game->getPlayer()->orientation) * 5;
+                game->getPlayer()->vel.y = sin(game->getPlayer()->orientation) * 5;
+            }
+
+            int xo = 0, yo = 0;
+            if (game->getPlayer()->vel.x < 0)
+            {
+                xo = -20;
+            }
+            else
+            {
+                xo = 20;
+            }
+            if (game->getPlayer()->vel.y < 0)
+            {
+                yo = -20;
+            }
+            else
+            {
+                yo = 20;
+            }
+            int ipx = game->getPlayer()->pos.x / 64.0, ipx_add_xo = (game->getPlayer()->pos.x + xo) / 64.0, ipx_sub_xo = (game->getPlayer()->pos.x - xo) / 64.0;
+            int ipy = game->getPlayer()->pos.y / 64.0, ipy_add_yo = (game->getPlayer()->pos.y + yo) / 64.0, ipy_sub_yo = (game->getPlayer()->pos.y - yo) / 64.0;
+            if (event.key.keysym.scancode == SDL_SCANCODE_W) //fix later
+            {
+                if (map[ipy * mapX + ipx_add_xo] == 0)
+                {
+                    game->getPlayer()->pos.x += game->getPlayer()->vel.x;
+                    
+                }  
+                if (map[ipy_add_yo * mapX + ipx] == 0)
+                {
+                    game->getPlayer()->pos.y += game->getPlayer()->vel.y;
+                }
+            }
+            if (event.key.keysym.scancode == SDL_SCANCODE_S) //fix later
+            {
+                if (map[ipy * mapX + ipx_sub_xo] == 0)
+                {
+                    game->getPlayer()->pos.x -= game->getPlayer()->vel.x;
+
+                }
+                if (map[ipy_sub_yo * mapX + ipx] == 0)
+                {
+                    game->getPlayer()->pos.y -= game->getPlayer()->vel.y;
+                }
+            }
+        }
 }
+        // send events to player as needed
+       //game->getPlayer()->HandleEvents(event);
+    
+
 
 void Scene1::drawMap2D()
 {
@@ -77,21 +148,16 @@ void Scene1::drawMap2D()
                 SDL_SetRenderDrawColor(renderer, 240, 240, 240, 0);
 
             }
+            else if (map[y * mapX + x] == 2)
+            {
+                SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
+            }
             else
             {
                 SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
             }
-            //xo = x * mapS;
-            //yo = y * mapS;
-            //glBegin(GL_QUADS);
-            //glVertex2i(xo, yo);
-            //glVertex2i(xo, yo+mapS);
-            //glVertex2i(xo+mapS, yo+mapS):
-            //glVertex2i(xo+mapS, yo);
-            //glEnd();
             SDL_Rect rect = { ((int)mapS * x), ((int)mapS * y), mapS, mapS };
             SDL_RenderFillRect(renderer, &rect);
-
         }
     }
 }
@@ -124,6 +190,7 @@ void Scene1::draw3D()
 
     for(r=0; r<60; r++)
     {
+        disT = 10000000;
         // Horizontal Line Check
         dof = 0;
         float disH = 100000000;
@@ -155,12 +222,17 @@ void Scene1::draw3D()
             mx = rx / 64;
             my = ry / 64;
             mp = my * mapX + mx;
-            if(mp > 0 && mp<mapX * mapY && map[mp] == 1)
+            if(mp > 0 && mp<mapX * mapY && map[mp] > 0)
             {
                 hX = rx;
                 hY = ry;
                 disH = dist(player->pos.x, player->pos.y, hX, hY, ra);
                 dof = 8;
+                if(map[mp] == 1)
+                {
+                    color = Vec3(240, 240, 240);
+                }
+                
             }
             else
             {
@@ -168,7 +240,8 @@ void Scene1::draw3D()
                 ry += yo;
                 dof += 1;
             }
-        }    
+        }
+        
         // Vertical Line Check
         dof = 0;
         float disV = 100000000;
@@ -200,12 +273,17 @@ void Scene1::draw3D()
             mx = rx / 64;
             my = ry / 64;
             mp = my * mapX + mx;
-            if(mp > 0 && mp<mapX * mapY && map[mp] == 1)
+            if(mp > 0 && mp<mapX * mapY && map[mp] > 0)
             {
                 vX = rx;
                 vY = ry;
                 disV = dist(player->pos.x, player->pos.y, vX, vY, ra);
-                dof = 8;
+                dof = 8;  
+                if (map[mp] == 1)
+                {
+                    color = Vec3(240, 240, 240);
+                }
+                
             }
             else
             {
@@ -213,20 +291,22 @@ void Scene1::draw3D()
                 ry += yo;
                 dof += 1;
             }
+
         }
+ 
         if(disV<disH)
         {
             rx = vX;
             ry = vY;
             disT = disV;
-            SDL_SetRenderDrawColor(renderer, 240, 240, 240, 0);
+            SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
         }
         else if (disH<disV)
         {
             rx = hX;
             ry = hY;
             disT = disH;
-            SDL_SetRenderDrawColor(renderer, 160, 160, 160, 0);
+            SDL_SetRenderDrawColor(renderer, color.x/1.6, color.y / 1.6, color.z / 1.6, 0);
         }
         SDL_RenderDrawLine(renderer, player->pos.x, player->pos.y, rx, ry);
 
@@ -242,14 +322,14 @@ void Scene1::draw3D()
             ca -= 2 * PI;
         }
 
-        disT = disT * cos(ca); //fisheye
+        disT *= cos(ca); //fisheye
 
         float lineH = (mapS * 320) / disT;
         float lineO = 160 - lineH / 2;
 
         if(lineO < 0)
         {
-            lineO = -1;
+            lineO = 0;
         }
 
 
