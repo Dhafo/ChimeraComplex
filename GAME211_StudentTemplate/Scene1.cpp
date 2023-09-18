@@ -219,14 +219,14 @@ void Scene1::draw3D()
             rx = vX;
             ry = vY;
             disT = disV;
-            SDL_SetRenderDrawColor(renderer, 255, 15, 15, 0);
+            SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
         }
         else if (disH<disV)
         {
             rx = hX;
             ry = hY;
             disT = disH;
-            SDL_SetRenderDrawColor(renderer, 200, 15, 15, 0);
+            SDL_SetRenderDrawColor(renderer, 160, 15, 15, 0);
         }
         SDL_RenderDrawLine(renderer, player->pos.x, player->pos.y, rx, ry);
 
@@ -246,11 +246,21 @@ void Scene1::draw3D()
 
         float lineH = (mapS * 320) / disT;
         float lineO = 160 - lineH / 2;
+
+        if(lineO < 0)
+        {
+            lineO = -1;
+        }
+
+
         if(lineH > 320)
         {
             lineH = 320;
         }
-        SDL_RenderDrawLine(renderer, r*8 + 530, lineO, r*8 + 530, lineH + lineO);
+
+        SDL_Rect rect = { r * 8 + 530, lineO, 8, lineH };
+        SDL_RenderFillRect(renderer, &rect);
+        //SDL_RenderDrawLine(renderer, r*8 + 530, lineO, r*8 + 530, lineH + lineO);
         //
 
         ra += DegToRad;
