@@ -47,7 +47,7 @@ void Scene1::Update(const float deltaTime) {
 }
 
 void Scene1::Render() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
 	SDL_RenderClear(renderer); 
 
     drawMap2D();
@@ -219,14 +219,14 @@ void Scene1::draw3D()
             rx = vX;
             ry = vY;
             disT = disV;
-            SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
+            SDL_SetRenderDrawColor(renderer, 240, 240, 240, 0);
         }
         else if (disH<disV)
         {
             rx = hX;
             ry = hY;
             disT = disH;
-            SDL_SetRenderDrawColor(renderer, 160, 15, 15, 0);
+            SDL_SetRenderDrawColor(renderer, 160, 160, 160, 0);
         }
         SDL_RenderDrawLine(renderer, player->pos.x, player->pos.y, rx, ry);
 
