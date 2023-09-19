@@ -2,6 +2,7 @@
 #define SCENE1_H
 
 #include <MMath.h>
+#include <vector>
 #include "Scene.h"
 
 using namespace MATH;
@@ -49,7 +50,13 @@ public:
 
     void drawMap2D();
     void draw3D();
+    void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
+
+    SDL_Surface* imageWall;
+    SDL_Texture* textureWall;
+
+    //Uint32 buffer[512][1024];
 };
 
 #endif

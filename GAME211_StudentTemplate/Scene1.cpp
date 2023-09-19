@@ -1,6 +1,11 @@
 #include "Scene1.h"
 #include <VMath.h>
 
+typedef struct
+{
+    int w, a, d, s;
+}ButtonKeys; ButtonKeys Keys;
+
 // See notes about this constructor in Scene1.h.
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -28,10 +33,14 @@ bool Scene1::OnCreate() {
 	// Set player image to PacMan
 
 	SDL_Surface* image;
+    
 	SDL_Texture* texture;
+   
 
 	image = IMG_Load("pacman.png");
+    imageWall = IMG_Load("wall.jpg");
 	texture = SDL_CreateTextureFromSurface(renderer, image);
+    textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
 
@@ -44,6 +53,7 @@ void Scene1::Update(const float deltaTime) {
 
 	// Update player
 	game->getPlayer()->Update(deltaTime);
+    HandleMovement();
 }
 
 void Scene1::Render() {
@@ -52,7 +62,7 @@ void Scene1::Render() {
 
     drawMap2D();
     draw3D();
-
+    
 	// render the player
 	game->RenderPlayer(1.0f);
 
@@ -67,74 +77,113 @@ void Scene1::HandleEvents(const SDL_Event& event)
             
             if (event.key.keysym.scancode == SDL_SCANCODE_A) 
             {
-                game->getPlayer()->orientation -= 0.1;
-                if (game->getPlayer()->orientation < 0)
-                {
-                    game->getPlayer()->orientation += 2 * PI;
-                }
-                game->getPlayer()->vel.x = cos(game->getPlayer()->orientation) * 5;
-                game->getPlayer()->vel.y = sin(game->getPlayer()->orientation) * 5;
+                Keys.a = 1; 
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_D) 
             {
-                game->getPlayer()->orientation += 0.1;
-                if (game->getPlayer()->orientation > 2 * PI)
-                {
-                    game->getPlayer()->orientation -= 2 * PI;
-                }
-                game->getPlayer()->vel.x = cos(game->getPlayer()->orientation) * 5;
-                game->getPlayer()->vel.y = sin(game->getPlayer()->orientation) * 5;
+                Keys.d = 1;
             }
 
-            int xo = 0, yo = 0;
-            if (game->getPlayer()->vel.x < 0)
-            {
-                xo = -20;
-            }
-            else
-            {
-                xo = 20;
-            }
-            if (game->getPlayer()->vel.y < 0)
-            {
-                yo = -20;
-            }
-            else
-            {
-                yo = 20;
-            }
-            int ipx = game->getPlayer()->pos.x / 64.0, ipx_add_xo = (game->getPlayer()->pos.x + xo) / 64.0, ipx_sub_xo = (game->getPlayer()->pos.x - xo) / 64.0;
-            int ipy = game->getPlayer()->pos.y / 64.0, ipy_add_yo = (game->getPlayer()->pos.y + yo) / 64.0, ipy_sub_yo = (game->getPlayer()->pos.y - yo) / 64.0;
             if (event.key.keysym.scancode == SDL_SCANCODE_W) //fix later
             {
-                if (map[ipy * mapX + ipx_add_xo] == 0)
-                {
-                    game->getPlayer()->pos.x += game->getPlayer()->vel.x;
-                    
-                }  
-                if (map[ipy_add_yo * mapX + ipx] == 0)
-                {
-                    game->getPlayer()->pos.y += game->getPlayer()->vel.y;
-                }
+                Keys.w = 1;
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_S) //fix later
             {
-                if (map[ipy * mapX + ipx_sub_xo] == 0)
-                {
-                    game->getPlayer()->pos.x -= game->getPlayer()->vel.x;
+                Keys.s = 1;
+            }
+        }
+        if(event.type == SDL_KEYUP)
+        {
+            if (event.key.keysym.scancode == SDL_SCANCODE_A)
+            {
+                Keys.a = 0;
+            }
+            if (event.key.keysym.scancode == SDL_SCANCODE_D)
+            {
+                Keys.d = 0;
+            }
 
-                }
-                if (map[ipy_sub_yo * mapX + ipx] == 0)
-                {
-                    game->getPlayer()->pos.y -= game->getPlayer()->vel.y;
-                }
+            if (event.key.keysym.scancode == SDL_SCANCODE_W) //fix later
+            {
+                Keys.w = 0;
+            }
+            if (event.key.keysym.scancode == SDL_SCANCODE_S) //fix later
+            {
+                Keys.s = 0;
             }
         }
 }
         // send events to player as needed
        //game->getPlayer()->HandleEvents(event);
-    
 
+void Scene1::HandleMovement()
+{
+        if (Keys.a == 1)
+        {
+            game->getPlayer()->orientation -= 0.030;
+            if (game->getPlayer()->orientation < 0)
+            {
+                game->getPlayer()->orientation += 2 * PI;
+            }
+            game->getPlayer()->vel.x = cos(game->getPlayer()->orientation) * 1.25f;
+            game->getPlayer()->vel.y = sin(game->getPlayer()->orientation) * 1.25f;
+        }
+        if (Keys.d == 1)
+        {
+            game->getPlayer()->orientation += 0.030;
+            if (game->getPlayer()->orientation > 2 * PI)
+            {
+                game->getPlayer()->orientation -= 2 * PI;
+            }
+            game->getPlayer()->vel.x = cos(game->getPlayer()->orientation) * 1.25f;
+            game->getPlayer()->vel.y = sin(game->getPlayer()->orientation) * 1.25f;
+        }
+
+        int xo = 0, yo = 0;
+        if (game->getPlayer()->vel.x < 0)
+        {
+            xo = -20;
+        }
+        else
+        {
+            xo = 20;
+        }
+        if (game->getPlayer()->vel.y < 0)
+        {
+            yo = -20;
+        }
+        else
+        {
+            yo = 20;
+        }
+        int ipx = game->getPlayer()->pos.x / 64.0, ipx_add_xo = (game->getPlayer()->pos.x + xo) / 64.0, ipx_sub_xo = (game->getPlayer()->pos.x - xo) / 64.0;
+        int ipy = game->getPlayer()->pos.y / 64.0, ipy_add_yo = (game->getPlayer()->pos.y + yo) / 64.0, ipy_sub_yo = (game->getPlayer()->pos.y - yo) / 64.0;
+        if (Keys.w == 1) //fix later
+        {
+            if (map[ipy * mapX + ipx_add_xo] == 0)
+            {
+                game->getPlayer()->pos.x += game->getPlayer()->vel.x;
+
+            }
+            if (map[ipy_add_yo * mapX + ipx] == 0)
+            {
+                game->getPlayer()->pos.y += game->getPlayer()->vel.y;
+            }
+        }
+        if (Keys.s == 1) //fix later
+        {
+            if (map[ipy * mapX + ipx_sub_xo] == 0)
+            {
+                game->getPlayer()->pos.x -= game->getPlayer()->vel.x;
+
+            }
+            if (map[ipy_sub_yo * mapX + ipx] == 0)
+            {
+                game->getPlayer()->pos.y -= game->getPlayer()->vel.y;
+            }
+        }
+}
 
 void Scene1::drawMap2D()
 {
@@ -227,12 +276,7 @@ void Scene1::draw3D()
                 hX = rx;
                 hY = ry;
                 disH = dist(player->pos.x, player->pos.y, hX, hY, ra);
-                dof = 8;
-                if(map[mp] == 1)
-                {
-                    color = Vec3(240, 240, 240);
-                }
-                
+                dof = 8;     
             }
             else
             {
@@ -278,12 +322,7 @@ void Scene1::draw3D()
                 vX = rx;
                 vY = ry;
                 disV = dist(player->pos.x, player->pos.y, vX, vY, ra);
-                dof = 8;  
-                if (map[mp] == 1)
-                {
-                    color = Vec3(240, 240, 240);
-                }
-                
+                dof = 8;     
             }
             else
             {
@@ -291,14 +330,24 @@ void Scene1::draw3D()
                 ry += yo;
                 dof += 1;
             }
-
         }
- 
+        
         if(disV<disH)
         {
             rx = vX;
             ry = vY;
             disT = disV;
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapX + mx;
+            if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
+            {
+                color = Vec3(240, 240, 240);
+            }
+            else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+            {
+                color = Vec3(240, 15, 15);
+            }
             SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
         }
         else if (disH<disV)
@@ -306,8 +355,21 @@ void Scene1::draw3D()
             rx = hX;
             ry = hY;
             disT = disH;
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapX + mx;
+            if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
+            {
+                color = Vec3(240, 240, 240);
+            }
+            else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+            {
+                color = Vec3(240, 15, 15);
+            }
             SDL_SetRenderDrawColor(renderer, color.x/1.6, color.y / 1.6, color.z / 1.6, 0);
         }
+        
+        
         SDL_RenderDrawLine(renderer, player->pos.x, player->pos.y, rx, ry);
 
         //3D Wall Drawing
@@ -339,9 +401,11 @@ void Scene1::draw3D()
         }
 
         SDL_Rect rect = { r * 8 + 530, lineO, 8, lineH };
-        SDL_RenderFillRect(renderer, &rect);
+        SDL_SetTextureColorMod(textureWall, color.x, color.y, color.z);
+        SDL_RenderCopy(renderer, textureWall, NULL, &rect);
+        //SDL_RenderFillRect(renderer, &rect);
         //SDL_RenderDrawLine(renderer, r*8 + 530, lineO, r*8 + 530, lineH + lineO);
-        //
+       
 
         ra += DegToRad;
         if (ra < 0)
