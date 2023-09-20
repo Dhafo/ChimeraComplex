@@ -38,7 +38,7 @@ bool Scene1::OnCreate() {
    
 
 	image = IMG_Load("pacman.png");
-    imageWall = IMG_Load("wall.jpg");
+    imageWall = IMG_Load("wall.png");
 	texture = SDL_CreateTextureFromSurface(renderer, image);
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
 	game->getPlayer()->setImage(image);
@@ -237,6 +237,10 @@ void Scene1::draw3D()
         ra -= 2 * PI;
     }
 
+    int test = 0;
+    int currentGrid = 0;
+    bool lastH = false;
+    bool lastV = false;
     for(r=0; r<60; r++)
     {
         disT = 10000000;
@@ -349,6 +353,7 @@ void Scene1::draw3D()
                 color = Vec3(240, 15, 15);
             }
             SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
+            SDL_SetTextureColorMod(textureWall, color.x, color.y, color.z);
         }
         else if (disH<disV)
         {
@@ -367,6 +372,7 @@ void Scene1::draw3D()
                 color = Vec3(240, 15, 15);
             }
             SDL_SetRenderDrawColor(renderer, color.x/1.6, color.y / 1.6, color.z / 1.6, 0);
+            SDL_SetTextureColorMod(textureWall, color.x/1.6, color.y/1.6, color.z/1.6);
         }
         
         
@@ -397,12 +403,18 @@ void Scene1::draw3D()
 
         if(lineH > 320)
         {
+
             lineH = 320;
         }
 
+
         SDL_Rect rect = { r * 8 + 530, lineO, 8, lineH };
-        SDL_SetTextureColorMod(textureWall, color.x, color.y, color.z);
-        SDL_RenderCopy(renderer, textureWall, NULL, &rect);
+        SDL_Rect crop = { r,0, 8, lineH };
+        
+        SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+            
+        //SDL_SetSurfaceColorMod(&rect, color.x, color.y, color.z);
+        //SDL_SET
         //SDL_RenderFillRect(renderer, &rect);
         //SDL_RenderDrawLine(renderer, r*8 + 530, lineO, r*8 + 530, lineH + lineO);
        

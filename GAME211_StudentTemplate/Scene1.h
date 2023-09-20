@@ -56,7 +56,7 @@ public:
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
 
-    //Uint32 buffer[512][1024];
+    Uint32 buffer[512][1024];
 };
 
 #endif
