@@ -237,9 +237,6 @@ void Scene1::draw3D()
         ra -= 2 * PI;
     }
 
-    int test = 0;
-    int currentGrid = 0;
-    bool lastH = false;
     bool lastV = false;
     for(r=0; r<60; r++)
     {
@@ -409,10 +406,71 @@ void Scene1::draw3D()
 
 
         SDL_Rect rect = { r * 8 + 530, lineO, 8, lineH };
-        SDL_Rect crop = { r,0, 8, lineH };
-        
-        SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-            
+        //where textures go
+        if(r == 0) //first ray
+        {
+            texX = 0;
+            currentGrid = map[mp]; //set the grid
+            if (disV < disH) //check if vertical or horizontal
+            {
+                SDL_Rect crop = { (texX + rx / 64), 0, 8, lineH }; // if vertical we use y offset
+                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+                lastV = true;
+            }
+            else
+            {
+                SDL_Rect crop = { texX + ry / 64, 0, 8, lineH }; // if vertical we use y offset
+                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+                lastV = false;
+            }
+            texX += 8;
+        }
+        else if(map[mp] == currentGrid) //if same grid as before keep going
+        {
+            if (disV < disH) //check if vertical or horizontal
+            {
+                if(!lastV)
+                {
+                    texX = 0;
+                }
+                SDL_Rect crop = { (texX + rx / 64), 0, 8, lineH }; // if vertical we use y offset
+                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+                lastV = true;
+            }
+            else
+            {
+                if (lastV)
+                {
+                    texX = 0;
+                }
+                SDL_Rect crop = { texX + ry / 64, 0, 8, lineH }; // if vertical we use y offset
+                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+                lastV = false;
+            }
+            texX += 8;
+            if (texX >= 64)
+            {
+                texX -= 64;
+            }
+        }
+        else
+        {
+            currentGrid = map[mp]; //if diff grid we start over
+            texX = 0;
+            if (disV < disH)
+            {
+                SDL_Rect crop = { (texX + rx / 64), 0, 8, lineH }; // if vertical we use y offset
+                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+                lastV = true;
+            }
+            else
+            {
+                SDL_Rect crop = { texX + ry / 64, 0, 8, lineH }; // if vertical we use y offset
+                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
+                lastV = false;
+            }
+            texX += 8;
+        }
         //SDL_SetSurfaceColorMod(&rect, color.x, color.y, color.z);
         //SDL_SET
         //SDL_RenderFillRect(renderer, &rect);

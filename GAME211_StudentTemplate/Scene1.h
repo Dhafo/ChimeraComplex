@@ -56,7 +56,8 @@ public:
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
 
-    Uint32 buffer[512][1024];
+    int currentGrid = 0;
+    int texX = 0;
 };
 
 #endif
