@@ -32,18 +32,46 @@ public:
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 
-    //map
-    int mapX = 8, mapY = 8, mapS = 64;
-    int map[64] =
+    //map Walls
+    int mapWallsX = 8, mapWallsY = 8, mapWallsS = 64;
+    int mapWalls[64] =
     {
         1, 1, 1, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 2, 2, 0, 1, 0, 1,
+        1, 0, 2, 2, 4, 1, 0, 1,
         1, 0, 2, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 1, 0, 1,
         1, 0, 1, 0, 1, 1, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 1,
         1, 1, 1, 1, 1, 1, 1, 1,
+    };
+
+    //map Ceiling
+    int mapCeilingX = 8, mapCeilingY = 8, mapCeilingS = 64;
+    int mapCeiling[64] =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 0,
+        0, 1, 0, 0, 1, 0, 1, 0,
+        0, 1, 0, 1, 1, 1, 1, 0,
+        0, 1, 1, 1, 1, 0, 1, 0,
+        0, 1, 0, 1, 0, 0, 1, 0,
+        0, 1, 1, 1, 1, 1, 1, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+    };
+
+    //map Floor
+    int mapFloorX = 8, mapFloorY = 8, mapFloorS = 64;
+    int mapFloor[64] =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 0,
+        0, 1, 0, 0, 1, 0, 1, 0,
+        0, 1, 0, 1, 1, 1, 1, 0,
+        0, 1, 1, 1, 1, 0, 1, 0,
+        0, 1, 0, 1, 0, 0, 1, 0,
+        0, 1, 1, 1, 1, 1, 1, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
     };
 
     Vec3 color = Vec3(240, 240, 240);
@@ -55,9 +83,6 @@ public:
 
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
-
-    int currentGrid = 0;
-    int texX = 0;
 };
 
 #endif

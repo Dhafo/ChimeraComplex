@@ -16,7 +16,7 @@ bool Window::OnCreate(){
 		return false;
 	}
 
-	window = SDL_CreateWindow("GAME307 Template", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Chimera Complex", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
     
 	if (window == nullptr) {
 		std::cout << "SDL_Error: " << SDL_GetError() << std::endl;

@@ -59,10 +59,20 @@ void Scene1::Update(const float deltaTime) {
 void Scene1::Render() {
 	SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
 	SDL_RenderClear(renderer); 
-
+    SDL_Rect ceiling = { 530, 16, 480, 160 };
+    SDL_SetRenderDrawColor(renderer, 208, 255, 240, 0);
+    SDL_RenderFillRect(renderer, &ceiling);
+    SDL_Rect floor = { 530, 160, 480, 192 };
+    SDL_SetRenderDrawColor(renderer, 68, 69, 45, 0);
+    SDL_RenderFillRect(renderer, &floor);
     drawMap2D();
     draw3D();
-    
+    SDL_Rect Top = { 530, 0, 480, 16 };
+    SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
+    SDL_RenderFillRect(renderer, &Top);
+    SDL_Rect Bottom = { 530, 320, 480, 192 };
+    SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
+    SDL_RenderFillRect(renderer, &Bottom);
 	// render the player
 	game->RenderPlayer(1.0f);
 
@@ -91,6 +101,34 @@ void Scene1::HandleEvents(const SDL_Event& event)
             if (event.key.keysym.scancode == SDL_SCANCODE_S) //fix later
             {
                 Keys.s = 1;
+            }
+            if (event.key.keysym.scancode == SDL_SCANCODE_E)
+            {
+                int xo = 0, yo = 0;
+                if (game->getPlayer()->vel.x < 0)
+                {
+                    xo = -25;
+                }
+                else
+                {
+                    xo = 25;
+                }
+                if (game->getPlayer()->vel.y < 0)
+                {
+                    yo = -25;
+                }
+                else
+                {
+                    yo = 25;
+                }
+                int ipx = game->getPlayer()->pos.x / 64.0, ipx_add_xo = (game->getPlayer()->pos.x + xo) / 64.0;
+                int ipy = game->getPlayer()->pos.y / 64.0, ipy_add_yo = (game->getPlayer()->pos.y + yo) / 64.0;
+
+                if (mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 4) 
+                {
+                    mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] = 0;
+                }
+
             }
         }
         if(event.type == SDL_KEYUP)
@@ -161,24 +199,24 @@ void Scene1::HandleMovement()
         int ipy = game->getPlayer()->pos.y / 64.0, ipy_add_yo = (game->getPlayer()->pos.y + yo) / 64.0, ipy_sub_yo = (game->getPlayer()->pos.y - yo) / 64.0;
         if (Keys.w == 1) //fix later
         {
-            if (map[ipy * mapX + ipx_add_xo] == 0)
+            if (mapWalls[ipy * mapWallsX + ipx_add_xo] == 0)
             {
                 game->getPlayer()->pos.x += game->getPlayer()->vel.x;
 
             }
-            if (map[ipy_add_yo * mapX + ipx] == 0)
+            if (mapWalls[ipy_add_yo * mapWallsX + ipx] == 0)
             {
                 game->getPlayer()->pos.y += game->getPlayer()->vel.y;
             }
         }
         if (Keys.s == 1) //fix later
         {
-            if (map[ipy * mapX + ipx_sub_xo] == 0)
+            if (mapWalls[ipy * mapWallsX + ipx_sub_xo] == 0)
             {
                 game->getPlayer()->pos.x -= game->getPlayer()->vel.x;
 
             }
-            if (map[ipy_sub_yo * mapX + ipx] == 0)
+            if (mapWalls[ipy_sub_yo * mapWallsX + ipx] == 0)
             {
                 game->getPlayer()->pos.y -= game->getPlayer()->vel.y;
             }
@@ -188,24 +226,28 @@ void Scene1::HandleMovement()
 void Scene1::drawMap2D()
 {
     int x, y, xo, yo;
-    for (y = 0; y < mapY; y++)
+    for (y = 0; y < mapWallsY; y++)
     {
-        for (x = 0; x < mapX; x++)
+        for (x = 0; x < mapWallsX; x++)
         {
-            if (map[y * mapX + x] == 1)
+            if (mapWalls[y * mapWallsX + x] == 1)
             {
                 SDL_SetRenderDrawColor(renderer, 240, 240, 240, 0);
 
             }
-            else if (map[y * mapX + x] == 2)
+            else if (mapWalls[y * mapWallsX + x] == 2)
             {
                 SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
+            }
+            else if (mapWalls[y * mapWallsX + x] == 4)
+            {
+                SDL_SetRenderDrawColor(renderer, 15, 15, 240, 0);
             }
             else
             {
                 SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
             }
-            SDL_Rect rect = { ((int)mapS * x), ((int)mapS * y), mapS, mapS };
+            SDL_Rect rect = { ((int)mapWallsS * x), ((int)mapWallsS * y), mapWallsS, mapWallsS };
             SDL_RenderFillRect(renderer, &rect);
         }
     }
@@ -220,7 +262,9 @@ void Scene1::draw3D()
 {
     int r, mx, my, mp, dof;
 
-    float rx, ry, ra, xo, yo;
+    float rx, ry, ra;
+    float xo = 0;
+    float yo = 0;
 
     float disT;
 
@@ -238,7 +282,7 @@ void Scene1::draw3D()
     }
 
     bool lastV = false;
-    for(r=0; r<60; r++)
+    for(r=0; r<120; r++)
     {
         disT = 10000000;
         // Horizontal Line Check
@@ -271,13 +315,13 @@ void Scene1::draw3D()
         {
             mx = rx / 64;
             my = ry / 64;
-            mp = my * mapX + mx;
-            if(mp > 0 && mp<mapX * mapY && map[mp] > 0)
+            mp = my * mapWallsX + mx;
+            if(mp > 0 && mp<mapWallsX * mapWallsY && mapWalls[mp] > 0)
             {
                 hX = rx;
                 hY = ry;
                 disH = dist(player->pos.x, player->pos.y, hX, hY, ra);
-                dof = 8;     
+                dof = 8;
             }
             else
             {
@@ -317,13 +361,13 @@ void Scene1::draw3D()
         {
             mx = rx / 64;
             my = ry / 64;
-            mp = my * mapX + mx;
-            if(mp > 0 && mp<mapX * mapY && map[mp] > 0)
+            mp = my * mapWallsX + mx;
+            if(mp > 0 && mp<mapWallsX * mapWallsY && mapWalls[mp] > 0)
             {
                 vX = rx;
                 vY = ry;
                 disV = dist(player->pos.x, player->pos.y, vX, vY, ra);
-                dof = 8;     
+                dof = 8;
             }
             else
             {
@@ -340,14 +384,18 @@ void Scene1::draw3D()
             disT = disV;
             mx = rx / 64;
             my = ry / 64;
-            mp = my * mapX + mx;
-            if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
+            mp = my * mapWallsX + mx;
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 1)
             {
                 color = Vec3(240, 240, 240);
             }
-            else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 2)
             {
                 color = Vec3(240, 15, 15);
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 4)
+            {
+                color = Vec3(15, 15, 240);
             }
             SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
             SDL_SetTextureColorMod(textureWall, color.x, color.y, color.z);
@@ -359,14 +407,18 @@ void Scene1::draw3D()
             disT = disH;
             mx = rx / 64;
             my = ry / 64;
-            mp = my * mapX + mx;
-            if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
+            mp = my * mapWallsX + mx;
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 1)
             {
                 color = Vec3(240, 240, 240);
             }
-            else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 2)
             {
                 color = Vec3(240, 15, 15);
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 4)
+            {
+                color = Vec3(15, 15, 240);
             }
             SDL_SetRenderDrawColor(renderer, color.x/1.6, color.y / 1.6, color.z / 1.6, 0);
             SDL_SetTextureColorMod(textureWall, color.x/1.6, color.y/1.6, color.z/1.6);
@@ -389,95 +441,53 @@ void Scene1::draw3D()
 
         disT *= cos(ca); //fisheye
 
-        float lineH = (mapS * 320) / disT;
+        float lineH = (mapWallsS * 320) / disT;
         float lineO = 160 - lineH / 2;
 
-        if(lineO < 0)
+        float texOffSet = 0;
+
+        
+        if (lineH > 320)
+        {
+            texOffSet = (lineH - 320) / 2.0;
+            texOffSet = texOffSet * 64.0 / (float)lineH;
+        }
+        
+
+        SDL_Rect rect = { r * 4 + 530, lineO + 16, 4, lineH + 16 };
+
+        if (lineO < 0)
         {
             lineO = 0;
         }
 
-
-        if(lineH > 320)
+        if (lineH > 320)
         {
-
             lineH = 320;
         }
 
-
-        SDL_Rect rect = { r * 8 + 530, lineO, 8, lineH };
         //where textures go
-        if(r == 0) //first ray
+        int texVX = (ry / 64 - my) * (64);
+        int texHX = (rx / 64 - mx) * (64);
+        if (disV < disH) //check if vertical or horizontal
         {
-            texX = 0;
-            currentGrid = map[mp]; //set the grid
-            if (disV < disH) //check if vertical or horizontal
-            {
-                SDL_Rect crop = { (texX + rx / 64), 0, 8, lineH }; // if vertical we use y offset
-                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-                lastV = true;
-            }
-            else
-            {
-                SDL_Rect crop = { texX + ry / 64, 0, 8, lineH }; // if vertical we use y offset
-                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-                lastV = false;
-            }
-            texX += 8;
-        }
-        else if(map[mp] == currentGrid) //if same grid as before keep going
-        {
-            if (disV < disH) //check if vertical or horizontal
-            {
-                if(!lastV)
-                {
-                    texX = 0;
-                }
-                SDL_Rect crop = { (texX + rx / 64), 0, 8, lineH }; // if vertical we use y offset
-                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-                lastV = true;
-            }
-            else
-            {
-                if (lastV)
-                {
-                    texX = 0;
-                }
-                SDL_Rect crop = { texX + ry / 64, 0, 8, lineH }; // if vertical we use y offset
-                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-                lastV = false;
-            }
-            texX += 8;
-            if (texX >= 64)
-            {
-                texX -= 64;
-            }
+            SDL_Rect crop = { texVX, 0, 1, 64}; // if vertical we use y offset
+            SDL_RenderCopy(renderer, textureWall, &crop, &rect);        
         }
         else
         {
-            currentGrid = map[mp]; //if diff grid we start over
-            texX = 0;
-            if (disV < disH)
-            {
-                SDL_Rect crop = { (texX + rx / 64), 0, 8, lineH }; // if vertical we use y offset
-                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-                lastV = true;
-            }
-            else
-            {
-                SDL_Rect crop = { texX + ry / 64, 0, 8, lineH }; // if vertical we use y offset
-                SDL_RenderCopy(renderer, textureWall, &crop, &rect);
-                lastV = false;
-            }
-            texX += 8;
+            SDL_Rect crop = { texHX, 0, 1, 64}; // if horizontal we use x offset
+            SDL_RenderCopy(renderer, textureWall, &crop, &rect);
         }
-        //SDL_SetSurfaceColorMod(&rect, color.x, color.y, color.z);
-        //SDL_SET
+        
         //SDL_RenderFillRect(renderer, &rect);
         //SDL_RenderDrawLine(renderer, r*8 + 530, lineO, r*8 + 530, lineH + lineO);
+        //SDL_SetRenderDrawColor(renderer, 255, 15, 15, 0);
+        //SDL_Rect TEST = { 128, 448, 64, 8 }; // if vertical we use y offset
+        //SDL_RenderFillRect(renderer, &TEST);
        
 
-        ra += DegToRad;
+        ra += DegToRad/2;
         if (ra < 0)
         {
             ra += 2 * PI;
