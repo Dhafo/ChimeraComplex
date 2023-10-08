@@ -39,6 +39,7 @@ public:
 	float getSceneWidth();
 	Matrix4 getProjectionMatrix();
     PlayerBody* getPlayer(){ return player; }
+	PlayerBody* setPlayer();
 	void RenderPlayer(float scale = 1.0f);
 	SDL_Renderer* getRenderer();
 
