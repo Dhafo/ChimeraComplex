@@ -5,8 +5,11 @@
 class Item : public Entity
 {
     bool collected;
+    int itemCountMax;
     
-    void CreateItem( Vec2 position_, Vec2 veloicty_);
+    public:
+    
+    Item( Vec2 position_, Vec2 veloicty_);
 
    
 

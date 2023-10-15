@@ -1,7 +1,7 @@
 #include "Item.h"
 
 
-void Item::CreateItem(Vec2 position_, Vec2 velocity_) {
+Item::Item(Vec2 position_, Vec2 velocity_) {
 
     position = position_;
     velocity = velocity_;

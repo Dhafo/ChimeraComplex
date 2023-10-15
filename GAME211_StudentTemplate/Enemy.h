@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Enemy_H
+#define Enemy_H
 #include "Entity.h"
 #include <MMath.h>
 #include <VMath.h>
@@ -11,10 +12,10 @@ class Enemy : public Entity
     
   
 
-  /*  Enemy();
-    Enemy(int maxhealth_, Vec2 position_,Vec2 velocity_);*/
+    Enemy();
+    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_) ;
 
-    void CreateEnemy(int maxhealth_, Vec2 position_, Vec2 velocity_);
+   // void CreateEnemy(int maxhealth_, Vec2 position_, Vec2 velocity_);
     
     void addHealth(int addValue);
 
@@ -24,4 +25,4 @@ class Enemy : public Entity
 
 };
 
-
+#endif /* Enemy_H */

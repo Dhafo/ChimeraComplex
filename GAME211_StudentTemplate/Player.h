@@ -4,6 +4,7 @@
 #include <VMath.h>
 class Player: public Entity
 {
+protected:
     int maxHealth;
     int currentHealth;
     int maxAmmo;
@@ -11,15 +12,22 @@ class Player: public Entity
 
     float orientation;
 
-  
-   /* Player();
+  public:
+    Player();
 
-    Player(int maxHealth_, int ammo_, float orientation_, Vec2 position_, Vec2 veloicty_);*/
-
-
-    void CreatePlayer(int maxHealth_, int ammo_, float orientation_, Vec2 position_, Vec2 veloicty_);
+    Player(int maxHealth_, int ammo_, float orientation_, Vec2 position_, Vec2 veloicty_);
 
 
+   /* void CreatePlayer(int maxHealth_, int ammo_, float orientation_, Vec2 position_, Vec2 veloicty_);*/
+
+    float getOrientation() {
+
+        return orientation;
+    }
+    void setOrientation(float orientation_) {
+
+        orientation = orientation_;
+    }
 
   
     void addHealth(int addValue);

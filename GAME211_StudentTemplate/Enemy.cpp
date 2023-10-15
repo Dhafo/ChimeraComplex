@@ -1,10 +1,9 @@
 #include "Enemy.h"
 
 
+ Enemy::Enemy(int maxHealth_, Vec2 position_, Vec2 velocity_) {
 
-void Enemy::CreateEnemy(int maxHealth_, Vec2 position_, Vec2 velocity_) {
-
-    maxHealth= maxHealth_;
+    maxHealth = maxHealth_;
     currentHealth = maxHealth;
 
     position = position_;
@@ -14,6 +13,8 @@ void Enemy::CreateEnemy(int maxHealth_, Vec2 position_, Vec2 velocity_) {
 
 
 }
+
+
 
 void Enemy::addHealth(int addValue)
 {

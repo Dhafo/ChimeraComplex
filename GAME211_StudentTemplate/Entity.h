@@ -16,19 +16,19 @@ protected:
     Vec2 velocity;
    
     Vec2 position;
-private:
+public:
 
     Entity();
     Entity(Vec2 position_, Vec2 velocity_);
 
     void setPosition(Vec2 position_);
-    Vec2 getPositon();
+    Vec2 getPosition();
 
     void setvelocity(Vec2 velocity_);
 
-    Vec2 getVeloicty();
+    Vec2 getVelocity();
 
-    bool collField(Vec3 Position_);
+    bool collField(Vec2 Position_);
 };
 
 #endif /* ENTITY_H */
