@@ -1,12 +1,16 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <irrKlang.h>
 #include <iostream>
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
 #include "PlayerBody.h"
 
+
+using namespace irrklang;
 
 class GameManager {
 private:
@@ -25,7 +29,10 @@ private:
 	class Scene *currentScene;
 
 	// This might be unfamiliar
-    class PlayerBody *player;
+    class PlayerBody *player;   
+    ISoundEngine* engine;
+
+    Uint32 changeScenceEventType; //event type number for user defined events
 
 public:
 	GameManager();
@@ -42,11 +49,15 @@ public:
 	PlayerBody* setPlayer();
 	void RenderPlayer(float scale = 1.0f);
 	SDL_Renderer* getRenderer();
+    ISoundEngine* getSoundEngine() { return engine; }
 
 	void Run();
 	void handleEvents();
 	void LoadScene( int i );
     bool ValidateCurrentScene();
+
+    Uint32 getChangeScence();
+ 
     
 };
 #endif

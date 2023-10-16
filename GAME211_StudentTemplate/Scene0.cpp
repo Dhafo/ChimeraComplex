@@ -1,0 +1,153 @@
+#include "Scene0.h"
+#include <VMath.h>
+
+// See notes about this constructor in Scene0.h.
+Scene0::Scene0(SDL_Window* sdlWindow_, GameManager* game_){
+	window = sdlWindow_;
+    game = game_;
+	renderer = SDL_GetRenderer(window);
+	xAxis = 25.0f;
+	yAxis = 15.0f;
+}
+
+Scene0::~Scene0(){
+}
+
+bool Scene0::OnCreate() {
+	int w, h;
+	SDL_GetWindowSize(window,&w,&h);
+
+	Matrix4 ndc = MMath::viewportNDC(w, h);
+	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
+	projectionMatrix = ndc * ortho;
+
+	/// Turn on the SDL imaging subsystem
+	IMG_Init(IMG_INIT_PNG);
+
+	// Set player image to PacMan
+
+	startImage = IMG_Load("Start.png");
+	startTexture = SDL_CreateTextureFromSurface(renderer, startImage);
+ //  /* SDL_Rect startButton = { 0, 0, 64,64 };
+ //   SDL_RenderCopy(renderer, startTexture, NULL, &startButton);*/
+
+
+    endImage = IMG_Load("End.png");
+    endTexture = SDL_CreateTextureFromSurface(renderer, endImage);
+
+
+    backgroundImage = IMG_Load("space.png");
+    backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundImage);
+
+    background = { 0, 0, 1024,512 };
+
+    TTF_Font* font;
+
+    font = TTF_OpenFont("Lato-Regular.ttf", 24);
+
+    if (!font) {
+        std::cout << "Failed to load" << TTF_GetError() << std::endl;
+    }
+    else {
+        // Set up a surface image with some text
+        SDL_Surface* text;
+
+        // Set color to white
+        SDL_Color color = { 255,255,255 };
+
+        text = TTF_RenderText_Solid(font, "Press X to Start", color);
+        if (!text) {
+            std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
+        }
+        else {
+            //Set up a texture from the surface and render it
+            text_texture = SDL_CreateTextureFromSurface(renderer, text);
+            dest = { 512 + 256 + 32,256 + 128 - 16,text->w,text->h };
+        }
+
+        text = TTF_RenderText_Solid(font, "Press Q to Quit", color);
+        if (!text) {
+            std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
+        }
+        else {
+            //Set up a texture from the surface and render it
+            text_texture2 = SDL_CreateTextureFromSurface(renderer, text);
+            dest2 = { 512 + 256 + 32,256 + 128 + 32,text->w,text->h };
+        }
+    }
+
+    font = TTF_OpenFont("Lato-Regular.ttf", 80);
+    if (!font) {
+        std::cout << "Failed to load" << TTF_GetError() << std::endl;
+    }
+    else 
+    {
+        SDL_Surface* text;
+        // Set color to white
+        SDL_Color color = { 242,140,40 };
+
+        text = TTF_RenderText_Solid(font, "Chimera Complex", color);
+        if (!text) {
+            std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
+        }
+        else {
+            //Set up a texture from the surface and render it
+            text_texture3 = SDL_CreateTextureFromSurface(renderer, text);
+            dest3 = { 256 - 64,256 - 80,text->w,text->h };
+        }
+
+    }
+
+    game->getSoundEngine()->play2D("MyVeryOwnDeadShip.ogg", true);
+
+	return true;
+}
+
+void Scene0::OnDestroy() 
+{
+    SDL_DestroyTexture(text_texture);
+}
+
+void Scene0::Update(const float deltaTime) {
+
+	// Update player
+	game->getPlayer()->Update(deltaTime);
+
+}
+
+void Scene0::Render() {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, backgroundTexture, NULL, &background);
+   
+    SDL_RenderCopy(renderer, text_texture, NULL, &dest);
+    SDL_RenderCopy(renderer, text_texture2, NULL, &dest2);
+    SDL_RenderCopy(renderer, text_texture3, NULL, &dest3);
+    
+
+	SDL_RenderPresent(renderer);
+}
+
+
+void Scene0::HandleEvents(const SDL_Event& event)
+{
+	// send events to player as needed
+	game->getPlayer()->HandleEvents(event);
+
+    if (event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.scancode)
+        {
+        case SDL_SCANCODE_X:
+            game->getSoundEngine()->play2D("beep.wav", false);
+            game->LoadScene(1);
+            break;
+
+        case SDL_SCANCODE_Q:
+            std::cout << "Q is pressed" << std::endl;
+            void SDL_Quit(void);
+            break;
+       }
+   
+    }
+}

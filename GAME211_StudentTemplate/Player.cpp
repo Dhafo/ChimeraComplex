@@ -4,9 +4,22 @@
 
 
 
-void Player::CreatePlayer(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, Vec2 velocity_) {
+Player::Player()
+{
+    maxHealth = 1;
+    currentHealth = maxHealth;
+    maxAmmo = 0;
+    currentAmmo = 0;
+    orientation = 0;
+    position = Vec2(0,0);
+    velocity = Vec2(0,0);
+
+}
+
+Player::Player(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, Vec2 velocity_) {
 
     maxHealth= maxhealth_;
+    currentHealth = maxHealth;
    maxAmmo = maxAmmo_;
     currentAmmo = 0;
    orientation = orientation_;
