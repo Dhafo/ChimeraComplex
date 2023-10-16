@@ -9,7 +9,7 @@
 
 bool PlayerBody::OnCreate()
 {
-    image = IMG_Load( "Pacman.png" );
+    image = IMG_Load( "wallTest.png" );
     SDL_Renderer *renderer = game->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
     if (image == nullptr) {

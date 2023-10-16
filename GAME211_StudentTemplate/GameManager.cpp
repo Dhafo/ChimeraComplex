@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "Scene0.h"
 #include "Scene1.h"
 
 GameManager::GameManager() {
@@ -10,6 +11,13 @@ GameManager::GameManager() {
 }
 
 bool GameManager::OnCreate() {
+    //initialize the ttf
+    if (TTF_Init() < 0) {
+        std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
+        return false;
+    }
+
+        // error starting up the engine
     // My display is 1920 x 1080 but the following seems to work best to fill the screen.
     //const int SCREEN_WIDTH = 1540;
     //const int SCREEN_HEIGHT = 860;
@@ -34,9 +42,15 @@ bool GameManager::OnCreate() {
 		return false;
 	}
 
-    // select scene for specific assignment
+    engine = createIrrKlangDevice();
 
-    currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+    if (!engine)
+    {
+        std::cout << "error: sound engine fail" << std::endl;
+        return 0;
+    }
+
+    currentScene = new Scene0(windowPtr->GetSDL_Window(), this);
     
     // create player
     float mass = 1.0f;
@@ -71,10 +85,24 @@ bool GameManager::OnCreate() {
         OnDestroy();
         return false;
     }
-           
+
+    // create some user defined event
+    changeScenceEventType = SDL_RegisterEvents(1);
+    if (changeScenceEventType == ((Uint32)-1))
+    {
+        OnDestroy();
+        return false;
+
+    }
+    
+   
 	return true;
 }
 
+Uint32 GameManager::getChangeScence() {
+    return changeScenceEventType;
+
+}
 
 /// Here's the whole game loop
 void GameManager::Run() {
@@ -110,6 +138,18 @@ void GameManager::handleEvents()
         {
             isRunning = false;
         }
+        else if(event.type == changeScenceEventType)
+        {
+            //switch scene
+            currentScene->OnDestroy();
+            delete currentScene;
+
+            currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+            if(!currentScene->OnCreate())
+            {
+                isRunning = false;
+            }
+        }
         else if (event.type == SDL_KEYDOWN)
         {
             switch (event.key.keysym.scancode)
@@ -124,7 +164,7 @@ void GameManager::handleEvents()
                 isRunning = false;
                 break;
             case SDL_SCANCODE_1:
-                LoadScene(1);
+                LoadScene(0);
                 break;
             default:
                 break;
@@ -141,6 +181,8 @@ void GameManager::OnDestroy(){
 	if (windowPtr) delete windowPtr;
 	if (timer) delete timer;
 	if (currentScene) delete currentScene;
+    TTF_Quit();
+    engine->drop();
 }
 
 // This might be unfamiliar
@@ -200,15 +242,15 @@ void GameManager::LoadScene( int i )
 
     switch ( i )
     {
-        case 1:
-            currentScene = new Scene1( windowPtr->GetSDL_Window(), this);
+        case 0:
+            currentScene = new Scene0( windowPtr->GetSDL_Window(), this);
+            engine->stopAllSounds();
             break;
-
-       /* case 2:
-            currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
-            break;*/
+        case 1:
+            currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+            break;
         default:
-            currentScene = new Scene1( windowPtr->GetSDL_Window(), this );
+            currentScene = new Scene0( windowPtr->GetSDL_Window(), this);
             break;
     }
 
