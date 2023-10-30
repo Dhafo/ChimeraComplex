@@ -3,10 +3,13 @@
 #include <iostream>
 
 using namespace std;
-typedef struct
-{
-    int w, a, d, s;
-}ButtonKeys; ButtonKeys Keys;
+
+
+
+//typedef struct
+//{
+//    int w, a, d, s;
+//}ButtonKeys; ButtonKeys Keys;
 
 // See notes about this constructor in Scene1.h.
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
@@ -16,8 +19,18 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	xAxis = 1024.0f;
 	yAxis = 512.0f;
     float orientation = 0.0f;
+    //Items
     key = Entity(Vec2(192, 896), Vec2(0, 0));
-    player = Player(10, 0, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
+    healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
+    ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
+    //Enemies
+    skulker1 = Enemy(3, Vec2(160, 160), Vec2(0, 0));
+
+
+    //Player
+    player = Player(10, 6, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
+
+
 }
 
 
@@ -28,6 +41,9 @@ bool Scene1::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window,&w,&h);
     kCollected = false;
+    aCollected = false;
+    hCollected = false;
+
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
@@ -37,6 +53,11 @@ bool Scene1::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	// Set player image to PacMan
+
+    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0)));
+    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0)));
+    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0)));
+    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0)));
 
 	SDL_Surface* image;
     
@@ -73,12 +94,14 @@ void Scene1::OnDestroy()
 }
 
 void Scene1::Update(const float deltaTime) {
-
+   // player.getCurrentHealth();
 	// Update playerit
 	game->getPlayer()->Update(deltaTime);
     HandleMovement();
-   
-
+    player.playerUpdate(deltaTime);
+    for (int i = 0; i < skulker.size();i++) {
+        skulker[i]->updatePos(player.getPosition());
+    }
     // 4/2 because of map size(4,4) = x,y
 }
 
@@ -112,6 +135,29 @@ void Scene1::Render() {
         SDL_RenderFillRect(renderer, &keyMap);
     }
 
+    if (aCollected==false)
+    {
+        //ammo map dot
+        SDL_Rect ammoMap = { ammoItem.getPosition().x / 2, ammoItem.getPosition().y / 2, 4, 4 };
+        SDL_SetRenderDrawColor(renderer, 255, 255, 15, 0);
+        SDL_RenderFillRect(renderer, &ammoMap);
+    }
+
+    if (hCollected==false)
+    {
+        //health map dot
+        SDL_Rect healthMap = { healthItem.getPosition().x / 2, healthItem.getPosition().y / 2, 4, 4 };
+        SDL_SetRenderDrawColor(renderer, 15, 15, 240, 0);
+        SDL_RenderFillRect(renderer, &healthMap);
+    }
+  
+    //Enemy map dots
+    for (int i = 0; i < skulker.size(); i++) {
+        SDL_Rect skulkerMap = { skulker[i]->getPosition().x / 2, skulker[i]->getPosition().y / 2, 4, 4 };
+        SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
+        SDL_RenderFillRect(renderer, &skulkerMap);
+    }
+
 	// render the player
     SDL_Rect playerPos = { (player.getPosition().x - 2)/2, (player.getPosition().y - 2)/2, 4, 4 };
     SDL_SetRenderDrawColor(renderer, 255, 255, 15, 0); 
@@ -141,20 +187,20 @@ void Scene1::HandleEvents(const SDL_Event& event)
             
             if (event.key.keysym.scancode == SDL_SCANCODE_A) 
             {
-                Keys.a = 1; 
+                player.a = 1; 
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_D) 
             {
-                Keys.d = 1;
+                player.d = 1;
             }
 
             if (event.key.keysym.scancode == SDL_SCANCODE_W) //fix later
             {
-                Keys.w = 1;
+                player.w = 1;
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_S) //fix later
             {
-                Keys.s = 1;
+                player.s = 1;
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_E)
             {
@@ -191,12 +237,12 @@ void Scene1::HandleEvents(const SDL_Event& event)
                 else if (mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5 && kCollected == true)
                 {
                     game->getSoundEngine()->play2D("door2.wav", false);
-                    Keys.w = 0;
-                    Keys.a = 0;
-                    Keys.s = 0;
-                    Keys.d = 0;
+                    player.w = 0;
+                    player.a = 0;
+                    player.s = 0;
+                    player.d = 0;
                     //load menu
-                    game->LoadScene(0);
+                    game->LoadScene(2);
                 }
                 else if (mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5 && kCollected == false)
                 {
@@ -209,27 +255,27 @@ void Scene1::HandleEvents(const SDL_Event& event)
         {
             if (event.key.keysym.scancode == SDL_SCANCODE_A)
             {
-                Keys.a = 0;
+                player.a = 0;
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_D)
             {
-                Keys.d = 0;
+                player.d = 0;
             }
 
             if (event.key.keysym.scancode == SDL_SCANCODE_W) 
             {
-                Keys.w = 0;
+                player.w = 0;
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_S) 
             {
-                Keys.s = 0;
+                player.s = 0;
             }
         }
 }
 
 void Scene1::HandleMovement()
 {
-    if (Keys.a == 1)
+    if (player.a == 1)
     {
         player.setOrientation(player.getOrientation() + 0.030);
         if (player.getOrientation() > 2 * PI)
@@ -240,7 +286,7 @@ void Scene1::HandleMovement()
 
         player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
     }
-        if (Keys.d == 1)
+        if (player.d == 1)
         {
 
             player.setOrientation(player.getOrientation() - 0.030);
@@ -271,7 +317,7 @@ void Scene1::HandleMovement()
         }
         int ipx = player.getPosition().x / 64.0, ipx_add_xo = (player.getPosition().x + xo) / 64.0, ipx_sub_xo = (player.getPosition().x - xo) / 64.0;
         int ipy = player.getPosition().y / 64.0, ipy_add_yo = (player.getPosition().y + yo) / 64.0, ipy_sub_yo = (player.getPosition().y - yo) / 64.0;
-        if (Keys.w == 1) 
+        if (player.w == 1) 
         {
             if (mapWalls[ipy * mapWallsX + ipx_add_xo] == 0)
             {
@@ -283,7 +329,7 @@ void Scene1::HandleMovement()
                 player.setPosition(Vec2(player.getPosition().x, player.getPosition().y + player.getVelocity().y));
             }
         }
-        if (Keys.s == 1) 
+        if (player.s == 1) 
         {
             if (mapWalls[ipy * mapWallsX + ipx_sub_xo] == 0)
             {
@@ -304,6 +350,30 @@ void Scene1::HandleMovement()
                 game->getSoundEngine()->play2D("beep.wav", false);
                 std::cout << "Green Key Acquired!" << std::endl;
         }
+
+        //Enemy attack check
+
+        for (int i = 0; i < skulker.size(); i++) {
+            if (player.collField(skulker[i]->getPosition())) {
+
+                player.subHealth(1);
+                // cout << "player hit!" << endl;
+
+            }
+        }
+        if (player.collField(healthItem.getPosition()) && hCollected == false) {
+            hCollected = true;
+            player.addHealth(1);
+            cout << "player healed!" << endl;
+            cout << "player health = " << player.getCurrentHealth() << endl;
+        }
+        if (player.collField(ammoItem.getPosition()) && aCollected == false) {
+            aCollected = true;
+            player.addAmmo(3);
+            cout << "player picked up ammo!" << endl;
+            cout << "player ammo = " << player.getAmmo() << endl;
+        }
+        
     }
 
 void Scene1::drawMap2D()
@@ -340,7 +410,7 @@ void Scene1::drawMap2D()
     }
 }
 
-float dist(float ax, float ay, float bx, float by, float ang)
+float Scene1::dist(float ax, float ay, float bx, float by, float ang)
 {
     return(sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
@@ -598,7 +668,7 @@ void Scene1::draw3D()
 
 }
 
-void drawFloors()
+void Scene1::drawFloors()
 {
 
 }

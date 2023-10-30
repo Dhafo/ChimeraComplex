@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "Player.h"
+#include "Enemy.h"
 
 using namespace MATH;
 
@@ -14,7 +15,10 @@ using namespace MATH;
 // https://wynnliam.github.io/raycaster/news/tutorial/2019/04/03/raycaster-part-02.html
 // https://www.youtube.com/watch?v=gYRrGTC7GtA
 //
+
 class Scene1 : public Scene {
+
+
 private:
 	float xAxis;	// scene width, in game coords, set in constructor
 	float yAxis;	// scene height, in game coords, set in constructor
@@ -22,10 +26,12 @@ private:
 	SDL_Renderer* renderer;	// the renderer associated with SDL window
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4     inverseProjection;	// set in OnCreate()
-    bool kCollected; //if key collected
-    Entity key; 
+    bool kCollected,aCollected,hCollected; //if key, ammo, health are collected
+    Entity key,ammoItem,healthItem; 
+    Enemy skulker1;
     Player player;
-    
+    std::vector<Enemy*> skulker;// Array for the Skulker Enemies
+
 public:
 
 	// This constructor may be different from what you've seen before
@@ -52,7 +58,7 @@ public:
     {
       2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 2,
       2, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2,
-      2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+      2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 2,
       1, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
       1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 2, 2, 0, 1,
       1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -111,7 +117,7 @@ public:
     //handles movemnet
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
-
+    float dist(float ax, float ay, float bx, float by, float ang);
     //imported textures
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
@@ -134,7 +140,7 @@ public:
     SDL_Rect keyAcq = { 530 + 32, 320 + 48, 64, 64 };
     //UI key on map
     SDL_Rect keyMap = { 192/2, 896/2, 4, 4 };
-
+    
 };
 
 #endif

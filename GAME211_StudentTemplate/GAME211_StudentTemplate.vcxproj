@@ -30,6 +30,7 @@
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="Scene1.cpp" />
+    <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -45,6 +46,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene0.h" />
     <ClInclude Include="Scene1.h" />
+    <ClInclude Include="Scene2.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -101,7 +103,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\GameDev\IrrKlang\include;C:\GameDev\SDL\include;C:\GameDev\MathLibrary\include;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\GameDev\SDL_ttf-main\include;C:\GameDev\IrrKlang\include;C:\GameDev\SDL\include;C:\GameDev\MathLibrary\include;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\MathLibrary\include;$(IncludePath)</IncludePath>
