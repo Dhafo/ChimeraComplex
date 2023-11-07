@@ -52,7 +52,7 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
-
+    void EnemyMoveUpate(Enemy* enemy_);
     int zBuffer[480]; //depth at each ray hit
 
     //map Walls

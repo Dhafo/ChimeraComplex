@@ -43,109 +43,97 @@ F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(269,25): warning C4244: 'in
 F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(269,69): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(270,25): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(270,69): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(323,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(326,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(330,102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(335,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(338,63): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(340,106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(361,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(361,61): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(361,112): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(362,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(362,61): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(362,112): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(399,27): warning C4018: '<': signed/unsigned mismatch
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(424,19): warning C4101: 'yo': unreferenced local variable
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(424,15): warning C4101: 'xo': unreferenced local variable
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(478,35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(482,21): warning C4305: '+=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(486,21): warning C4305: '-=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(520,23): warning C4018: '<': signed/unsigned mismatch
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(544,26): warning C4305: '+=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(548,26): warning C4305: '-=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(553,64): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(560,64): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(573,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(574,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(599,64): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(606,64): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(619,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(620,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(646,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(647,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(673,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(674,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(734,23): warning C4018: '<': signed/unsigned mismatch
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(758,26): warning C4305: '+=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(762,25): warning C4305: '-=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(767,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(774,63): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(787,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(788,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(813,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(820,63): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(833,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(834,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(860,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(861,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(871,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(872,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(910,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(917,58): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(930,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(931,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(956,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(963,58): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(976,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(977,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1000,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1001,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1020,68): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1020,59): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1020,50): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1021,68): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1021,59): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1021,50): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1028,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1029,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1049,78): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1049,65): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1049,52): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1060,25): warning C4305: '+=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1064,25): warning C4305: '-=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1069,22): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1075,42): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1075,42): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1075,57): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1075,57): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1078,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1079,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1081,106): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1081,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1096,37): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1096,37): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1098,91): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1098,75): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1098,75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1104,52): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1104,52): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1106,94): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1106,78): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1106,78): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1115,25): warning C4305: '+=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1118,25): warning C4305: '+=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1122,25): warning C4305: '-=': truncation from 'double' to 'float'
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1145,23): warning C4018: '<': signed/unsigned mismatch
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(498,19): warning C4101: 'orDeg': unreferenced local variable
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1184,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1185,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1187,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1190,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1216,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1218,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1222,59): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1223,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1230,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1232,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(356,26): warning C4305: '+=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(360,26): warning C4305: '-=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(365,59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(372,59): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(385,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(386,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(411,59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(418,59): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(431,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(432,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(458,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(459,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(469,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(470,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(331,36): warning C4101: 'pra': unreferenced local variable
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(331,19): warning C4101: 'orDeg': unreferenced local variable
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(321,9): warning C4101: 'r': unreferenced local variable
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(487,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(490,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(494,102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(499,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(502,63): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(504,106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(525,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(525,61): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(525,112): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(526,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(526,61): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(526,112): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(563,27): warning C4018: '<': signed/unsigned mismatch
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(588,19): warning C4101: 'yo': unreferenced local variable
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(588,15): warning C4101: 'xo': unreferenced local variable
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(642,35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(646,21): warning C4305: '+=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(650,21): warning C4305: '-=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(666,23): warning C4018: '<': signed/unsigned mismatch
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(683,23): warning C4018: '<': signed/unsigned mismatch
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(707,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(714,58): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(727,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(728,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(753,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(760,58): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(773,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(774,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(797,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(798,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(817,68): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(817,59): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(817,50): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(818,68): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(818,59): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(818,50): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(825,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(826,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(846,78): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(846,65): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(846,52): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(857,25): warning C4305: '+=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(861,25): warning C4305: '-=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(866,22): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(872,42): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(872,42): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(872,57): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(872,57): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(875,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(876,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(878,106): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(878,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(893,37): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(893,37): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(895,91): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(895,75): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(895,75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(901,52): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(901,52): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(903,94): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(903,78): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(903,78): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(912,25): warning C4305: '+=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(915,25): warning C4305: '+=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(919,25): warning C4305: '-=': truncation from 'double' to 'float'
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(942,23): warning C4018: '<': signed/unsigned mismatch
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(986,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(987,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(989,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(992,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1018,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1020,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1024,59): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1025,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1032,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+F:\ChimeraComplex\GAME211_StudentTemplate\Scene1.cpp(1034,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   GAME211_StudentTemplate.vcxproj -> F:\ChimeraComplex\Debug\GAME211_StudentTemplate.exe
