@@ -27,6 +27,21 @@ public:
 
     void updatePos(Vec2 otherPos);
 
+    bool predMoveCheck(Vec2 pointA, Vec2 pointB, Vec2 pointC);
+
+    
+
+    float getOrientation() {
+
+        return orientation;
+
+    }
+    void setOrientation(float orientation_) {
+
+        orientation = orientation_;
+    }
 };
+
+
 
 #endif /* Enemy_H */

@@ -1,5 +1,7 @@
 #include "Enemy.h"
 #include <MMath.h>
+
+
 using namespace std;
 Enemy::Enemy() {
 
@@ -73,5 +75,30 @@ void Enemy::updatePos(Vec2 otherPos)
 
  /*   position.x += 1;
     position.y += 1;*/
+
+}
+
+bool Enemy::predMoveCheck(Vec2 pointA, Vec2 pointB, Vec2 pointC)
+{
+    Vec2 triBCCResult;
+
+    float detT = (pointB.y - pointC.y) * (pointA.x - pointC.x) +
+                 (pointC.x - pointB.x) * (pointA.y - pointC.y);
+    
+    triBCCResult.x = ((pointB.y - pointC.y) * (position.x - pointC.x) +
+                (pointC.x - pointB.x) * (position.y - pointC.y)) / detT;
+    
+    triBCCResult.y = ((pointC.y - pointA.y) * (position.x - pointC.x) +
+                (pointA.x - pointC.x) * (position.y - pointC.y)) / detT;
+    
+     triBCCResult;
+     
+     if (triBCCResult.x >= 0.0f && triBCCResult.y >= 0.0f && (triBCCResult.x + triBCCResult.y) <= 1.0f) {
+         return true;
+     }
+     else
+     {
+         return false;
+     }
 }
 

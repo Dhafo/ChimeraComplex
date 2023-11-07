@@ -32,6 +32,9 @@ private:
     Player player;
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies
 
+    std::vector<Enemy*> predator;// Array for the Skulker Enemies
+    bool predCanSee[1];
+
 public:
 
 	// This constructor may be different from what you've seen before

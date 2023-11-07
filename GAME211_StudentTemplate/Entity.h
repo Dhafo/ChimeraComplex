@@ -16,6 +16,7 @@ protected:
     Vec2 velocity;
    
     Vec2 position;
+    
 public:
 
     Entity();

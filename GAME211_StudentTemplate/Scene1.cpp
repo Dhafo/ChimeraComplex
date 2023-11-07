@@ -59,6 +59,10 @@ bool Scene1::OnCreate() {
     skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0)));
     skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0)));
 
+    predator.push_back(new Enemy(3, Vec2(544, 352), Vec2(0, 0)));
+
+    predCanSee[0] = false;
+
 	SDL_Surface* image;
     
 	SDL_Texture* texture;
@@ -100,7 +104,7 @@ void Scene1::Update(const float deltaTime) {
     HandleMovement();
     player.playerUpdate(deltaTime);
     for (int i = 0; i < skulker.size();i++) {
-        skulker[i]->updatePos(player.getPosition());
+     //   skulker[i]->updatePos(player.getPosition());
     }
     // 4/2 because of map size(4,4) = x,y
 }
@@ -108,6 +112,7 @@ void Scene1::Update(const float deltaTime) {
 
 
 void Scene1::Render() {
+
 	SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
 	SDL_RenderClear(renderer); 
 
@@ -156,6 +161,10 @@ void Scene1::Render() {
         SDL_Rect skulkerMap = { skulker[i]->getPosition().x / 2, skulker[i]->getPosition().y / 2, 4, 4 };
         SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
         SDL_RenderFillRect(renderer, &skulkerMap);
+       /* SDL_RenderDrawLine(renderer, (player.getPosition().x) / 2,
+            (player.getPosition().y) / 2,
+            skulker[i]->getPosition().x/2,
+            skulker[i]->getPosition().y/2);*/
     }
 
 	// render the player
@@ -164,14 +173,48 @@ void Scene1::Render() {
     SDL_RenderFillRect(renderer, &playerPos);
 
     // render direction on map
+
+
     int pointX = (player.getPosition().x) / 2;
     pointX += cos(-player.getOrientation()) * (((player.getPosition().x) / 2 + 8) - (player.getPosition().x) / 2) - sin(-player.getOrientation()) * (0);
     int pointY = (player.getPosition().y) / 2;
     pointY += sin(-player.getOrientation()) * (((player.getPosition().x) / 2 + 8) - (player.getPosition().x) / 2) + cos(-player.getOrientation()) * (0);
+
     SDL_RenderDrawLine(renderer, (player.getPosition().x) / 2,
                                  (player.getPosition().y) / 2,
                                  pointX,
                                    pointY);
+
+    int ePointX,ePointY;
+
+    for (int i = 0; i < skulker.size(); i++) {
+
+        ePointX = (skulker[i]->getPosition().x) / 2;
+        ePointX += cos(-skulker[i]->getOrientation()) * (((skulker[i]->getPosition().x) / 2 + 8) - (skulker[i]->getPosition().x) / 2) - sin(-skulker[i]->getOrientation()) * (0);
+        ePointY = (skulker[i]->getPosition().y) / 2;
+        ePointY += sin(-skulker[i]->getOrientation()) * (((skulker[i]->getPosition().x) / 2 + 8) - (skulker[i]->getPosition().x) / 2) + cos(-skulker[i]->getOrientation()) * (0);
+
+        SDL_RenderDrawLine(renderer, (skulker[i]->getPosition().x) / 2,
+            (skulker[i]->getPosition().y) / 2,
+            ePointX,
+            ePointY);
+
+    }
+
+    for (int i = 0; i < predator.size(); i++) {
+
+        ePointX = (predator[i]->getPosition().x) / 2;
+        ePointX += cos(-predator[i]->getOrientation()) * (((predator[i]->getPosition().x) / 2 + 8) - (predator[i]->getPosition().x) / 2) - sin(-predator[i]->getOrientation()) * (0);
+        ePointY = (predator[i]->getPosition().y) / 2;
+        ePointY += sin(-predator[i]->getOrientation()) * (((predator[i]->getPosition().x) / 2 + 8) - (predator[i]->getPosition().x) / 2) + cos(-predator[i]->getOrientation()) * (0);
+
+        SDL_RenderDrawLine(renderer, (predator[i]->getPosition().x) / 2,
+            (predator[i]->getPosition().y) / 2,
+            ePointX,
+            ePointY);
+
+    }
+
 	SDL_RenderPresent(renderer);
     
     //if we ever want to destroy
@@ -424,6 +467,9 @@ void Scene1::draw3D()
     float yo = 0;
 
     float disT;
+    //zone points used for the visual area detection of enemies
+    Vec2 zonePoint1;
+    Vec2 zonePoint2;
 
    // PlayerBody* player = game->getPlayer();
     SDL_Texture* tempTex = textureWall;
@@ -439,6 +485,415 @@ void Scene1::draw3D()
     {
         ra -= 2 * PI;
     }
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    float pX = player.getPosition().x;
+    float pY = player.getPosition().y;
+  
+    float eX, eY, orDeg ,tes, sra,pra;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //for (int i = 0; i < predator.size(); i++) {
+
+    //    eX = predator[i]->getPosition().x;
+    //    eY = predator[i]->getPosition().y;
+
+    //    tes = atan2(eY - pY, pX - eX);
+    //    /*  orDeg = tes * RADIANS_TO_DEGREES;
+    //      cout << orDeg << endl;*/
+    //    predator[i]->setOrientation(tes);
+
+    //  /*  if (predCanSee[i] == true) {
+
+    //        predator[i]->updatePos(player.getPosition());
+    //    }*/
+    //}
+
+    for (int i = 0; i < predator.size(); i++) {
+
+        eX = predator[i]->getPosition().x;
+        eY = predator[i]->getPosition().y;
+
+        tes = atan2(eY - pY, pX - eX);
+        /*  orDeg = tes * RADIANS_TO_DEGREES;
+          cout << orDeg << endl;*/
+        predator[i]->setOrientation(tes);
+
+        ///////////////////
+        disT = 10000000;
+        // Horizontal Line Check
+        pra = -predator[i]->getOrientation();
+        dof = 0;
+        float disH = 100000000;
+        float ehx = predator[i]->getPosition().x;
+        float ehy = predator[i]->getPosition().y;
+        float aTan = -1 / tan(pra);
+
+        // pra = -predator[i]->getOrientation() - DegToRad * 30;
+
+        if (pra < 0)
+        {
+            pra += 2 * PI;
+        }
+        if (pra > 2 * PI)
+        {
+            pra -= 2 * PI;
+        }
+
+        if (pra > PI)
+        {
+            ry = (int)(predator[i]->getPosition().y / 64) * 64 - 0.0001;
+            rx = (predator[i]->getPosition().y - ry) * aTan + predator[i]->getPosition().x;
+            yo = -64;
+            xo = -yo * aTan;
+        }
+        if (pra < PI)
+        {
+            ry = (int)(predator[i]->getPosition().y / 64) * 64 + 64;
+            rx = (predator[i]->getPosition().y - ry) * aTan + predator[i]->getPosition().x;
+            yo = 64;
+            xo = -yo * aTan;
+        }
+        if (pra == 0 || pra == PI)
+        {
+            rx = predator[i]->getPosition().x;
+            ry = predator[i]->getPosition().y;
+            dof = 16;
+        }
+        while (dof < 16)
+        {
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
+            {
+                ehx = rx;
+                ehy = ry;
+                disH = dist(predator[i]->getPosition().x, predator[i]->getPosition().y, ehx, ehy, pra);
+                dof = 16;
+            }
+            else
+            {
+                rx += xo;
+                ry += yo;
+                dof += 1;
+            }
+        }
+
+        // Vertical Line Check
+        dof = 0;
+        float disV = 100000000;
+        float vX = predator[i]->getPosition().x;
+        float vY = predator[i]->getPosition().y;
+        float nTan = -tan(pra);
+        if (pra > P2 && pra < P3)
+        {
+            rx = (int)(predator[i]->getPosition().x / 64) * 64 - 0.0001;
+            ry = (predator[i]->getPosition().x - rx) * nTan + predator[i]->getPosition().y;
+            xo = -64;
+            yo = -xo * nTan;
+        }
+        if (pra < P2 || pra > P3)
+        {
+            rx = (int)(predator[i]->getPosition().x / 64) * 64 + 64;
+            ry = (predator[i]->getPosition().x - rx) * nTan + predator[i]->getPosition().y;
+            xo = 64;
+            yo = -xo * nTan;
+        }
+        if (pra == 0 || pra == PI)
+        {
+            rx = predator[i]->getPosition().x;
+            ry = predator[i]->getPosition().y;
+            dof = 16;
+        }
+        while (dof < 16)
+        {
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
+            {
+                vX = rx;
+                vY = ry;
+                disV = dist(predator[i]->getPosition().x, predator[i]->getPosition().y, vX, vY, pra);
+                dof = 16;
+            }
+            else
+            {
+                rx += xo;
+                ry += yo;
+                dof += 1;
+            }
+
+
+        }
+
+
+        //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
+        if (disV < disH)
+        {
+            rx = vX;
+            ry = vY;
+            disT = disV;
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+            color = Vec3(240, 240, 240);
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 1)
+            {
+                tempTex = textureWall;
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 2)
+            {
+                tempTex = textureWall2;
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 4)
+            {
+                tempTex = textureDoor;
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 5)
+            {
+                tempTex = textureDoor2;
+            }
+
+        }
+        else if (disH < disV)
+        {
+            rx = ehx;
+            ry = ehy;
+            disT = disH;
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+            color = Vec3(240, 240, 240);
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 1)
+            {
+                tempTex = textureWall;
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 2)
+            {
+                tempTex = textureWall2;
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 4)
+            {
+                tempTex = textureDoor;
+            }
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 5)
+            {
+                tempTex = textureDoor2;
+            }
+
+        }
+
+        if (dist(eX, eY, rx, ry, pra) > dist(eX, eY, pX, pY, pra)) {
+            if (predCanSee[i] == true) {
+
+                predator[i]->updatePos(player.getPosition());
+            }
+        }
+        /* if (eX - rx > eX - pX && eY - ry > eY - pY) {
+             skulker[i]->updatePos(player.getPosition());
+         }*/
+         // SDL_RenderDrawLine(renderer, skulker[i]->getPosition().x, skulker[i]->getPosition().y, rx, ry);
+
+    }
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //for (int i = 0; i < predator.size(); i++) {
+
+    //    eX = predator[i]->getPosition().x;
+    //    eY = predator[i]->getPosition().y;
+
+    //    tes = atan2(eY - pY, pX - eX);
+    //    /*  orDeg = tes * RADIANS_TO_DEGREES;
+    //      cout << orDeg << endl;*/
+    //    predator[i]->setOrientation(tes);
+
+    //    if (predCanSee[i] == true) {
+
+    //        predator[i]->updatePos(player.getPosition());
+    //    }
+    //}
+   
+    for (int i = 0; i < skulker.size(); i++) {
+
+        eX = skulker[i]->getPosition().x;
+        eY = skulker[i]->getPosition().y;
+
+        tes = atan2(eY - pY, pX - eX);
+        /*  orDeg = tes * RADIANS_TO_DEGREES;
+          cout << orDeg << endl;*/
+        skulker[i]->setOrientation(tes);
+
+        ///////////////////
+        disT = 10000000;
+        // Horizontal Line Check
+        sra = -skulker[i]->getOrientation() ;
+        dof = 0;
+        float disH = 100000000;
+        float ehx = skulker[i]->getPosition().x;
+        float ehy = skulker[i]->getPosition().y;
+        float aTan = -1 / tan(sra);
+
+       // sra = -skulker[i]->getOrientation() - DegToRad * 30;
+
+        if (sra < 0)
+        {
+            sra += 2 * PI;
+        }
+        if (sra > 2 * PI)
+        {
+           sra -= 2 * PI;
+        }
+
+        if (sra > PI)
+        {
+            ry = (int)(skulker[i]->getPosition().y / 64) * 64 - 0.0001;
+            rx = (skulker[i]->getPosition().y - ry) * aTan + skulker[i]->getPosition().x;
+            yo = -64;
+            xo = -yo * aTan;
+        }
+        if (sra < PI)
+        {
+            ry = (int)(skulker[i]->getPosition().y / 64) * 64 + 64;
+            rx = (skulker[i]->getPosition().y - ry) * aTan + skulker[i]->getPosition().x;
+            yo = 64;
+            xo = -yo * aTan;
+        }
+        if (sra == 0 || sra == PI)
+        {
+            rx = skulker[i]->getPosition().x;
+            ry = skulker[i]->getPosition().y;
+            dof = 16;
+        }
+        while (dof < 16)
+        {
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
+            {
+                ehx = rx;
+                ehy = ry;
+                disH = dist(skulker[i]->getPosition().x, skulker[i]->getPosition().y, ehx, ehy, sra);
+                dof = 16;
+            }
+            else
+            {
+                rx += xo;
+                ry += yo;
+                dof += 1;
+            }
+        }
+
+        // Vertical Line Check
+        dof = 0;
+        float disV = 100000000;
+        float vX = skulker[i]->getPosition().x;
+        float vY = skulker[i]->getPosition().y;
+        float nTan = -tan(sra);
+        if (sra > P2 && sra < P3)
+        {
+            rx = (int)(skulker[i]->getPosition().x / 64) * 64 - 0.0001;
+            ry = (skulker[i]->getPosition().x - rx) * nTan + skulker[i]->getPosition().y;
+            xo = -64;
+            yo = -xo * nTan;
+        }
+        if (sra < P2 || sra > P3)
+        {
+            rx = (int)(skulker[i]->getPosition().x / 64) * 64 + 64;
+            ry = (skulker[i]->getPosition().x - rx) * nTan + skulker[i]->getPosition().y;
+            xo = 64;
+            yo = -xo * nTan;
+        }
+        if (sra == 0 || sra == PI)
+        {
+            rx = skulker[i]->getPosition().x;
+            ry = skulker[i]->getPosition().y;
+            dof = 16;
+        }
+        while (dof < 16)
+        {
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
+            {
+                vX = rx;
+                vY = ry;
+                disV = dist(skulker[i]->getPosition().x, skulker[i]->getPosition().y, vX, vY, sra);
+                dof = 16;
+            }
+            else
+            {
+                rx += xo;
+                ry += yo;
+                dof += 1;
+            }
+
+
+        }
+
+
+        //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
+        if (disV < disH)
+        {
+            rx = vX;
+            ry = vY;
+            disT = disV;
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+          
+        
+        }
+        else if (disH < disV)
+        {
+            rx = ehx;
+            ry = ehy;
+            disT = disH;
+            mx = rx / 64;
+            my = ry / 64;
+            mp = my * mapWallsX + mx;
+
+        }
+
+        if (disT> dist(eX, eY, pX, pY, sra)) {
+            skulker[i]->updatePos(player.getPosition());
+            
+        }
+        if (i == 3) {
+           // cout << disT << "   " << dist(eX, eY, pX, pY, sra) << endl;
+        }
+       /* if (eX - rx > eX - pX && eY - ry > eY - pY) {
+        //    skulker[i]->updatePos(player.getPosition());
+        }*/
+       // SDL_RenderDrawLine(renderer, skulker[i]->getPosition().x, skulker[i]->getPosition().y, rx, ry);
+
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 
     //480 rays for every x value in the 480x320 screen
     for(r=0; r<480; r++)
@@ -562,7 +1017,7 @@ void Scene1::draw3D()
             {
                 tempTex = textureDoor2;
             }
-            //SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
+            SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
             SDL_SetTextureColorMod(tempTex, color.x, color.y, color.z);
         }
         else if (disH<disV)
@@ -594,6 +1049,8 @@ void Scene1::draw3D()
             SDL_SetTextureColorMod(tempTex, color.x/1.6, color.y/1.6, color.z/1.6);
         }
        
+
+      
 
         //3D Wall Drawing
         float ca = player.getOrientation() + ra;
@@ -664,9 +1121,53 @@ void Scene1::draw3D()
         {
             ra -= 2 * PI;
         }
-    }
 
+        if (r == 30) {
+            zonePoint1 = Vec2(rx, ry);
+
+        }
+        if (r == 450) {
+            zonePoint2 = Vec2(rx, ry);
+
+        }
+    }
+   
+    //float slope = (player.getPosition().y - zonePoint1.y) / (player.getPosition().x - zonePoint1.x);
+    //float b = zonePoint1.y - (slope * zonePoint1.x);
+    //zonePoint1 = Vec2(zonePoint1.x * 5, (zonePoint1.x * 5 * slope) + b);
+
+
+    //slope = (player.getPosition().y - zonePoint2.y) / (player.getPosition().x - zonePoint2.x);
+    //b = zonePoint2.y - (slope * zonePoint2.x);
+    //zonePoint2 = Vec2(zonePoint2.x * 5, (zonePoint2.x * 5 * slope) + b);
+
+    //checks if the player is staring at the enemy
+    for (int i = 0; i < predator.size(); i++) {
+       /* if (predator[i]->getPosition().x <fFieldx && predator[i]->getPosition().x > player.getPosition().x) {
+
+            predCanSee[i] == true;
+        }*/
+        float slope = (player.getPosition().y - zonePoint1.y)/(player.getPosition().x - zonePoint1.x);
+        float b = zonePoint1.y- (slope* zonePoint1.x);
+        zonePoint1 = Vec2(zonePoint1.x * 5, (zonePoint1.x * 5 * slope) + b);
+
+        b = zonePoint2.y - (slope * zonePoint2.x);
+        slope = (player.getPosition().y - zonePoint2.y) / (player.getPosition().x - zonePoint2.x);
+        zonePoint2 = Vec2(zonePoint2.x * 5, (zonePoint2.x * 5 * slope) + b);
+
+
+        if (predator[i]->predMoveCheck(player.getPosition(), zonePoint1, zonePoint2)) {
+            predCanSee[i] = true;
+            cout << "i see you"<< endl;
+       }
+        else
+        {
+            predCanSee[i] = false;
+        }
+    }
 }
+
+
 
 void Scene1::drawFloors()
 {
