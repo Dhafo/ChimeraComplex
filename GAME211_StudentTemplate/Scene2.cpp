@@ -1,6 +1,8 @@
 #include "Scene2.h"
 #include <VMath.h>
 #include <iostream>
+#include <algorithm>
+#include "Scene1.h"
 
 using namespace std;
 
@@ -35,6 +37,12 @@ Scene2::~Scene2(){
 bool Scene2::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window,&w,&h);
+
+    SDL_RenderSetScale(renderer, 2, 2);
+    surf = SDL_CreateRGBSurface(0, 480, 320, 32, 0, 0, 0, 0);
+    pixels = (Uint32*)surf->pixels;
+    buffer = SDL_CreateTextureFromSurface(renderer, surf);
+
     kCollected = false;
     aCollected = false;
     hCollected = false;
@@ -54,30 +62,58 @@ bool Scene2::OnCreate() {
     
 	SDL_Texture* texture;
 
-	image = IMG_Load("pacman.png");
+    image = IMG_Load("pacman.png");
     imageWall = IMG_Load("wallTest.png");
     imageWall2 = IMG_Load("wallTest2.png");
     imageDoor = IMG_Load("door.png");
     imageDoor2 = IMG_Load("door2.png");
-    enemySprite = IMG_Load("CardKey.png");
-	texture = SDL_CreateTextureFromSurface(renderer, image);
+    keySprite = IMG_Load("CardKey.png");
+    imageFloor = IMG_Load("floor2.png");
+    imageCeiling = IMG_Load("ceiling.png");
+    predatorSprite = IMG_Load("Blinky.png");
+    skulkerSprite = IMG_Load("Blinky2.png");
+    texture = SDL_CreateTextureFromSurface(renderer, image);
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
     textureWall2 = SDL_CreateTextureFromSurface(renderer, imageWall2);
     textureDoor = SDL_CreateTextureFromSurface(renderer, imageDoor);
     textureDoor2 = SDL_CreateTextureFromSurface(renderer, imageDoor2);
-    enemyTexture = SDL_CreateTextureFromSurface(renderer, enemySprite);
-	game->getPlayer()->setImage(image);
-	game->getPlayer()->setTexture(texture);
+    keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
+    textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
+    textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
+    for (int i = 0; i < 6; i++) {
+        std::string gunFrame = "Gun/gun" + std::to_string(i) + ".png";
+        SDL_Surface* gunSurf = IMG_Load(gunFrame.c_str());
+        SDL_Texture* gunTexture = SDL_CreateTextureFromSurface(renderer, gunSurf);
+        SDL_FreeSurface(gunSurf);
+        textureGun[i] = gunTexture;
+    }
+    currentGunFrame = 0;
+    predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
+    skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
+    game->getPlayer()->setImage(image);
+    game->getPlayer()->setTexture(texture);
 
-    key = Entity(Vec2(192, 896), Vec2(0, 0), enemyTexture);
+    key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
     //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
     //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
 
-    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), enemyTexture));
-    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), enemyTexture));
-    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), enemyTexture));
-    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), enemyTexture));
+    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
 
+    entities.reserve(predator.size() + skulker.size() + 1);
+
+    for (Entity* entity : predator)
+    {
+        entities.push_back(entity);
+    }
+    for (Entity* entity : skulker)
+    {
+        entities.push_back(entity);
+    }
+
+    entities.push_back(&key);
 
 	return true;
 }
@@ -88,14 +124,37 @@ void Scene2::OnDestroy()
     SDL_FreeSurface(imageWall);
     SDL_DestroyTexture(textureWall2);
     SDL_FreeSurface(imageWall2);
+    SDL_DestroyTexture(textureFloor);
+    SDL_FreeSurface(imageFloor);
+    SDL_DestroyTexture(textureCeiling);
+    SDL_FreeSurface(imageCeiling);
     SDL_DestroyTexture(textureDoor);
     SDL_FreeSurface(imageDoor);
-    SDL_DestroyTexture(enemyTexture);
-    SDL_FreeSurface(enemySprite);
+    SDL_DestroyTexture(predatorTexture);
+    SDL_FreeSurface(predatorSprite);
+    SDL_DestroyTexture(skulkerTexture);
+    SDL_FreeSurface(skulkerSprite);
+    SDL_DestroyTexture(buffer);
+    SDL_FreeSurface(surf);
 }
 
 void Scene2::Update(const float deltaTime) {
    // player.getCurrentHealth();
+    if (shootGun)
+    {
+        timePassed += deltaTime;
+        //shoot gun
+        if (timePassed >= 0.08f)
+        {
+            currentGunFrame += 1;
+            timePassed = 0;
+        }
+        if (currentGunFrame > 5)
+        {
+            currentGunFrame = 0;
+            shootGun = false;
+        }
+    }
 	// Update playerit
 	game->getPlayer()->Update(deltaTime);
     HandleMovement();
@@ -109,69 +168,33 @@ void Scene2::Update(const float deltaTime) {
 
 
 void Scene2::Render() {
-	SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
-	SDL_RenderClear(renderer); 
+    SDL_RenderClear(renderer);
 
+    drawFloors();
+    SDL_UpdateTexture(buffer, NULL, surf->pixels, surf->pitch);
+    SDL_RenderCopy(renderer, buffer, NULL, NULL);
     draw3D();
-    entityTick();
 
-    drawMap2D();
-   
-    SDL_SetRenderDrawColor(renderer, 15, 15, 15, 0);
-    //UI
-    SDL_RenderFillRect(renderer, &Top);
-    SDL_RenderFillRect(renderer, &Bottom);;
-    SDL_RenderFillRect(renderer, &Left);
-    SDL_RenderFillRect(renderer, &Right);
-    
+    std::sort(entities.begin(), entities.end(), [&](Entity* a, Entity* b)
+        {
+            return sortByDistance(a, b);
+        });
+
+    for (int i = 0; i < entities.size(); i++)
+    {
+        entityTick(entities[i], entities[i]->texture);
+    }
+
+    SDL_RenderCopy(renderer, textureGun[currentGunFrame], NULL, &gun);
+
     if (kCollected)
     {
         // key collect UI
-        SDL_RenderCopy(renderer, enemyTexture, NULL, &keyAcq);
-    }
-    else
-    {
-        //key map dot
-        SDL_SetRenderDrawColor(renderer, 15, 240, 15, 0);
-        SDL_RenderFillRect(renderer, &keyMap);
+        SDL_RenderCopy(renderer, keyTexture, NULL, &keyAcq);
     }
 
 
-    //ammo map dot
-    SDL_Rect ammoMap = { ammoItem.getPosition().x / 2, ammoItem.getPosition().y / 2, 4, 4 };
-    SDL_SetRenderDrawColor(renderer, 255, 255, 15, 0);
-    SDL_RenderFillRect(renderer, &ammoMap);
-
-  
-    //health map dot
-    SDL_Rect healthMap = { healthItem.getPosition().x / 2, healthItem.getPosition().y / 2, 4, 4 };
-    SDL_SetRenderDrawColor(renderer, 15, 15, 240, 0);
-    SDL_RenderFillRect(renderer, &healthMap);
-
-  
-    //Enemy map dots
-    for (int i = 0; i < skulker.size(); i++) {
-        SDL_Rect skulkerMap = { skulker[i]->getPosition().x / 2, skulker[i]->getPosition().y / 2, 4, 4 };
-        SDL_SetRenderDrawColor(renderer, 240, 15, 15, 0);
-        SDL_RenderFillRect(renderer, &skulkerMap);
-    }
-
-	// render the player
-    SDL_Rect playerPos = { (player.getPosition().x - 2)/2, (player.getPosition().y - 2)/2, 4, 4 };
-    SDL_SetRenderDrawColor(renderer, 255, 255, 15, 0); 
-    SDL_RenderFillRect(renderer, &playerPos);
-
-    // render direction on map
-    int pointX = (player.getPosition().x) / 2;
-    pointX += cos(-player.getOrientation()) * (((player.getPosition().x) / 2 + 8) - (player.getPosition().x) / 2) - sin(-player.getOrientation()) * (0);
-    int pointY = (player.getPosition().y) / 2;
-    pointY += sin(-player.getOrientation()) * (((player.getPosition().x) / 2 + 8) - (player.getPosition().x) / 2) + cos(-player.getOrientation()) * (0);
-    SDL_RenderDrawLine(renderer, (player.getPosition().x) / 2,
-                                 (player.getPosition().y) / 2,
-                                 pointX,
-                                   pointY);
-	SDL_RenderPresent(renderer);
-    
+    SDL_RenderPresent(renderer);
     //if we ever want to destroy
     //SDL_DestroyTexture(textureWall);
     //SDL_FreeSurface(imageWall);
@@ -182,7 +205,14 @@ void Scene2::HandleEvents(const SDL_Event& event)
 
         if (event.type == SDL_KEYDOWN)
         {
-            
+            if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
+            {
+                if (!shootGun)
+                {
+                    game->getSoundEngine()->play2D("pistol_shot.wav", false);
+                    shootGun = true;
+                }
+            }
             if (event.key.keysym.scancode == SDL_SCANCODE_A) 
             {
                 player.a = 1; 
@@ -240,7 +270,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
                     player.s = 0;
                     player.d = 0;
                     //load menu
-                    game->LoadScene(2);
+                    game->LoadScene(0);
                 }
                 else if (mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5 && kCollected == false)
                 {
@@ -408,9 +438,17 @@ void Scene2::drawMap2D()
     }
 }
 
-float Scene2::dist(float ax, float ay, float bx, float by, float ang)
+float Scene2::dist(float ax, float ay, float bx, float by)
 {
     return(sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
+}
+
+// Custom comparison function to sort by shortest distance to a target position.
+bool Scene2::sortByDistance(Entity* entity1, Entity* entity2)
+{
+    float distanceA = dist(entity1->getPosition().x, entity1->getPosition().y, player.getPosition().x, player.getPosition().y);
+    float distanceB = dist(entity2->getPosition().x, entity2->getPosition().y, player.getPosition().x, player.getPosition().y);
+    return distanceA > distanceB;
 }
 
 void Scene2::draw3D()
@@ -423,23 +461,28 @@ void Scene2::draw3D()
 
     float disT;
 
-   // PlayerBody* player = game->getPlayer();
-    SDL_Texture* tempTex = textureWall;
+    // PlayerBody* player = game->getPlayer();
 
+    SDL_Texture* tempTex = textureWall;
+    //zone points used for the visual area detection of enemies
+    Vec2 zonePoint1;
+    Vec2 zonePoint2;
 
     ra = -player.getOrientation() - DegToRad * 30;
 
-    if(ra < 0)
+    if (ra < 0)
     {
         ra += 2 * PI;
     }
-    if(ra > 2*PI)
+    if (ra > 2 * PI)
     {
         ra -= 2 * PI;
     }
+ 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    //480 rays for every x value in the 480x320 screen
-    for(r=0; r<480; r++)
+        //480 rays for every x value in the 480x320 screen
+    for (r = 0; r < 480; r++)
     {
         disT = 10000000;
         // Horizontal Line Check
@@ -448,7 +491,7 @@ void Scene2::draw3D()
         float hX = player.getPosition().x;
         float hY = player.getPosition().y;
         float aTan = -1 / tan(ra);
-        if(ra > PI)
+        if (ra > PI)
         {
             ry = (int)(player.getPosition().y / 64) * 64 - 0.0001;
             rx = (player.getPosition().y - ry) * aTan + player.getPosition().x;
@@ -462,22 +505,22 @@ void Scene2::draw3D()
             yo = 64;
             xo = -yo * aTan;
         }
-        if(ra ==0 || ra ==PI)
+        if (ra == 0 || ra == PI)
         {
             rx = player.getPosition().x;
             ry = player.getPosition().y;
             dof = 16;
         }
-        while(dof < 16)
+        while (dof < 16)
         {
             mx = rx / 64;
             my = ry / 64;
             mp = my * mapWallsX + mx;
-            if(mp > 0 && mp<mapWallsX * mapWallsY && mapWalls[mp] > 0)
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
             {
                 hX = rx;
                 hY = ry;
-                disH = dist(player.getPosition().x, player.getPosition().y, hX, hY, ra);
+                disH = dist(player.getPosition().x, player.getPosition().y, hX, hY);
                 dof = 16;
             }
             else
@@ -487,14 +530,14 @@ void Scene2::draw3D()
                 dof += 1;
             }
         }
-        
+
         // Vertical Line Check
         dof = 0;
         float disV = 100000000;
         float vX = player.getPosition().x;
         float vY = player.getPosition().y;
         float nTan = -tan(ra);
-        if(ra > P2 && ra < P3)
+        if (ra > P2 && ra < P3)
         {
             rx = (int)(player.getPosition().x / 64) * 64 - 0.0001;
             ry = (player.getPosition().x - rx) * nTan + player.getPosition().y;
@@ -508,22 +551,22 @@ void Scene2::draw3D()
             xo = 64;
             yo = -xo * nTan;
         }
-        if(ra ==0 || ra ==PI)
+        if (ra == 0 || ra == PI)
         {
             rx = player.getPosition().x;
             ry = player.getPosition().y;
             dof = 16;
         }
-        while(dof < 16)
+        while (dof < 16)
         {
             mx = rx / 64;
             my = ry / 64;
             mp = my * mapWallsX + mx;
-            if(mp > 0 && mp<mapWallsX * mapWallsY && mapWalls[mp] > 0)
+            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
             {
                 vX = rx;
                 vY = ry;
-                disV = dist(player.getPosition().x, player.getPosition().y, vX, vY, ra);
+                disV = dist(player.getPosition().x, player.getPosition().y, vX, vY);
                 dof = 16;
             }
             else
@@ -535,7 +578,7 @@ void Scene2::draw3D()
         }
 
         //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
-        if(disV<disH)
+        if (disV < disH)
         {
             rx = vX;
             ry = vY;
@@ -556,14 +599,14 @@ void Scene2::draw3D()
             {
                 tempTex = textureDoor;
             }
-            else if(mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 5)
+            else if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] == 5)
             {
                 tempTex = textureDoor2;
             }
             //SDL_SetRenderDrawColor(renderer,color.x, color.y, color.z, 0);
             SDL_SetTextureColorMod(tempTex, color.x, color.y, color.z);
         }
-        else if (disH<disV)
+        else if (disH < disV)
         {
             rx = hX;
             ry = hY;
@@ -589,9 +632,9 @@ void Scene2::draw3D()
                 tempTex = textureDoor2;
             }
             //SDL_SetRenderDrawColor(renderer, color.x/1.6, color.y / 1.6, color.z / 1.6, 0);
-            SDL_SetTextureColorMod(tempTex, color.x/1.6, color.y/1.6, color.z/1.6);
+            SDL_SetTextureColorMod(tempTex, color.x / 1.6, color.y / 1.6, color.z / 1.6);
         }
-       
+
 
         //3D Wall Drawing
         float ca = player.getOrientation() + ra;
@@ -613,47 +656,44 @@ void Scene2::draw3D()
         float lineO = 160 - lineH / 2; //offset so we don't start from the very top of the screen
 
         //make our line into a rect
-        SDL_Rect rect = { r + 530, lineO + 16, 1, lineH + 16 };
+        SDL_Rect rect = { r, lineO, 1, lineH };
 
         //where textures go
         int texVX = (ry / 64 - my) * (64);
+        if ((ra * RADIANS_TO_DEGREES > 90) && (ra * RADIANS_TO_DEGREES < 270))
+        {
+            texVX = 63 - texVX;
+        }
+
         int texHX = (rx / 64 - mx) * (64);
-        float dy = lineO + lineH + 32;
-        int texFloorX = player.getPosition().x / 2 + cos(ra * DegToRad) * 158 * 64 / dy / (cos(FixAng(ca - ra) * DegToRad));
+        if (ra * RADIANS_TO_DEGREES < 180)
+        {
+            texHX = 63 - texHX;
+        }
+
+        float dy = lineO + lineH;
 
         if (disV < disH) //check if vertical or horizontal
         {
-            SDL_Rect crop = { texVX, 0, 1, 64}; // if vertical we use y offset
+            SDL_Rect crop = { texVX, 0, 1, 64 }; // if vertical we use y offset
             SDL_RenderCopy(renderer, tempTex, &crop, &rect);
+
         }
         else
         {
-            SDL_Rect crop = { texHX, 0, 1, 64}; // if horizontal we use x offset
+            SDL_Rect crop = { texHX, 0, 1, 64 }; // if horizontal we use x offset
             SDL_RenderCopy(renderer, tempTex, &crop, &rect);
         }
 
+        //SDL_Rect ceiling = { r, 0 , 1, lineO }; //under the walls
+        //SDL_SetRenderDrawColor(renderer, 7, 11, 27, 0);
+        //SDL_RenderFillRect(renderer, &ceiling);
 
-        //Draw Floor (everything after the wall is done)
-        SDL_Rect floor = { r + 530, dy, 1, 320 }; //under the walls
-        SDL_Rect floorCrop = { texFloorX,
-                               (int)game->getPlayer()->pos.y * 158 * 64/dy/ cos(FixAng(ca - ra) * DegToRad),
-            1, 64};
-        SDL_SetRenderDrawColor(renderer, 25, 27, 63, 0);
-        SDL_RenderFillRect(renderer, &floor);
-
-        //Draw Ceiling (everything before the wall is done)
-        SDL_Rect ceiling = { r + 530, 0 , 1, lineO + 16 }; //under the walls
-        SDL_Rect ceilingCrop = { texFloorX,
-                               (int)game->getPlayer()->pos.y * 158 * 64 / dy / cos(FixAng(ca - ra) * DegToRad),
-            1, 64 };
-        SDL_SetRenderDrawColor(renderer, 7, 12, 29, 0);
-        SDL_RenderFillRect(renderer, &ceiling);
-        
         //SDL_RenderFillRect(renderer, &rect);
         //SDL_RenderDrawLine(renderer, r*8 + 530, lineO, r*8 + 530, lineH + lineO);
-       
+
         //degree change 60 (fov)  / 480 (number of rays) = 1/8 degree change per ray
-        ra += DegToRad/8;
+        ra += DegToRad / 8;
         if (ra < 0)
         {
             ra += 2 * PI;
@@ -662,24 +702,99 @@ void Scene2::draw3D()
         {
             ra -= 2 * PI;
         }
+
+        if (r == 30) {
+            zonePoint1 = Vec2(rx, ry);
+
+        }
+        if (r == 450) {
+            zonePoint2 = Vec2(rx, ry);
+
+        }
     }
 
+   
+}
+
+Uint32 Scene2::getpixel(SDL_Surface* surface, int x, int y)
+{
+    //https://stackoverflow.com/questions/53033971/how-to-get-the-color-of-a-specific-pixel-from-sdl-surface
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to retrieve */
+    Uint8* p = (Uint8*)surface->pixels + y * surface->pitch + x * bpp;
+
+    Uint32 pixelColor = *(Uint32*)p;
+
+    Uint8 red, green, blue, alpha;
+    SDL_GetRGBA(pixelColor, surface->format, &red, &green, &blue, &alpha);
+    return SDL_MapRGBA(surface->format, blue, green, red, alpha);
 }
 
 void Scene2::drawFloors()
 {
+    //we need to start from left most fov ray, till right most fov ray
+    float angle0 = -player.getOrientation() - DegToRad * 30;
+    float angle1 = angle0 + DegToRad * 60;
 
+    float rayDirX0 = cos(angle0);
+    float rayDirY0 = sin(angle0);
+    float rayDirX1 = cos(angle1);
+    float rayDirY1 = sin(angle1);
+
+    float posZ = 1 * 320 / 2;
+    //find right most ray
+    for (int y = 160; y < 320; y++) //half screen line by line
+    {
+        int p = y - 320 / 2;
+        float rowDistance = posZ / p;
+
+        float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / 480;
+        float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / 480;
+
+        float floorX = player.getPosition().x / 64.0f + rowDistance * rayDirX0; //posX
+        float floorY = player.getPosition().y / 64.0f + rowDistance * rayDirY0; //posY
+
+        for (int x = 0; x < 480; x++)
+        {
+            //point on the map
+            int mapX = (int)(floorX);
+            int mapY = (int)(floorY);
+
+            //get tex coord from 0.0 - 1.0 offset
+            int tx = (int)(64 * (floorX - mapX)) & (64 - 1); //64 = texWidth
+            int ty = (int)(64 * (floorY - mapY)) & (64 - 1); //64 = texHeight
+
+            floorX += floorStepX;
+            floorY += floorStepY;
+
+            //choose text and draw pixel
+            if (mapFloor[mapY * mapFloorX + mapX] == 0)
+            {
+                //
+            }
+            else if (mapFloor[mapY * mapFloorX + mapX] == 1)
+            {
+                //
+            }
+
+            //floor
+            pixels[x + y * 480] = getpixel(imageFloor, tx, ty);
+            //ceiling
+            pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling, tx, ty);
+
+        }
+    }
 }
 
-void Scene2::entityTick()
+void Scene2::entityTick(Entity* entity, SDL_Texture* entityTexture)
 {
     //Major help from:
     //https://www.youtube.com/watch?v=eBFOjriHMc8
     //https://wynnliam.github.io/raycaster/news/tutorial/2019/04/03/raycaster-part-02.html
 
     //first find distance between key and player
-    int distPosX = (key.getPosition().x) - player.getPosition().x; //entity pos x - player pos.x
-    int distPosY = (key.getPosition().y) - player.getPosition().y; //entity pos y - player pos.y
+    int distPosX = (entity->getPosition().x) - player.getPosition().x; //entity pos x - player pos.x
+    int distPosY = (entity->getPosition().y) - player.getPosition().y; //entity pos y - player pos.y
 
     int dist = sqrt((distPosX * distPosX) + (distPosY * distPosY));
 
@@ -699,7 +814,7 @@ void Scene2::entityTick()
     }
 
     float yTemp = ((player.getOrientation() + (DEGREES_TO_RADIANS * 30)) * RADIANS_TO_DEGREES) - angle; //orientation + 30 degrees produces left most column, then subtract angle
-    
+
 
     if (angle > 270 && (player.getOrientation() - (DEGREES_TO_RADIANS * 30)) * RADIANS_TO_DEGREES < 90)
     {
@@ -730,16 +845,14 @@ void Scene2::entityTick()
         if (drawEndX >= 480) drawEndX = 480;
         for (int i = drawStartX; i <= drawEndX; i++)
         {
-            if (530 + (i) >= 530 && 530 + (i) <= 1010)
+            if (i >= 0 && i <= 1010)
             {
-                int rayPos = (int)((((530 + (i)) - 530) / 480.0) * 480); //530 is where the screen starts at the moment
+                int rayPos = (int)(((i) / 480.0) * 480); //530 is where the screen starts at the moment
                 //if direction of this hits wall of distance greater than sprite
                 if (dist < zBuffer[rayPos]) {
-                    SDL_Rect key = { 530 + i, 320 / 2 + 48, 1,width };
+                    SDL_Rect spriteRect = { i, 320 / 2 + 4, 1,width };
                     SDL_Rect crop = { int(i - (-width / 2 + xTemp)) * 64 / width,0,  1,  64 };
-                    //SDL_SetRenderDrawColor(renderer, 15, 15, 240, 0);
-                    //SDL_RenderFillRect(renderer, &key);
-                    SDL_RenderCopy(renderer, enemyTexture, &crop, &key);
+                    SDL_RenderCopy(renderer, entityTexture, &crop, &spriteRect);
                 }
             }
 
@@ -747,4 +860,3 @@ void Scene2::entityTick()
     }
 
 }
-

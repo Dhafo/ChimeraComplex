@@ -923,7 +923,7 @@ void Scene1::draw3D()
 
 
 
-Uint32 getpixel(SDL_Surface* surface, int x, int y)
+Uint32 Scene1::getpixel(SDL_Surface* surface, int x, int y)
 {
     //https://stackoverflow.com/questions/53033971/how-to-get-the-color-of-a-specific-pixel-from-sdl-surface
     int bpp = surface->format->BytesPerPixel;

@@ -32,6 +32,10 @@ private:
     Player player;
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies
 
+    std::vector<Enemy*> predator;// Array for the Skulker Enemies
+    std::vector<Entity*> entities;
+    bool predCanSee[1];
+
 public:
 
 	// This constructor may be different from what you've seen before
@@ -49,6 +53,7 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
+
 
     int zBuffer[480]; //depth at each ray hit
 
@@ -76,31 +81,47 @@ public:
 
     //placeholder --- 
     //map Ceiling
-    int mapCeilingX = 8, mapCeilingY = 8, mapCeilingS = 64;
-    int mapCeiling[64] =
+    int mapCeilingX = 16, mapCeilingY = 16, mapCeilingS = 64;
+    int mapCeiling[256] =
     {
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1, 1, 1, 0,
-        0, 1, 0, 0, 1, 0, 1, 0,
-        0, 1, 0, 1, 1, 1, 1, 0,
-        0, 1, 1, 1, 1, 0, 1, 0,
-        0, 1, 0, 1, 0, 0, 1, 0,
-        0, 1, 1, 1, 1, 1, 1, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
     };
 
     //map Floor
-    int mapFloorX = 8, mapFloorY = 8, mapFloorS = 64;
-    int mapFloor[64] =
+    int mapFloorX = 16, mapFloorY = 16, mapFloorS = 64;
+    int mapFloor[256] =
     {
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1, 1, 1, 0,
-        0, 1, 0, 0, 1, 0, 1, 0,
-        0, 1, 0, 1, 1, 1, 1, 0,
-        0, 1, 1, 1, 1, 0, 1, 0,
-        0, 1, 0, 1, 0, 0, 1, 0,
-        0, 1, 1, 1, 1, 1, 1, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
     };
     //--
   
@@ -113,11 +134,13 @@ public:
     //WIP
     void drawFloors();
     //draws sprite
-    void entityTick();
+    void entityTick(Entity* entity, SDL_Texture* entityTexture);
     //handles movemnet
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
-    float dist(float ax, float ay, float bx, float by, float ang);
+    float dist(float ax, float ay, float bx, float by);
+    bool sortByDistance(Entity* entity1, Entity* entity2);
+    Uint32 getpixel(SDL_Surface* surface, int x, int y);
     //imported textures
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
@@ -127,19 +150,38 @@ public:
     SDL_Texture* textureDoor;
     SDL_Surface* imageDoor2;
     SDL_Texture* textureDoor2;
-    SDL_Surface* enemySprite;
-    SDL_Texture* enemyTexture;
+    SDL_Surface* keySprite;
+    SDL_Texture* keyTexture;
 
-    //cover gameview with UI background
-    SDL_Rect Top = { 530, 0, 500, 16 };
-    SDL_Rect Bottom = { 530, 320, 500, 192 };
-    SDL_Rect Left = { 512, 0, 24, 512 };
-    SDL_Rect Right = { 1010, 0, 32, 512 };
+    SDL_Surface* predatorSprite;
+    SDL_Texture* predatorTexture;
 
+    SDL_Surface* skulkerSprite;
+    SDL_Texture* skulkerTexture;
+
+    SDL_Surface* imageFloor;
+    SDL_Texture* textureFloor;
+
+    SDL_Surface* imageCeiling;
+    SDL_Texture* textureCeiling;
+
+    SDL_Surface* imageGun;
+    SDL_Texture* textureGun[6]; //6 frames
+    int currentGunFrame = 0;
+    bool shootGun = false;
+    float timePassed = 0.0f;
+    SDL_Rect gun = { 128, 128 - 8, 256, 256 };
     //UI key collection
-    SDL_Rect keyAcq = { 530 + 32, 320 + 48, 64, 64 };
-    //UI key on map
-    SDL_Rect keyMap = { 192/2, 896/2, 4, 4 };
+    SDL_Rect keyAcq = { 32, 290, 64, 64 };
+
+
+
+    SDL_Texture* buffer = NULL;
+    SDL_Surface* surf = NULL;
+
+    Uint32* pixels;
+    int pitch;
+
     
 };
 

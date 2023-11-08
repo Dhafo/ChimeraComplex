@@ -167,6 +167,12 @@ void GameManager::handleEvents()
             case SDL_SCANCODE_1:
                 LoadScene(0);
                 break;
+            case SDL_SCANCODE_2:
+                LoadScene(1);
+                break;
+            case SDL_SCANCODE_3:
+                LoadScene(2);
+                break;
 
             default:
                 break;

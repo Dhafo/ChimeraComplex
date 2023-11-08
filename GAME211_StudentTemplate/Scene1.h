@@ -138,6 +138,7 @@ public:
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
     float dist(float ax, float ay, float bx, float by);
+    Uint32 getpixel(SDL_Surface* surface, int x, int y);
     //imported textures
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
