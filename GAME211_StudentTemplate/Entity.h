@@ -9,18 +9,15 @@ using namespace MATH;
 //#include <Vector.h>
 class Entity
 {
-
-
-
 protected:
     Vec2 velocity;
    
     Vec2 position;
-    
+
 public:
 
     Entity();
-    Entity(Vec2 position_, Vec2 velocity_);
+    Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture);
 
     void setPosition(Vec2 position_);
     Vec2 getPosition();
@@ -30,6 +27,7 @@ public:
     Vec2 getVelocity();
 
     bool collField(Vec2 Position_);
+    SDL_Texture* texture;
 };
 
 #endif /* ENTITY_H */

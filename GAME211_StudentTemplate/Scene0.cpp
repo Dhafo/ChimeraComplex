@@ -2,34 +2,34 @@
 #include <VMath.h>
 
 // See notes about this constructor in Scene0.h.
-Scene0::Scene0(SDL_Window* sdlWindow_, GameManager* game_){
-	window = sdlWindow_;
+Scene0::Scene0(SDL_Window* sdlWindow_, GameManager* game_) {
+    window = sdlWindow_;
     game = game_;
-	renderer = SDL_GetRenderer(window);
-	xAxis = 25.0f;
-	yAxis = 15.0f;
+    renderer = SDL_GetRenderer(window);
+    xAxis = 25.0f;
+    yAxis = 15.0f;
 }
 
-Scene0::~Scene0(){
+Scene0::~Scene0() {
 }
 
 bool Scene0::OnCreate() {
-	int w, h;
-	SDL_GetWindowSize(window,&w,&h);
+    int w, h;
+    SDL_GetWindowSize(window, &w, &h);
+    SDL_RenderSetScale(renderer, 1, 1);
+    Matrix4 ndc = MMath::viewportNDC(w, h);
+    Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
+    projectionMatrix = ndc * ortho;
 
-	Matrix4 ndc = MMath::viewportNDC(w, h);
-	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
-	projectionMatrix = ndc * ortho;
+    /// Turn on the SDL imaging subsystem
+    IMG_Init(IMG_INIT_PNG);
 
-	/// Turn on the SDL imaging subsystem
-	IMG_Init(IMG_INIT_PNG);
+    // Set player image to PacMan
 
-	// Set player image to PacMan
-
-	startImage = IMG_Load("Start.png");
-	startTexture = SDL_CreateTextureFromSurface(renderer, startImage);
- //  /* SDL_Rect startButton = { 0, 0, 64,64 };
- //   SDL_RenderCopy(renderer, startTexture, NULL, &startButton);*/
+    startImage = IMG_Load("Start.png");
+    startTexture = SDL_CreateTextureFromSurface(renderer, startImage);
+    //  /* SDL_Rect startButton = { 0, 0, 64,64 };
+    //   SDL_RenderCopy(renderer, startTexture, NULL, &startButton);*/
 
 
     endImage = IMG_Load("End.png");
@@ -39,7 +39,7 @@ bool Scene0::OnCreate() {
     backgroundImage = IMG_Load("space.png");
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundImage);
 
-    background = { 0, 0, 1024,512 };
+    background = { 0, 0, 960,640 };
 
     TTF_Font* font;
 
@@ -62,7 +62,7 @@ bool Scene0::OnCreate() {
         else {
             //Set up a texture from the surface and render it
             text_texture = SDL_CreateTextureFromSurface(renderer, text);
-            dest = { 512 + 256 + 32,256 + 128 - 16,text->w,text->h };
+            dest = { 512 + 128 + 32,256 + 128 - 16 + 112,text->w,text->h };
         }
 
         text = TTF_RenderText_Solid(font, "Press Q to Quit", color);
@@ -72,7 +72,7 @@ bool Scene0::OnCreate() {
         else {
             //Set up a texture from the surface and render it
             text_texture2 = SDL_CreateTextureFromSurface(renderer, text);
-            dest2 = { 512 + 256 + 32,256 + 128 + 32,text->w,text->h };
+            dest2 = { 512 + 128 + 32,256 + 128 + 32 + 112,text->w,text->h };
         }
     }
 
@@ -80,7 +80,7 @@ bool Scene0::OnCreate() {
     if (!font) {
         std::cout << "Failed to load" << TTF_GetError() << std::endl;
     }
-    else 
+    else
     {
         SDL_Surface* text;
         // Set color to white
@@ -100,40 +100,38 @@ bool Scene0::OnCreate() {
 
     game->getSoundEngine()->play2D("MyVeryOwnDeadShip.ogg", true);
 
-	return true;
+    return true;
 }
 
-void Scene0::OnDestroy() 
+void Scene0::OnDestroy()
 {
     SDL_DestroyTexture(text_texture);
 }
 
 void Scene0::Update(const float deltaTime) {
 
-	// Update player
-	game->getPlayer()->Update(deltaTime);
+    // Update player
+    game->getPlayer()->Update(deltaTime);
 
 }
 
 void Scene0::Render() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
 
     SDL_RenderCopy(renderer, backgroundTexture, NULL, &background);
-   
+
     SDL_RenderCopy(renderer, text_texture, NULL, &dest);
     SDL_RenderCopy(renderer, text_texture2, NULL, &dest2);
     SDL_RenderCopy(renderer, text_texture3, NULL, &dest3);
-    
-
-	SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer);
 }
 
 
 void Scene0::HandleEvents(const SDL_Event& event)
 {
-	// send events to player as needed
-	game->getPlayer()->HandleEvents(event);
+    // send events to player as needed
+    game->getPlayer()->HandleEvents(event);
 
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.scancode)
@@ -147,7 +145,7 @@ void Scene0::HandleEvents(const SDL_Event& event)
             std::cout << "Q is pressed" << std::endl;
             void SDL_Quit(void);
             break;
-       }
-   
+        }
+
     }
 }

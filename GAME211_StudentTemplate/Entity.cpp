@@ -7,12 +7,11 @@ Entity::Entity() {
 
 }
 
-Entity::Entity(Vec2 position_, Vec2 velocity_) {
+Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
 
     position = position_;
     velocity = velocity_;
-
-
+    texture = texture_;
 }
 
 void Entity::setPosition(Vec2 position_)

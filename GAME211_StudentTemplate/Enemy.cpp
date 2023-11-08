@@ -14,14 +14,14 @@ Enemy::Enemy() {
 
 }
 
- Enemy::Enemy(int maxHealth_, Vec2 position_, Vec2 velocity_) {
+ Enemy::Enemy(int maxHealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
 
     maxHealth = maxHealth_;
     currentHealth = maxHealth;
 
     position = position_;
     velocity = velocity;
-
+    texture = texture_;
 
     speed = 0.5;
 

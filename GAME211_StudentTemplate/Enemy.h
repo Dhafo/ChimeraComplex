@@ -15,7 +15,7 @@ protected:
   
 public:
     Enemy();
-    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_) ;
+    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) ;
 
    // void CreateEnemy(int maxhealth_, Vec2 position_, Vec2 velocity_);
     

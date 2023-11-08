@@ -20,12 +20,7 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	yAxis = 512.0f;
     float orientation = 0.0f;
     //Items
-    key = Entity(Vec2(192, 896), Vec2(0, 0));
-    healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
-    ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
-    //Enemies
-    skulker1 = Enemy(3, Vec2(160, 160), Vec2(0, 0));
-
+    
 
     //Player
     player = Player(10, 6, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
@@ -54,11 +49,7 @@ bool Scene2::OnCreate() {
 
 	// Set player image to PacMan
 
-    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0)));
-    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0)));
-    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0)));
-    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0)));
-
+  
 	SDL_Surface* image;
     
 	SDL_Texture* texture;
@@ -77,6 +68,16 @@ bool Scene2::OnCreate() {
     enemyTexture = SDL_CreateTextureFromSurface(renderer, enemySprite);
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
+
+    key = Entity(Vec2(192, 896), Vec2(0, 0), enemyTexture);
+    //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
+    //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
+
+    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), enemyTexture));
+    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), enemyTexture));
+    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), enemyTexture));
+    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), enemyTexture));
+
 
 	return true;
 }
