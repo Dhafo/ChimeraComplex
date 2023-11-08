@@ -141,17 +141,38 @@ void Scene1::Update(const float deltaTime) {
 	// Update playerit
     if(shootGun)
     {
-        timePassed += deltaTime;
+        timePassedGun += deltaTime;
         //shoot gun
-        if(timePassed >= 0.08f)
+        if(timePassedGun >= 0.08f)
         {
             currentGunFrame += 1;
-            timePassed = 0;
+            timePassedGun = 0;
         }
         if (currentGunFrame > 5)
         {
             currentGunFrame = 0;
             shootGun = false;
+        }
+    }
+    if (hit)
+    {
+        timePassedHit += deltaTime;
+        //shoot gun
+        if (timePassedHit >= 0.06f)
+        {
+            fade += 50 * fadeDir;
+            timePassedHit = 0;
+        }
+        if (fade > 200)
+        {
+            fade = 200;
+            fadeDir = -1;
+        }
+        if(fade < 0 && fadeDir == -1)
+        {
+            fade = 0;
+            fadeDir = 1;
+            hit = false;
         }
     }
 	game->getPlayer()->Update(deltaTime);
@@ -191,7 +212,10 @@ void Scene1::Render() {
         SDL_RenderCopy(renderer, keyTexture, NULL, &keyAcq);
     }
 
-
+    SDL_Rect dmgFade = { 0,0, 960, 640 };
+    SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderFillRect(renderer, &dmgFade);
     SDL_RenderPresent(renderer);
     //if we ever want to destroy
     //SDL_DestroyTexture(textureWall);
@@ -537,6 +561,7 @@ void Scene1::HandleMovement()
         {
 
                 kCollected = true;
+                entities.pop_back();
                 game->getSoundEngine()->play2D("beep.wav", false);
                 std::cout << "Green Key Acquired!" << std::endl;
         }
@@ -545,8 +570,12 @@ void Scene1::HandleMovement()
 
         for (int i = 0; i < skulker.size(); i++) {
             if (player.collField(skulker[i]->getPosition())) {
-
+                if(player.delayActive == false)
+                {
+                    hit = true;
+                }
                 player.subHealth(1);
+                
                 // cout << "player hit!" << endl;
 
             }
@@ -1042,28 +1071,25 @@ void Scene1::entityTick(Entity* entity, SDL_Texture* entityTexture)
         width = width / 480.0 * 120; //scale
     }
 
-    if (!kCollected)
+    //we split up the item sprite so that we can compare the distance of each slice to the distance of each wall
+       //if wall is closer, we don't render that part of the sprite!
+    int drawStartX = -width / 2 + xTemp;
+    if (drawStartX < 0) drawStartX = 0;
+    int drawEndX = width / 2 + xTemp;
+    if (drawEndX >= 480) drawEndX = 480;
+    for (int i = drawStartX; i <= drawEndX; i++)
     {
-        //we split up the item sprite so that we can compare the distance of each slice to the distance of each wall
-        //if wall is closer, we don't render that part of the sprite!
-        int drawStartX = -width / 2 + xTemp;
-        if (drawStartX < 0) drawStartX = 0;
-        int drawEndX = width / 2 + xTemp;
-        if (drawEndX >= 480) drawEndX = 480;
-        for (int i = drawStartX; i <= drawEndX; i++)
+        if (i >= 0 && i <= 1010)
         {
-            if (i >= 0 && i <= 1010)
-            {
-                int rayPos = (int)(((i) / 480.0) * 480); //530 is where the screen starts at the moment
-                //if direction of this hits wall of distance greater than sprite
-                if (dist < zBuffer[rayPos]) {
-                    SDL_Rect spriteRect = { i, 320 / 2 + 4, 1,width };
-                    SDL_Rect crop = { int(i - (-width / 2 + xTemp)) * 64 / width,0,  1,  64 };
-                    SDL_RenderCopy(renderer, entityTexture, &crop, &spriteRect);
-                }
+            int rayPos = (int)(((i) / 480.0) * 480); //530 is where the screen starts at the moment
+            //if direction of this hits wall of distance greater than sprite
+            if (dist < zBuffer[rayPos]) {
+                SDL_Rect spriteRect = { i, 320 / 2 + 4, 1,width };
+                SDL_Rect crop = { int(i - (-width / 2 + xTemp)) * 64 / width,0,  1,  64 };
+                SDL_RenderCopy(renderer, entityTexture, &crop, &spriteRect);
             }
-
         }
+
     }
 
 }

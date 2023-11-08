@@ -167,7 +167,11 @@ public:
     SDL_Texture* textureGun[6]; //6 frames
     int currentGunFrame = 0;
     bool shootGun = false;
-    float timePassed = 0.0f;
+    bool hit = false;
+    float timePassedGun = 0.0f;
+    float timePassedHit = 0.0f;
+    int fade = 0;
+    int fadeDir = 1;
     SDL_Rect gun = { 128, 128 - 8, 256, 256 };
     //UI key collection
     SDL_Rect keyAcq = { 32, 290, 64, 64 };

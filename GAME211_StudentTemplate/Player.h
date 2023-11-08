@@ -13,7 +13,7 @@ protected:
     int currentAmmo;
    
     float damageDelayTime; 
-    bool delayActive;
+    
  
 
     float orientation;
@@ -21,6 +21,7 @@ protected:
   public:
       //stores values for controller
       int w, a, s, d;
+      bool delayActive;
     Player();
 
     Player(int maxHealth_, int ammo_, float orientation_, Vec2 position_, Vec2 veloicty_);
