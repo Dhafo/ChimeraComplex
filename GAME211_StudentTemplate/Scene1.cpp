@@ -235,24 +235,24 @@ void Scene1::HandleEvents(const SDL_Event& event)
                     shootGun = true;
                 } 
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_A) 
+            if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) 
             {
                 player.a = 1; 
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_D) 
+            if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) 
             {
                 player.d = 1;
             }
 
-            if (event.key.keysym.scancode == SDL_SCANCODE_W) //fix later
+            if (event.key.keysym.scancode == SDL_SCANCODE_UP) //fix later
             {
                 player.w = 1;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_S) //fix later
+            if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) //fix later
             {
                 player.s = 1;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_E)
+            if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
             {
                 //check if interactable is close enough in front of us
                 int xo = 0, yo = 0;
@@ -303,20 +303,20 @@ void Scene1::HandleEvents(const SDL_Event& event)
         }
         if(event.type == SDL_KEYUP)
         {
-            if (event.key.keysym.scancode == SDL_SCANCODE_A)
+            if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
             {
                 player.a = 0;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_D)
+            if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
             {
                 player.d = 0;
             }
 
-            if (event.key.keysym.scancode == SDL_SCANCODE_W) 
+            if (event.key.keysym.scancode == SDL_SCANCODE_UP) 
             {
                 player.w = 0;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_S) 
+            if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) 
             {
                 player.s = 0;
             }
