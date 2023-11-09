@@ -16,7 +16,12 @@ protected:
     Vec2 velocity;
    
     Vec2 position;
+<<<<<<< Updated upstream
     
+=======
+    bool exist;
+
+>>>>>>> Stashed changes
 public:
 
     Entity();
@@ -30,6 +35,19 @@ public:
     Vec2 getVelocity();
 
     bool collField(Vec2 Position_);
+<<<<<<< Updated upstream
+=======
+    SDL_Texture* texture;
+
+    bool getExist() {
+        return exist;
+    }
+
+    void setExist(bool exist_) {
+
+        exist = exist_;
+    }
+>>>>>>> Stashed changes
 };
 
 #endif /* ENTITY_H */

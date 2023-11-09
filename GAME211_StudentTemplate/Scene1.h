@@ -33,7 +33,15 @@ private:
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies
 
     std::vector<Enemy*> predator;// Array for the Skulker Enemies
+<<<<<<< Updated upstream
     bool predCanSee[1];
+=======
+    std::vector<Entity*> entities;
+    std::vector<Enemy*> stalker;
+    std::vector<Entity*> ammo;
+    std::vector<Entity*> health;
+
+>>>>>>> Stashed changes
 
 public:
 
@@ -52,7 +60,12 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
+<<<<<<< Updated upstream
     void EnemyMoveUpate(Enemy* enemy_);
+=======
+   
+    bool sortByDistance(Entity* entity1, Entity* entity2);
+>>>>>>> Stashed changes
     int zBuffer[480]; //depth at each ray hit
 
     //map Walls
@@ -120,7 +133,14 @@ public:
     //handles movemnet
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
+<<<<<<< Updated upstream
     float dist(float ax, float ay, float bx, float by, float ang);
+=======
+    float dist(float ax, float ay, float bx, float by);
+
+    bool EnemyMoveUpate(Enemy* enemy_);
+    Uint32 getpixel(SDL_Surface* surface, int x, int y);
+>>>>>>> Stashed changes
     //imported textures
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
@@ -133,12 +153,46 @@ public:
     SDL_Surface* enemySprite;
     SDL_Texture* enemyTexture;
 
+<<<<<<< Updated upstream
     //cover gameview with UI background
     SDL_Rect Top = { 530, 0, 500, 16 };
     SDL_Rect Bottom = { 530, 320, 500, 192 };
     SDL_Rect Left = { 512, 0, 24, 512 };
     SDL_Rect Right = { 1010, 0, 32, 512 };
 
+=======
+    SDL_Surface* ammoSprite;
+    SDL_Texture* ammoTexture;
+
+    SDL_Surface* healthSprite;
+    SDL_Texture* healthTexture;
+
+    SDL_Surface* predatorSprite;
+    SDL_Texture* predatorTexture;
+
+    SDL_Surface* stalkerSprite;
+    SDL_Texture* stalkerTexture;
+
+    SDL_Surface* skulkerSprite;
+    SDL_Texture* skulkerTexture;
+
+    SDL_Surface* imageFloor;
+    SDL_Texture* textureFloor;
+
+    SDL_Surface* imageCeiling;
+    SDL_Texture* textureCeiling;
+
+    SDL_Surface* imageGun;
+    SDL_Texture* textureGun[6]; //6 frames
+    int currentGunFrame = 0;
+    bool shootGun = false;
+    bool hit = false;
+    float timePassedGun = 0.0f;
+    float timePassedHit = 0.0f;
+    int fade = 0;
+    int fadeDir = 1;
+    SDL_Rect gun = { 128, 128 - 8, 256, 256 };
+>>>>>>> Stashed changes
     //UI key collection
     SDL_Rect keyAcq = { 530 + 32, 320 + 48, 64, 64 };
     //UI key on map
