@@ -33,7 +33,10 @@ private:
 
     std::vector<Enemy*> predator;// Array for the Skulker Enemies
     std::vector<Entity*> entities;
-    bool predCanSee[1];
+    std::vector<Enemy*> stalker;
+    std::vector<Entity*> ammo;
+    std::vector<Entity*> health;
+
 
 public:
 
@@ -52,7 +55,7 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
-    void EnemyMoveUpate(Enemy* enemy_);
+   
     bool sortByDistance(Entity* entity1, Entity* entity2);
     int zBuffer[480]; //depth at each ray hit
 
@@ -138,6 +141,8 @@ public:
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
     float dist(float ax, float ay, float bx, float by);
+
+    bool EnemyMoveUpate(Enemy* enemy_);
     Uint32 getpixel(SDL_Surface* surface, int x, int y);
     //imported textures
     SDL_Surface* imageWall;
@@ -151,8 +156,17 @@ public:
     SDL_Surface* keySprite;
     SDL_Texture* keyTexture;
 
+    SDL_Surface* ammoSprite;
+    SDL_Texture* ammoTexture;
+
+    SDL_Surface* healthSprite;
+    SDL_Texture* healthTexture;
+
     SDL_Surface* predatorSprite;
     SDL_Texture* predatorTexture;
+
+    SDL_Surface* stalkerSprite;
+    SDL_Texture* stalkerTexture;
 
     SDL_Surface* skulkerSprite;
     SDL_Texture* skulkerTexture;

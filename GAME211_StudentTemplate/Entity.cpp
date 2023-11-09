@@ -4,7 +4,7 @@ Entity::Entity() {
 
     position = Vec2(0, 0);
     velocity = Vec2(0, 0);
-
+    exist = true;
 }
 
 Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
@@ -12,6 +12,7 @@ Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
     position = position_;
     velocity = velocity_;
     texture = texture_;
+    exist = true;
 }
 
 void Entity::setPosition(Vec2 position_)
@@ -59,3 +60,5 @@ bool Entity::collField(Vec2 position_)
     }
     
 }
+
+

@@ -61,6 +61,9 @@ bool Scene1::OnCreate() {
     imageCeiling = IMG_Load("ceiling.png");
     predatorSprite = IMG_Load("Blinky.png");
     skulkerSprite = IMG_Load("Blinky2.png");
+    stalkerSprite = IMG_Load("Blinky.png");
+    healthSprite = IMG_Load("CardKey.png");
+    ammoSprite = IMG_Load("CardKey.png");
 	texture = SDL_CreateTextureFromSurface(renderer, image);
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
     textureWall2 = SDL_CreateTextureFromSurface(renderer, imageWall2);
@@ -79,6 +82,10 @@ bool Scene1::OnCreate() {
     currentGunFrame = 0;
     predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
+    stalkerTexture = SDL_CreateTextureFromSurface(renderer, stalkerSprite);
+    ammoTexture = SDL_CreateTextureFromSurface(renderer, ammoSprite);
+    healthTexture = SDL_CreateTextureFromSurface(renderer, healthSprite);
+
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
 
@@ -87,18 +94,20 @@ bool Scene1::OnCreate() {
     //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
     //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
     
-    // Set player image to PacMan
+    ammo.push_back(new Entity(Vec2(672, 928), Vec2(0, 0), ammoTexture));
+    health.push_back(new Entity(Vec2(96, 416), Vec2(0, 0), healthTexture));
 
     skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), skulkerTexture));
     skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), skulkerTexture));
     skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), skulkerTexture));
     skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
 
-    predator.push_back(new Enemy(3, Vec2(544, 352), Vec2(0, 0), predatorTexture));
+    predator.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0),predatorTexture));
 
-    predCanSee[0] = false;
+    stalker.push_back(new Enemy(3, Vec2(800, 544), Vec2(0, 0),stalkerTexture));
 
-    entities.reserve(predator.size() + skulker.size() + 1);
+
+    entities.reserve(predator.size() + skulker.size() + stalker.size()+ ammo.size() + health.size() + 1);
 
     for(Entity* entity: predator)
     {
@@ -108,7 +117,18 @@ bool Scene1::OnCreate() {
     {
         entities.push_back(entity);
     }
-
+    for (Entity* entity : stalker)
+    {
+        entities.push_back(entity);
+    }
+    for (Entity* entity : ammo)
+    {
+        entities.push_back(entity);
+    }
+    for (Entity* entity : health)
+    {
+        entities.push_back(entity);
+    }
     entities.push_back(&key);
 
 	return true;
@@ -130,6 +150,13 @@ void Scene1::OnDestroy()
     SDL_FreeSurface(predatorSprite);
     SDL_DestroyTexture(skulkerTexture);
     SDL_FreeSurface(skulkerSprite);
+    SDL_DestroyTexture(stalkerTexture);
+    SDL_FreeSurface(stalkerSprite);
+    SDL_DestroyTexture(ammoTexture);
+    SDL_FreeSurface(ammoSprite);
+    SDL_DestroyTexture(healthTexture);
+    SDL_FreeSurface(healthSprite);
+
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(surf);
 }
@@ -180,6 +207,30 @@ void Scene1::Update(const float deltaTime) {
      //   skulker[i]->updatePos(player.getPosition());
     }
     // 4/2 because of map size(4,4) = x,y
+
+    for (int i = 0; i < predator.size(); i++) {
+        if (predator[i]->VisionCheck(player, 25) && EnemyMoveUpate(predator[i])) {
+
+            predator[i]->updatePos(player.getPosition());
+        }
+    }
+
+
+    for (int i = 0; i < stalker.size(); i++) {
+        if (!stalker[i]->VisionCheck(player, 30) && EnemyMoveUpate(stalker[i])) {
+
+            stalker[i]->updatePos(player.getPosition());
+        }
+    }
+
+
+    for (int i = 0; i < skulker.size(); i++) {
+        if (EnemyMoveUpate(skulker[i])) {
+
+            skulker[i]->updatePos(player.getPosition());
+        }
+
+    }
 }
 
 
@@ -197,9 +248,11 @@ void Scene1::Render() {
         return sortByDistance(a, b);
     });
 
-    for(int i = 0; i < entities.size(); i++)
+    for (int i = 0; i < entities.size(); i++)
     {
+        if (entities[i]->getExist() == true) {
         entityTick(entities[i], entities[i]->texture);
+        }
     }
 
     SDL_RenderCopy(renderer, textureGun[currentGunFrame], NULL, &gun);
@@ -229,8 +282,36 @@ void Scene1::HandleEvents(const SDL_Event& event)
             {
                 if(!shootGun)
                 {
-                    game->getSoundEngine()->play2D("pistol_shot.wav", false);
-                    shootGun = true;
+                    if (player.getAmmo() > 0) {
+
+                        for (int i = 0; i < predator.size(); i++) {
+                            if (predator[i]->VisionCheck(player, 3) && EnemyMoveUpate(predator[i])) {
+
+                              predator[i]->subtractHealth(1);
+                            }
+                        }
+
+
+                        for (int i = 0; i < stalker.size(); i++) {
+                            if (stalker[i]->VisionCheck(player, 3) && EnemyMoveUpate(stalker[i])) {
+
+                                stalker[i]->subtractHealth(1);
+                            }
+                        }
+
+
+                        for (int i = 0; i < skulker.size(); i++) {
+                            if (skulker[i]->VisionCheck(player, 3) && EnemyMoveUpate(skulker[i])) {
+                             
+                                skulker[i]->subtractHealth(1);
+                            }
+
+                        }
+
+                        game->getSoundEngine()->play2D("pistol_shot.wav", false);
+                        shootGun = true;
+                        player.subAmmo(1);
+                    }
                 } 
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) 
@@ -320,8 +401,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
             }
         }
 }
-
-void Scene1::EnemyMoveUpate(Enemy* enemy_)
+bool Scene1::EnemyMoveUpate(Enemy* enemy_)
 {
     int r, mx, my, mp, dof;
 
@@ -334,155 +414,159 @@ void Scene1::EnemyMoveUpate(Enemy* enemy_)
     float pY = player.getPosition().y;
 
     float eX, eY, orDeg, tes, sra, pra;
-   
 
-        eX = enemy_->getPosition().x;
-        eY = enemy_->getPosition().y;
 
-        tes = atan2(eY - pY, pX - eX);
-        /*  orDeg = tes * RADIANS_TO_DEGREES;
-          cout << orDeg << endl;*/
-        enemy_->setOrientation(tes);
+    eX = enemy_->getPosition().x;
+    eY = enemy_->getPosition().y;
 
-        ///////////////////
-        disT = 10000000;
-        // Horizontal Line Check
-        sra = -enemy_->getOrientation();
-        dof = 0;
-        float disH = 100000000;
-        float ehx = enemy_->getPosition().x;
-        float ehy = enemy_->getPosition().y;
-        float aTan = -1 / tan(sra);
+    tes = atan2(eY - pY, pX - eX);
+    /*  orDeg = tes * RADIANS_TO_DEGREES;
+      cout << orDeg << endl;*/
+    enemy_->setOrientation(tes);
 
-        // sra = -enemy_->getOrientation() - DegToRad * 30;
+    ///////////////////
+    disT = 10000000;
+    // Horizontal Line Check
+    sra = -enemy_->getOrientation();
+    dof = 0;
+    float disH = 100000000;
+    float ehx = enemy_->getPosition().x;
+    float ehy = enemy_->getPosition().y;
+    float aTan = -1 / tan(sra);
 
-        if (sra < 0)
+    // sra = -enemy_->getOrientation() - DegToRad * 30;
+
+    if (sra < 0)
+    {
+        sra += 2 * PI;
+    }
+    if (sra > 2 * PI)
+    {
+        sra -= 2 * PI;
+    }
+
+    if (sra > PI)
+    {
+        ry = (int)(enemy_->getPosition().y / 64) * 64 - 0.0001;
+        rx = (enemy_->getPosition().y - ry) * aTan + enemy_->getPosition().x;
+        yo = -64;
+        xo = -yo * aTan;
+    }
+    if (sra < PI)
+    {
+        ry = (int)(enemy_->getPosition().y / 64) * 64 + 64;
+        rx = (enemy_->getPosition().y - ry) * aTan + enemy_->getPosition().x;
+        yo = 64;
+        xo = -yo * aTan;
+    }
+    if (sra == 0 || sra == PI)
+    {
+        rx = enemy_->getPosition().x;
+        ry = enemy_->getPosition().y;
+        dof = 16;
+    }
+    while (dof < 16)
+    {
+        mx = rx / 64;
+        my = ry / 64;
+        mp = my * mapWallsX + mx;
+        if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
         {
-            sra += 2 * PI;
-        }
-        if (sra > 2 * PI)
-        {
-            sra -= 2 * PI;
-        }
-
-        if (sra > PI)
-        {
-            ry = (int)(enemy_->getPosition().y / 64) * 64 - 0.0001;
-            rx = (enemy_->getPosition().y - ry) * aTan + enemy_->getPosition().x;
-            yo = -64;
-            xo = -yo * aTan;
-        }
-        if (sra < PI)
-        {
-            ry = (int)(enemy_->getPosition().y / 64) * 64 + 64;
-            rx = (enemy_->getPosition().y - ry) * aTan + enemy_->getPosition().x;
-            yo = 64;
-            xo = -yo * aTan;
-        }
-        if (sra == 0 || sra == PI)
-        {
-            rx = enemy_->getPosition().x;
-            ry = enemy_->getPosition().y;
+            ehx = rx;
+            ehy = ry;
+            disH = dist(enemy_->getPosition().x, enemy_->getPosition().y, ehx, ehy);
             dof = 16;
         }
-        while (dof < 16)
+        else
         {
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
-            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
-            {
-                ehx = rx;
-                ehy = ry;
-                disH = dist(enemy_->getPosition().x, enemy_->getPosition().y, ehx, ehy);
-                dof = 16;
-            }
-            else
-            {
-                rx += xo;
-                ry += yo;
-                dof += 1;
-            }
+            rx += xo;
+            ry += yo;
+            dof += 1;
         }
+    }
 
-        // Vertical Line Check
-        dof = 0;
-        float disV = 100000000;
-        float vX = enemy_->getPosition().x;
-        float vY = enemy_->getPosition().y;
-        float nTan = -tan(sra);
-        if (sra > P2 && sra < P3)
+    // Vertical Line Check
+    dof = 0;
+    float disV = 100000000;
+    float vX = enemy_->getPosition().x;
+    float vY = enemy_->getPosition().y;
+    float nTan = -tan(sra);
+    if (sra > P2 && sra < P3)
+    {
+        rx = (int)(enemy_->getPosition().x / 64) * 64 - 0.0001;
+        ry = (enemy_->getPosition().x - rx) * nTan + enemy_->getPosition().y;
+        xo = -64;
+        yo = -xo * nTan;
+    }
+    if (sra < P2 || sra > P3)
+    {
+        rx = (int)(enemy_->getPosition().x / 64) * 64 + 64;
+        ry = (enemy_->getPosition().x - rx) * nTan + enemy_->getPosition().y;
+        xo = 64;
+        yo = -xo * nTan;
+    }
+    if (sra == 0 || sra == PI)
+    {
+        rx = enemy_->getPosition().x;
+        ry = enemy_->getPosition().y;
+        dof = 16;
+    }
+    while (dof < 16)
+    {
+        mx = rx / 64;
+        my = ry / 64;
+        mp = my * mapWallsX + mx;
+        if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
         {
-            rx = (int)(enemy_->getPosition().x / 64) * 64 - 0.0001;
-            ry = (enemy_->getPosition().x - rx) * nTan + enemy_->getPosition().y;
-            xo = -64;
-            yo = -xo * nTan;
-        }
-        if (sra < P2 || sra > P3)
-        {
-            rx = (int)(enemy_->getPosition().x / 64) * 64 + 64;
-            ry = (enemy_->getPosition().x - rx) * nTan + enemy_->getPosition().y;
-            xo = 64;
-            yo = -xo * nTan;
-        }
-        if (sra == 0 || sra == PI)
-        {
-            rx = enemy_->getPosition().x;
-            ry = enemy_->getPosition().y;
+            vX = rx;
+            vY = ry;
+            disV = dist(enemy_->getPosition().x, enemy_->getPosition().y, vX, vY);
             dof = 16;
         }
-        while (dof < 16)
+        else
         {
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
-            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
-            {
-                vX = rx;
-                vY = ry;
-                disV = dist(enemy_->getPosition().x, enemy_->getPosition().y, vX, vY);
-                dof = 16;
-            }
-            else
-            {
-                rx += xo;
-                ry += yo;
-                dof += 1;
-            }
-
-
+            rx += xo;
+            ry += yo;
+            dof += 1;
         }
 
 
-        //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
-        if (disV < disH)
-        {
-            rx = vX;
-            ry = vY;
-            disT = disV;
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
+    }
 
 
-        }
-        else if (disH < disV)
-        {
-            rx = ehx;
-            ry = ehy;
-            disT = disH;
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
+    //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
+    if (disV < disH)
+    {
+        rx = vX;
+        ry = vY;
+        disT = disV;
+        mx = rx / 64;
+        my = ry / 64;
+        mp = my * mapWallsX + mx;
 
-        }
 
-        if (disT > dist(eX, eY, pX, pY)) {
-            enemy_->updatePos(player.getPosition());
+    }
+    else if (disH < disV)
+    {
+        rx = ehx;
+        ry = ehy;
+        disT = disH;
+        mx = rx / 64;
+        my = ry / 64;
+        mp = my * mapWallsX + mx;
 
-        }
+    }
 
-    
+    if (disT > dist(eX, eY, pX, pY)) {
+        return true;
+
+    }
+    else {
+        return false;
+    }
+
+
+
 }
 
 void Scene1::HandleMovement()
@@ -564,6 +648,29 @@ void Scene1::HandleMovement()
                 std::cout << "Green Key Acquired!" << std::endl;
         }
 
+        for (int i = 0; i < ammo.size(); i++) {
+            if (player.collField(ammo[i]->getPosition()) && ammo[i]->getExist())
+            {
+
+                ammo[i]->setExist(false);
+              //  entities.pop_back();
+                game->getSoundEngine()->play2D("beep.wav", false);
+                std::cout << "Ammo Collected!" << std::endl;
+                player.addAmmo(3);
+            }
+        }
+
+        for (int i = 0; i < health.size(); i++) {
+            if (player.collField(health[i]->getPosition()) && health[i]->getExist())
+            {
+                health[i]->setExist(false);
+               
+              //  entities.pop_back();
+                game->getSoundEngine()->play2D("beep.wav", false);
+                std::cout << "Health Acquired!" << std::endl;
+                player.addHealth(1);
+            }
+        }
         //Enemy attack check
 
         for (int i = 0; i < skulker.size(); i++) {
@@ -574,6 +681,23 @@ void Scene1::HandleMovement()
                 }
                 player.subHealth(1);
                 
+                // cout << "player hit!" << endl;
+
+            }
+        }
+
+        for (int i = 0; i < predator.size(); i++) {
+            if (player.collField(predator[i]->getPosition())) {
+
+                player.subHealth(1);
+                // cout << "player hit!" << endl;
+
+            }
+        }
+        for (int i = 0; i < stalker.size(); i++) {
+            if (player.collField(stalker[i]->getPosition())) {
+
+                player.subHealth(1);
                 // cout << "player hit!" << endl;
 
             }
@@ -675,14 +799,14 @@ void Scene1::draw3D()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    for (int i = 0; i < predator.size(); i++) {
+    /*for (int i = 0; i < predator.size(); i++) {
 
         EnemyMoveUpate(predator[i]);
     }
 
     for (int i = 0; i < skulker.size(); i++) {
         EnemyMoveUpate(skulker[i]);
-    }
+    }*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -922,30 +1046,8 @@ void Scene1::draw3D()
         }
     }
 
-    //checks if the player is staring at the enemy
-    for (int i = 0; i < predator.size(); i++) {
-       /* if (predator[i]->getPosition().x <fFieldx && predator[i]->getPosition().x > player.getPosition().x) {
-
-            predCanSee[i] == true;
-        }*/
-        float slope = (player.getPosition().y - zonePoint1.y)/(player.getPosition().x - zonePoint1.x);
-        float b = zonePoint1.y- (slope* zonePoint1.x);
-        zonePoint1 = Vec2(zonePoint1.x * 5, (zonePoint1.x * 5 * slope) + b);
-
-        b = zonePoint2.y - (slope * zonePoint2.x);
-        slope = (player.getPosition().y - zonePoint2.y) / (player.getPosition().x - zonePoint2.x);
-        zonePoint2 = Vec2(zonePoint2.x * 5, (zonePoint2.x * 5 * slope) + b);
-
-
-        if (predator[i]->predMoveCheck(player.getPosition(), zonePoint1, zonePoint2)) {
-            predCanSee[i] = true;
-            cout << "i see you"<< endl;
-       }
-        else
-        {
-            predCanSee[i] = false;
-        }
-    }
+   
+    
 }
 
 

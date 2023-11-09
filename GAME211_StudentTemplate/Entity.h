@@ -13,6 +13,7 @@ protected:
     Vec2 velocity;
    
     Vec2 position;
+    bool exist;
 
 public:
 
@@ -28,6 +29,15 @@ public:
 
     bool collField(Vec2 Position_);
     SDL_Texture* texture;
+
+    bool getExist() {
+        return exist;
+    }
+
+    void setExist(bool exist_) {
+
+        exist = exist_;
+    }
 };
 
 #endif /* ENTITY_H */
