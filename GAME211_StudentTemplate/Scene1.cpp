@@ -38,8 +38,6 @@ bool Scene1::OnCreate() {
     buffer = SDL_CreateTextureFromSurface(renderer, surf);
 
     kCollected = false;
-    aCollected = false;
-    hCollected = false;
 
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
@@ -284,7 +282,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
                     mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] = 0;
                 }
                 //5 = door locked by green keycard
-                else if (mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5 && kCollected == true)
+                else if (kCollected == true && mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5)
                 {
                     game->getSoundEngine()->play2D("door2.wav", false);
                     player.w = 0;
@@ -294,7 +292,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
                     //load menu
                     game->LoadScene(2);
                 }
-                else if (mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5 && kCollected == false)
+                else if (kCollected == false && mapWalls[ipy_add_yo * mapWallsX + ipx_add_xo] == 5)
                 {
                     game->getSoundEngine()->play2D("denied.wav", false);
                 }
