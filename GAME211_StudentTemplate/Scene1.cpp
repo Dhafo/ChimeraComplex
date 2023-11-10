@@ -19,9 +19,9 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	renderer = SDL_GetRenderer(window);
 	xAxis = 1024.0f;
 	yAxis = 512.0f;
-    float orientation = 0.0f;
+    float orientation = 90 * DEGREES_TO_RADIANS;
     //Player
-    player = Player(10, 6, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
+    player = Player(10, 6, orientation, Vec2(544, 864), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
 
 }
 
@@ -162,8 +162,24 @@ void Scene1::OnDestroy()
 }
 
 void Scene1::Update(const float deltaTime) {
-   // player.getCurrentHealth();
-	// Update playerit
+ 
+    for (int i = 0; i < predator.size(); i++) {
+        if (predator[i]->getHealth() <= 0) {
+            predator[i]->setExist(false);
+            //   
+        }
+    }for (int i = 0; i < stalker.size(); i++) {
+        if (stalker[i]->getHealth() <= 0) {
+
+            stalker[i]->setExist(false);
+        }
+    }for (int i = 0; i < skulker.size(); i++) {
+        if (skulker[i]->getHealth() <= 0) {
+
+            skulker[i]->setExist(false);
+        }
+    }
+
     if(shootGun)
     {
         timePassedGun += deltaTime;
@@ -250,7 +266,7 @@ void Scene1::Render() {
 
     for (int i = 0; i < entities.size(); i++)
     {
-        if (entities[i]->getExist() == true) {
+        if (entities[i]->getExist()) {
         entityTick(entities[i], entities[i]->texture);
         }
     }
@@ -674,7 +690,7 @@ void Scene1::HandleMovement()
         //Enemy attack check
 
         for (int i = 0; i < skulker.size(); i++) {
-            if (player.collField(skulker[i]->getPosition())) {
+            if (skulker[i]->getExist() && player.collField(skulker[i]->getPosition())) {
                 if(player.delayActive == false)
                 {
                     hit = true;
@@ -687,7 +703,7 @@ void Scene1::HandleMovement()
         }
 
         for (int i = 0; i < predator.size(); i++) {
-            if (player.collField(predator[i]->getPosition())) {
+            if (predator[i]->getExist() && player.collField(predator[i]->getPosition())) {
 
                 player.subHealth(1);
                 // cout << "player hit!" << endl;
@@ -695,25 +711,14 @@ void Scene1::HandleMovement()
             }
         }
         for (int i = 0; i < stalker.size(); i++) {
-            if (player.collField(stalker[i]->getPosition())) {
+            if (stalker[i]->getExist() && player.collField(stalker[i]->getPosition())) {
 
                 player.subHealth(1);
                 // cout << "player hit!" << endl;
 
             }
         }
-        if (player.collField(healthItem.getPosition()) && hCollected == false) {
-            hCollected = true;
-            player.addHealth(1);
-            cout << "player healed!" << endl;
-            cout << "player health = " << player.getCurrentHealth() << endl;
-        }
-        if (player.collField(ammoItem.getPosition()) && aCollected == false) {
-            aCollected = true;
-            player.addAmmo(3);
-            cout << "player picked up ammo!" << endl;
-            cout << "player ammo = " << player.getAmmo() << endl;
-        }
+       
         
     }
 

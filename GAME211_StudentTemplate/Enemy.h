@@ -32,6 +32,11 @@ public:
 
     bool VisionCheck(Player player, float visionRange);
 
+    int getHealth() {
+
+        return currentHealth;
+    }
+
     float getOrientation() {
 
         return orientation;

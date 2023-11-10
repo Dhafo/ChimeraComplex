@@ -20,41 +20,43 @@ class Scene2 : public Scene {
 
 
 private:
-	float xAxis;	// scene width, in game coords, set in constructor
-	float yAxis;	// scene height, in game coords, set in constructor
-	SDL_Window* window;		// an SDL window with a SDL renderer
-	SDL_Renderer* renderer;	// the renderer associated with SDL window
-	Matrix4 projectionMatrix;	// set in OnCreate()
+    float xAxis;	// scene width, in game coords, set in constructor
+    float yAxis;	// scene height, in game coords, set in constructor
+    SDL_Window* window;		// an SDL window with a SDL renderer
+    SDL_Renderer* renderer;	// the renderer associated with SDL window
+    Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4     inverseProjection;	// set in OnCreate()
-    bool kCollected,aCollected,hCollected; //if key, ammo, health are collected
-    Entity key,ammoItem,healthItem; 
-    Enemy skulker1;
+    bool kCollected, aCollected, hCollected; //if key, ammo, health are collected
+    Entity key, ammoItem, healthItem;
     Player player;
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies
 
     std::vector<Enemy*> predator;// Array for the Skulker Enemies
     std::vector<Entity*> entities;
-    bool predCanSee[1];
+    std::vector<Enemy*> stalker;
+    std::vector<Entity*> ammo;
+    std::vector<Entity*> health;
+
 
 public:
 
-	// This constructor may be different from what you've seen before
-	// Notice the second parameter, and look in GameManager.cpp
-	// to see how this constructor is called.
-	Scene2(SDL_Window* sdlWindow, GameManager* game_);
-	~Scene2();
-	bool OnCreate();
-	void OnDestroy();
-	void Update(const float time);
-	void Render();
-    void HandleEvents(const SDL_Event &event);
-	float getxAxis() { return xAxis; }
-	float getyAxis() { return yAxis; }
-	SDL_Window* getWindow() { return window; }
+    // This constructor may be different from what you've seen before
+    // Notice the second parameter, and look in GameManager.cpp
+    // to see how this constructor is called.
+    Scene2(SDL_Window* sdlWindow, GameManager* game_);
+    ~Scene2();
+    bool OnCreate();
+    void OnDestroy();
+    void Update(const float time);
+    void Render();
+    void HandleEvents(const SDL_Event& event);
+    float getxAxis() { return xAxis; }
+    float getyAxis() { return yAxis; }
+    SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
-	Matrix4 getInverseMatrix() { return inverseProjection; }
+    Matrix4 getInverseMatrix() { return inverseProjection; }
 
-
+    bool sortByDistance(Entity* entity1, Entity* entity2);
     int zBuffer[480]; //depth at each ray hit
 
     //map Walls
@@ -65,7 +67,7 @@ public:
       2, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2,
       2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 2,
       1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-      1, 4, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1,
+      1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1,
       1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 1, 0, 0, 1,
       1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 4, 1,
       1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 2,
@@ -124,7 +126,7 @@ public:
       0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
     };
     //--
-  
+
     Vec3 color = Vec3(240, 240, 240);
 
     //draws map on left side of screen
@@ -139,7 +141,8 @@ public:
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
     float dist(float ax, float ay, float bx, float by);
-    bool sortByDistance(Entity* entity1, Entity* entity2);
+
+    bool EnemyMoveUpate(Enemy* enemy_);
     Uint32 getpixel(SDL_Surface* surface, int x, int y);
     //imported textures
     SDL_Surface* imageWall;
@@ -153,8 +156,17 @@ public:
     SDL_Surface* keySprite;
     SDL_Texture* keyTexture;
 
+    SDL_Surface* ammoSprite;
+    SDL_Texture* ammoTexture;
+
+    SDL_Surface* healthSprite;
+    SDL_Texture* healthTexture;
+
     SDL_Surface* predatorSprite;
     SDL_Texture* predatorTexture;
+
+    SDL_Surface* stalkerSprite;
+    SDL_Texture* stalkerTexture;
 
     SDL_Surface* skulkerSprite;
     SDL_Texture* skulkerTexture;
@@ -169,7 +181,11 @@ public:
     SDL_Texture* textureGun[6]; //6 frames
     int currentGunFrame = 0;
     bool shootGun = false;
-    float timePassed = 0.0f;
+    bool hit = false;
+    float timePassedGun = 0.0f;
+    float timePassedHit = 0.0f;
+    int fade = 0;
+    int fadeDir = 1;
     SDL_Rect gun = { 128, 128 - 8, 256, 256 };
     //UI key collection
     SDL_Rect keyAcq = { 32, 290, 64, 64 };
@@ -181,8 +197,6 @@ public:
 
     Uint32* pixels;
     int pitch;
-
-    
 };
 
 #endif

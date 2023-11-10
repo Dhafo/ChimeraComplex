@@ -42,7 +42,7 @@ void Enemy::addHealth(int addValue)
 
 void Enemy::subtractHealth(int subValue)
 {
-    currentHealth += subValue;
+    currentHealth -= subValue;
     if (currentHealth < 0) {
 
         currentHealth = maxHealth;
