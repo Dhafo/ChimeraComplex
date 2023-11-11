@@ -8,7 +8,6 @@ GameManager::GameManager() {
 	timer = nullptr;
 	isRunning = true;
 	currentScene = nullptr;
-    player = nullptr;
 }
 
 bool GameManager::OnCreate() {
@@ -62,24 +61,6 @@ bool GameManager::OnCreate() {
     Vec3 position(0.5f * currentScene->getxAxis() - 300, 0.5f * currentScene->getyAxis(), 0.0f);
     Vec3 velocity(cos(orientation) * 1.25, sin(orientation) * 1.25, 0.0f);
     Vec3 acceleration(0.0f, 0.0f, 0.0f);
-    
-
-    player = new PlayerBody
-    (
-        position,
-        velocity,
-        acceleration,
-        mass,
-        radius,
-        orientation,
-        rotation,
-        angular,
-        this
-    );
-    if ( player->OnCreate() == false ) {
-        OnDestroy();
-        return false;
-    }
 
     // need to create Player before validating scene
     if (!ValidateCurrentScene()) {
@@ -210,36 +191,6 @@ SDL_Renderer* GameManager::getRenderer()
     SDL_Window* window = currentScene->getWindow();
     SDL_Renderer* renderer = SDL_GetRenderer(window);
     return renderer;
-}
-
-PlayerBody* GameManager::setPlayer()
-{
-    float mass = 1.0f;
-    float radius = 0.5f;
-    float orientation = 0.0f;
-    float rotation = 0.0f;
-    float angular = 0.0f;
-    Vec3 position(0.5f * currentScene->getxAxis() - 300, 0.5f * currentScene->getyAxis(), 0.0f);
-    Vec3 velocity(cos(orientation) * 1.75, sin(orientation) * 1.75, 0.0f);
-    Vec3 acceleration(0.0f, 0.0f, 0.0f);
-
-    player = new PlayerBody(position,
-        velocity,
-        acceleration,
-        mass,
-        radius,
-        orientation,
-        rotation,
-        angular,
-        this
-    );
-    return nullptr;
-}
-
-// This might be unfamiliar
-void GameManager::RenderPlayer(float scale)
-{
-    player->Render(scale);
 }
 
 void GameManager::LoadScene( int i )

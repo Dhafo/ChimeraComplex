@@ -7,9 +7,6 @@
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
-#include "PlayerBody.h"
-
-
 using namespace irrklang;
 
 class GameManager {
@@ -28,8 +25,6 @@ private:
 	bool isRunning;
 	class Scene *currentScene;
 
-	// This might be unfamiliar
-    class PlayerBody *player;   
     ISoundEngine* engine;
 
     Uint32 changeScenceEventType; //event type number for user defined events
@@ -40,14 +35,10 @@ public:
 	bool OnCreate();
 	void OnDestroy();
 
-
 	// These might be unfamiliar
 	float getSceneHeight();
 	float getSceneWidth();
-	Matrix4 getProjectionMatrix();
-    PlayerBody* getPlayer(){ return player; }
-	PlayerBody* setPlayer();
-	void RenderPlayer(float scale = 1.0f);
+	MATH::Matrix4 getProjectionMatrix();
 	SDL_Renderer* getRenderer();
     ISoundEngine* getSoundEngine() { return engine; }
 

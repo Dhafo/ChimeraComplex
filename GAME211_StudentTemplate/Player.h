@@ -4,6 +4,12 @@
 #include <VMath.h>
 #include <iostream>
 
+
+#define PI 3.1415926535
+#define P2 PI/2
+#define P3 3*PI/2
+#define DegToRad 0.0174533 //1 deg in rad
+
 class Player: public Entity
 {
 protected:
@@ -13,8 +19,6 @@ protected:
     int currentAmmo;
    
     float damageDelayTime; 
-    
- 
 
     float orientation;
 

@@ -90,8 +90,6 @@ bool Scene2::OnCreate() {
     currentGunFrame = 0;
     predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
-    game->getPlayer()->setImage(image);
-    game->getPlayer()->setTexture(texture);
 
     key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
     //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
@@ -156,7 +154,6 @@ void Scene2::Update(const float deltaTime) {
         }
     }
 	// Update playerit
-	game->getPlayer()->Update(deltaTime);
     HandleMovement();
     player.playerUpdate(deltaTime);
     for (int i = 0; i < skulker.size();i++) {

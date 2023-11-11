@@ -78,8 +78,7 @@ bool Scene1::OnCreate() {
     currentGunFrame = 0;
     predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
-	game->getPlayer()->setImage(image);
-	game->getPlayer()->setTexture(texture);
+
 
     keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
@@ -97,10 +96,6 @@ bool Scene1::OnCreate() {
     stalkerTexture = SDL_CreateTextureFromSurface(renderer, stalkerSprite);
     ammoTexture = SDL_CreateTextureFromSurface(renderer, ammoSprite);
     healthTexture = SDL_CreateTextureFromSurface(renderer, healthSprite);
-
-	game->getPlayer()->setImage(image);
-	game->getPlayer()->setTexture(texture);
-
 
     //Items
     key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
@@ -233,7 +228,6 @@ void Scene1::Update(const float deltaTime) {
             hit = false;
         }
     }
-	game->getPlayer()->Update(deltaTime);
     HandleMovement();
     player.playerUpdate(deltaTime);
     for (int i = 0; i < skulker.size();i++) {
@@ -606,10 +600,7 @@ bool Scene1::EnemyMoveUpate(Enemy* enemy_)
             ry += yo;
             dof += 1;
         }
-
-
     }
-
 
     //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
     if (disV < disH)

@@ -110,9 +110,6 @@ void Scene0::OnDestroy()
 
 void Scene0::Update(const float deltaTime) {
 
-    // Update player
-    game->getPlayer()->Update(deltaTime);
-
 }
 
 void Scene0::Render() {
@@ -130,9 +127,6 @@ void Scene0::Render() {
 
 void Scene0::HandleEvents(const SDL_Event& event)
 {
-    // send events to player as needed
-    game->getPlayer()->HandleEvents(event);
-
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.scancode)
         {
