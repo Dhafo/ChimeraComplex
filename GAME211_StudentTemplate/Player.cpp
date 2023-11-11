@@ -23,7 +23,7 @@ Player::Player(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, V
     maxHealth= maxhealth_;
     currentHealth = maxHealth;
     maxAmmo = maxAmmo_;
-    currentAmmo = 3;
+    currentAmmo = 7;
     orientation = orientation_;
     position = position_;
     velocity = velocity_;

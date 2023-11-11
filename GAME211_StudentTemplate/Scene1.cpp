@@ -5,13 +5,6 @@
 
 using namespace std;
 
-
-
-//typedef struct
-//{
-//    int w, a, d, s;
-//}ButtonKeys; ButtonKeys Keys;
-
 // See notes about this constructor in Scene1.h.
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -21,7 +14,7 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	yAxis = 512.0f;
     float orientation = 0.0f;
     //Player
-    player = Player(10, 6, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
+    player = Player(100, 7, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
 
 }
 
@@ -56,33 +49,25 @@ bool Scene1::OnCreate() {
     imageWall2 = IMG_Load("wallTest2.png");
     imageDoor = IMG_Load("door.png");
     imageDoor2 = IMG_Load("door2.png");
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-    enemySprite = IMG_Load("CardKey.png");
-=======
->>>>>>> Ramy
     keySprite = IMG_Load("CardKey.png");
     imageFloor = IMG_Load("floor2.png");
     imageCeiling = IMG_Load("ceiling.png");
     predatorSprite = IMG_Load("Blinky.png");
     skulkerSprite = IMG_Load("Blinky2.png");
-<<<<<<< HEAD
-=======
     stalkerSprite = IMG_Load("Blinky.png");
     healthSprite = IMG_Load("CardKey.png");
     ammoSprite = IMG_Load("CardKey.png");
->>>>>>> Stashed changes
->>>>>>> Ramy
+
 	texture = SDL_CreateTextureFromSurface(renderer, image);
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
     textureWall2 = SDL_CreateTextureFromSurface(renderer, imageWall2);
     textureDoor = SDL_CreateTextureFromSurface(renderer, imageDoor);
     textureDoor2 = SDL_CreateTextureFromSurface(renderer, imageDoor2);
-<<<<<<< HEAD
+
     keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
+
     for (int i = 0; i < 6; i++) {
         std::string gunFrame = "Gun/gun" + std::to_string(i) + ".png";
         SDL_Surface* gunSurf = IMG_Load(gunFrame.c_str());
@@ -96,13 +81,6 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
 
-=======
-<<<<<<< Updated upstream
-    enemyTexture = SDL_CreateTextureFromSurface(renderer, enemySprite);
-	game->getPlayer()->setImage(image);
-	game->getPlayer()->setTexture(texture);
-
-=======
     keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
@@ -123,38 +101,36 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
 
->>>>>>> Ramy
+
     //Items
     key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
     //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
     //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
     
-<<<<<<< HEAD
+
     // Set player image to PacMan
-=======
+
     ammo.push_back(new Entity(Vec2(672, 928), Vec2(0, 0), ammoTexture));
     health.push_back(new Entity(Vec2(96, 416), Vec2(0, 0), healthTexture));
->>>>>>> Ramy
 
     skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), skulkerTexture));
     skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), skulkerTexture));
     skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), skulkerTexture));
     skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
 
-<<<<<<< HEAD
+
     predator.push_back(new Enemy(3, Vec2(544, 352), Vec2(0, 0), predatorTexture));
 
     predCanSee[0] = false;
 
     entities.reserve(predator.size() + skulker.size() + 1);
-=======
+
     predator.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0),predatorTexture));
 
     stalker.push_back(new Enemy(3, Vec2(800, 544), Vec2(0, 0),stalkerTexture));
 
 
     entities.reserve(predator.size() + skulker.size() + stalker.size()+ ammo.size() + health.size() + 1);
->>>>>>> Ramy
 
     for(Entity* entity: predator)
     {
@@ -164,10 +140,9 @@ bool Scene1::OnCreate() {
     {
         entities.push_back(entity);
     }
-<<<<<<< HEAD
 
     entities.push_back(&key);
-=======
+
     for (Entity* entity : stalker)
     {
         entities.push_back(entity);
@@ -182,8 +157,7 @@ bool Scene1::OnCreate() {
     }
     entities.push_back(&key);
 
->>>>>>> Stashed changes
->>>>>>> Ramy
+
 	return true;
 }
 
@@ -199,21 +173,15 @@ void Scene1::OnDestroy()
     SDL_FreeSurface(imageCeiling);
     SDL_DestroyTexture(textureDoor);
     SDL_FreeSurface(imageDoor);
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-    SDL_DestroyTexture(enemyTexture);
-    SDL_FreeSurface(enemySprite);
-=======
->>>>>>> Ramy
+
     SDL_DestroyTexture(predatorTexture);
     SDL_FreeSurface(predatorSprite);
     SDL_DestroyTexture(skulkerTexture);
     SDL_FreeSurface(skulkerSprite);
-<<<<<<< HEAD
+
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(surf);
-=======
+
     SDL_DestroyTexture(stalkerTexture);
     SDL_FreeSurface(stalkerSprite);
     SDL_DestroyTexture(ammoTexture);
@@ -223,8 +191,7 @@ void Scene1::OnDestroy()
 
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(surf);
->>>>>>> Stashed changes
->>>>>>> Ramy
+
 }
 
 void Scene1::Update(const float deltaTime) {
@@ -273,8 +240,6 @@ void Scene1::Update(const float deltaTime) {
      //   skulker[i]->updatePos(player.getPosition());
     }
     // 4/2 because of map size(4,4) = x,y
-
-<<<<<<< HEAD
       // Stuff We need for UI
     // Color and the font
     colorFont = { 255, 0, 255 };
@@ -285,14 +250,14 @@ void Scene1::Update(const float deltaTime) {
     _itoa_s(player.getAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the Max ammo for ammo ttf
 
     // The health 
-    health = TTF_RenderText_Solid(font, playerHealth, colorFont);
-    healthTexture = SDL_CreateTextureFromSurface(renderer, health);
+    healthText = TTF_RenderText_Solid(font, playerHealth, colorFont);
+    healthTextTexture = SDL_CreateTextureFromSurface(renderer, healthText);
     healthName = TTF_RenderText_Solid(font, "Health: ", colorFont);
     healthNameTexture = SDL_CreateTextureFromSurface(renderer, healthName);
 
     // The ammo
-    ammo = TTF_RenderText_Solid(font, playerAmmo, colorFont);
-    ammoTexture = SDL_CreateTextureFromSurface(renderer, ammo);
+    ammoText = TTF_RenderText_Solid(font, playerAmmo, colorFont);
+    ammoTextTexture = SDL_CreateTextureFromSurface(renderer, ammoText);
     ammoName = TTF_RenderText_Solid(font, "Ammo: ", colorFont);
     ammoNameTexture = SDL_CreateTextureFromSurface(renderer, ammoName);
 
@@ -303,13 +268,13 @@ void Scene1::Update(const float deltaTime) {
     keyTexture = SDL_CreateTextureFromSurface(renderer, cardKey);
 
     // SDL Rect
-    healthRect = { 10,30,health->w,health->h };
+    healthRect = { 10,30,healthText->w,healthText->h };
     healthNameRect = { 0,0,healthName->w,healthName->h };
-    ammoRect = { 150, 30, ammo->w, ammo->h };
+    ammoRect = { 150, 30, ammoText->w, ammoText->h };
     ammoNameRect = { 130, 0, ammoName->w,ammoName->h };
     keyNameRect = { 250, 0, keyName->w, keyName->h };
     cardKeyRect = { 400,0, 64, 64 };
-=======
+
     for (int i = 0; i < predator.size(); i++) {
         if (predator[i]->VisionCheck(player, 25) && EnemyMoveUpate(predator[i])) {
 
@@ -333,7 +298,7 @@ void Scene1::Update(const float deltaTime) {
         }
 
     }
->>>>>>> Ramy
+
 }
 
 
@@ -346,35 +311,22 @@ void Scene1::Render() {
     SDL_RenderCopy(renderer, buffer, NULL, NULL);
     draw3D();
     
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Ramy
     std::sort(entities.begin(), entities.end(), [&](Entity* a, Entity* b) 
     {
         return sortByDistance(a, b);
     });
 
-<<<<<<< HEAD
-    for(int i = 0; i < entities.size(); i++)
-    {
-        entityTick(entities[i], entities[i]->texture);
-=======
+
     for (int i = 0; i < entities.size(); i++)
     {
         if (entities[i]->getExist() == true) {
         entityTick(entities[i], entities[i]->texture);
         }
->>>>>>> Ramy
+
     }
 
     SDL_RenderCopy(renderer, textureGun[currentGunFrame], NULL, &gun);
 
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> Ramy
     if (kCollected)
     {
         // key collect UI
@@ -387,9 +339,9 @@ void Scene1::Render() {
     SDL_RenderFillRect(renderer, &dmgFade);
 
     // Renders the health and ammo of the UI
-    SDL_RenderCopy(renderer, healthTexture, NULL, &healthRect);
+    SDL_RenderCopy(renderer, healthTextTexture, NULL, &healthRect);
     SDL_RenderCopy(renderer, healthNameTexture, NULL, &healthNameRect);
-    SDL_RenderCopy(renderer, ammoTexture, NULL, &ammoRect);
+    SDL_RenderCopy(renderer, ammoTextTexture, NULL, &ammoRect);
     SDL_RenderCopy(renderer, ammoNameTexture, NULL, &ammoNameRect);
     // SDL_RenderCopy(renderer, keyNameTexture, NULL, &keyNameRect);
 
@@ -405,24 +357,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
         if (event.type == SDL_KEYDOWN)
         {
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-            
-            if (event.key.keysym.scancode == SDL_SCANCODE_A) 
-=======
->>>>>>> Ramy
-            if(event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
-            {
-                if(!shootGun)
-                {
-<<<<<<< HEAD
-                    game->getSoundEngine()->play2D("pistol_shot.wav", false);
-                    shootGun = true;
-                } 
-            }
-            if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) 
-=======
+            if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL) {
                     if (player.getAmmo() > 0) {
 
                         for (int i = 0; i < predator.size(); i++) {
@@ -456,8 +391,6 @@ void Scene1::HandleEvents(const SDL_Event& event)
                 } 
             }
             if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) 
->>>>>>> Stashed changes
->>>>>>> Ramy
             {
                 player.a = 1; 
             }
@@ -522,7 +455,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
                 }
 
             }
-        }
+        
         if(event.type == SDL_KEYUP)
         {
             if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
@@ -544,6 +477,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
             }
         }
 }
+
 bool Scene1::EnemyMoveUpate(Enemy* enemy_)
 {
     int r, mx, my, mp, dof;
@@ -622,28 +556,9 @@ bool Scene1::EnemyMoveUpate(Enemy* enemy_)
         }
         else
         {
-<<<<<<< Updated upstream
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
-            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
-            {
-                ehx = rx;
-                ehy = ry;
-                disH = dist(enemy_->getPosition().x, enemy_->getPosition().y, ehx, ehy);
-                dof = 16;
-            }
-            else
-            {
-                rx += xo;
-                ry += yo;
-                dof += 1;
-            }
-=======
             rx += xo;
             ry += yo;
             dof += 1;
->>>>>>> Stashed changes
         }
     }
 
@@ -687,47 +602,13 @@ bool Scene1::EnemyMoveUpate(Enemy* enemy_)
         }
         else
         {
-<<<<<<< Updated upstream
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
-            if (mp > 0 && mp < mapWallsX * mapWallsY && mapWalls[mp] > 0)
-            {
-                vX = rx;
-                vY = ry;
-                disV = dist(enemy_->getPosition().x, enemy_->getPosition().y, vX, vY);
-                dof = 16;
-            }
-            else
-            {
-                rx += xo;
-                ry += yo;
-                dof += 1;
-            }
-<<<<<<< HEAD
-        }
-        //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
-        if (disV < disH)
-        {
-            rx = vX;
-            ry = vY;
-            disT = disV;
-            mx = rx / 64;
-            my = ry / 64;
-            mp = my * mapWallsX + mx;
-=======
-
-
-=======
             rx += xo;
             ry += yo;
             dof += 1;
->>>>>>> Stashed changes
         }
 
 
     }
->>>>>>> Ramy
 
 
     //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
@@ -741,14 +622,6 @@ bool Scene1::EnemyMoveUpate(Enemy* enemy_)
         mp = my * mapWallsX + mx;
 
 
-<<<<<<< HEAD
-        if (disT > dist(eX, eY, pX, pY)) {
-=======
-<<<<<<< Updated upstream
-        if (disT > dist(eX, eY, pX, pY, sra)) {
->>>>>>> Ramy
-            enemy_->updatePos(player.getPosition());
-=======
     }
     else if (disH < disV)
     {
@@ -769,10 +642,10 @@ bool Scene1::EnemyMoveUpate(Enemy* enemy_)
         return false;
     }
 
->>>>>>> Stashed changes
 
 
 }
+
 
 void Scene1::HandleMovement()
 {
@@ -884,7 +757,7 @@ void Scene1::HandleMovement()
                 {
                     hit = true;
                 }
-                player.subHealth(1);
+                player.subHealth(15);
                 
                 // cout << "player hit!" << endl;
 
@@ -894,7 +767,7 @@ void Scene1::HandleMovement()
         for (int i = 0; i < predator.size(); i++) {
             if (player.collField(predator[i]->getPosition())) {
 
-                player.subHealth(1);
+                player.subHealth(15);
                 // cout << "player hit!" << endl;
 
             }
@@ -902,20 +775,20 @@ void Scene1::HandleMovement()
         for (int i = 0; i < stalker.size(); i++) {
             if (player.collField(stalker[i]->getPosition())) {
 
-                player.subHealth(1);
+                player.subHealth(15);
                 // cout << "player hit!" << endl;
 
             }
         }
         if (player.collField(healthItem.getPosition()) && hCollected == false) {
             hCollected = true;
-            player.addHealth(1);
+            player.addHealth(50);
             cout << "player healed!" << endl;
             cout << "player health = " << player.getCurrentHealth() << endl;
         }
         if (player.collField(ammoItem.getPosition()) && aCollected == false) {
             aCollected = true;
-            player.addAmmo(3);
+            player.addAmmo(7);
             cout << "player picked up ammo!" << endl;
             cout << "player ammo = " << player.getAmmo() << endl;
         }
@@ -996,43 +869,6 @@ void Scene1::draw3D()
     {
         ra -= 2 * PI;
     }
-<<<<<<< HEAD
-=======
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-  
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-<<<<<<< Updated upstream
-
->>>>>>> Ramy
-
-    for (int i = 0; i < predator.size(); i++) {
-=======
-    /*for (int i = 0; i < predator.size(); i++) {
->>>>>>> Stashed changes
-
-        EnemyMoveUpate(predator[i]);
-    }
-
-    for (int i = 0; i < skulker.size(); i++) {
-        EnemyMoveUpate(skulker[i]);
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-     
->>>>>>> Ramy
-    }
-=======
-    }*/
->>>>>>> Stashed changes
 
     //480 rays for every x value in the 480x320 screen
     for (r = 0; r < 480; r++)

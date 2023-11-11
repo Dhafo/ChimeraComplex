@@ -32,19 +32,12 @@ private:
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies
 
     std::vector<Enemy*> predator;// Array for the Skulker Enemies
-<<<<<<< HEAD
-    std::vector<Entity*> entities;
-=======
-<<<<<<< Updated upstream
->>>>>>> Ramy
     bool predCanSee[1];
-=======
+
     std::vector<Entity*> entities;
     std::vector<Enemy*> stalker;
     std::vector<Entity*> ammo;
     std::vector<Entity*> health;
-
->>>>>>> Stashed changes
 
 public:
 
@@ -63,16 +56,8 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
-<<<<<<< Updated upstream
-    void EnemyMoveUpate(Enemy* enemy_);
-<<<<<<< HEAD
     bool sortByDistance(Entity* entity1, Entity* entity2);
-=======
-=======
-   
-    bool sortByDistance(Entity* entity1, Entity* entity2);
->>>>>>> Stashed changes
->>>>>>> Ramy
+
     int zBuffer[480]; //depth at each ray hit
 
     //map Walls
@@ -156,19 +141,11 @@ public:
     //handles movemnet
     void HandleMovement();
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
-<<<<<<< HEAD
-    float dist(float ax, float ay, float bx, float by);
-    Uint32 getpixel(SDL_Surface* surface, int x, int y);
-=======
-<<<<<<< Updated upstream
-    float dist(float ax, float ay, float bx, float by, float ang);
-=======
-    float dist(float ax, float ay, float bx, float by);
 
+    float dist(float ax, float ay, float bx, float by);
     bool EnemyMoveUpate(Enemy* enemy_);
     Uint32 getpixel(SDL_Surface* surface, int x, int y);
->>>>>>> Stashed changes
->>>>>>> Ramy
+
     //imported textures
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
@@ -181,19 +158,6 @@ public:
     SDL_Surface* keySprite;
     SDL_Texture* keyTexture;
 
-<<<<<<< HEAD
-    SDL_Surface* predatorSprite;
-    SDL_Texture* predatorTexture;
-
-=======
-<<<<<<< Updated upstream
-    //cover gameview with UI background
-    SDL_Rect Top = { 530, 0, 500, 16 };
-    SDL_Rect Bottom = { 530, 320, 500, 192 };
-    SDL_Rect Left = { 512, 0, 24, 512 };
-    SDL_Rect Right = { 1010, 0, 32, 512 };
-
-=======
     SDL_Surface* ammoSprite;
     SDL_Texture* ammoTexture;
 
@@ -206,7 +170,6 @@ public:
     SDL_Surface* stalkerSprite;
     SDL_Texture* stalkerTexture;
 
->>>>>>> Ramy
     SDL_Surface* skulkerSprite;
     SDL_Texture* skulkerTexture;
 
@@ -216,18 +179,17 @@ public:
     SDL_Surface* imageCeiling;
     SDL_Texture* textureCeiling;
 
-<<<<<<< HEAD
     // TTF stuff for the UI
     TTF_Font* font;
     SDL_Color colorFont;
 
-    SDL_Surface* health;
-    SDL_Texture* healthTexture;
+    SDL_Surface* healthText;
+    SDL_Texture* healthTextTexture;
     SDL_Surface* healthName;
     SDL_Texture* healthNameTexture;
 
-    SDL_Surface* ammo;
-    SDL_Texture* ammoTexture;
+    SDL_Surface* ammoText;
+    SDL_Texture* ammoTextTexture;
     SDL_Surface* ammoName;
     SDL_Texture* ammoNameTexture;
 
@@ -250,8 +212,6 @@ public:
     char playerHealth[12];
     char playerAmmo[12];
 
-=======
->>>>>>> Ramy
     SDL_Surface* imageGun;
     SDL_Texture* textureGun[6]; //6 frames
     int currentGunFrame = 0;
@@ -262,14 +222,9 @@ public:
     int fade = 0;
     int fadeDir = 1;
     SDL_Rect gun = { 128, 128 - 8, 256, 256 };
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> Ramy
+
     //UI key collection
     SDL_Rect keyAcq = { 32, 290, 64, 64 };
-    
-
 
     SDL_Texture* buffer = NULL;
     SDL_Surface* surf = NULL;

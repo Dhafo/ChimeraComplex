@@ -11,17 +11,8 @@ Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
 
     position = position_;
     velocity = velocity_;
-<<<<<<< HEAD
-    texture = texture_;
-=======
-<<<<<<< Updated upstream
-
-
-=======
     texture = texture_;
     exist = true;
->>>>>>> Stashed changes
->>>>>>> Ramy
 }
 
 void Entity::setPosition(Vec2 position_)
