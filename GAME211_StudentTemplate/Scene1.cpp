@@ -110,7 +110,6 @@ bool Scene1::OnCreate() {
     }
 
     entities.push_back(&key);
-
 	return true;
 }
 
@@ -180,6 +179,41 @@ void Scene1::Update(const float deltaTime) {
      //   skulker[i]->updatePos(player.getPosition());
     }
     // 4/2 because of map size(4,4) = x,y
+
+      // Stuff We need for UI
+    // Color and the font
+    colorFont = { 255, 0, 255 };
+    font = TTF_OpenFont("Lato-Regular.ttf", 24);
+
+    // itoa
+    _itoa_s(player.getCurrentHealth(), playerHealth, sizeof(playerHealth), 10); // Gets the Max health for health ttf
+    _itoa_s(player.getAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the Max ammo for ammo ttf
+
+    // The health 
+    health = TTF_RenderText_Solid(font, playerHealth, colorFont);
+    healthTexture = SDL_CreateTextureFromSurface(renderer, health);
+    healthName = TTF_RenderText_Solid(font, "Health: ", colorFont);
+    healthNameTexture = SDL_CreateTextureFromSurface(renderer, healthName);
+
+    // The ammo
+    ammo = TTF_RenderText_Solid(font, playerAmmo, colorFont);
+    ammoTexture = SDL_CreateTextureFromSurface(renderer, ammo);
+    ammoName = TTF_RenderText_Solid(font, "Ammo: ", colorFont);
+    ammoNameTexture = SDL_CreateTextureFromSurface(renderer, ammoName);
+
+    // The key
+    keyName = TTF_RenderText_Solid(font, "Key Collected: ", colorFont);
+    keyNameTexture = SDL_CreateTextureFromSurface(renderer, keyName);
+    cardKey = IMG_Load("CardKey.png");
+    keyTexture = SDL_CreateTextureFromSurface(renderer, cardKey);
+
+    // SDL Rect
+    healthRect = { 10,30,health->w,health->h };
+    healthNameRect = { 0,0,healthName->w,healthName->h };
+    ammoRect = { 150, 30, ammo->w, ammo->h };
+    ammoNameRect = { 130, 0, ammoName->w,ammoName->h };
+    keyNameRect = { 250, 0, keyName->w, keyName->h };
+    cardKeyRect = { 400,0, 64, 64 };
 }
 
 
@@ -214,6 +248,15 @@ void Scene1::Render() {
     SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_RenderFillRect(renderer, &dmgFade);
+
+    // Renders the health and ammo of the UI
+    SDL_RenderCopy(renderer, healthTexture, NULL, &healthRect);
+    SDL_RenderCopy(renderer, healthNameTexture, NULL, &healthNameRect);
+    SDL_RenderCopy(renderer, ammoTexture, NULL, &ammoRect);
+    SDL_RenderCopy(renderer, ammoNameTexture, NULL, &ammoNameRect);
+    // SDL_RenderCopy(renderer, keyNameTexture, NULL, &keyNameRect);
+
+
     SDL_RenderPresent(renderer);
     //if we ever want to destroy
     //SDL_DestroyTexture(textureWall);
@@ -449,11 +492,7 @@ void Scene1::EnemyMoveUpate(Enemy* enemy_)
                 ry += yo;
                 dof += 1;
             }
-
-
         }
-
-
         //see if closest collision is the vertical or horizontal line, if horizontal darken the texture
         if (disV < disH)
         {
@@ -667,13 +706,6 @@ void Scene1::draw3D()
     {
         ra -= 2 * PI;
     }
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     for (int i = 0; i < predator.size(); i++) {
 
@@ -683,12 +715,6 @@ void Scene1::draw3D()
     for (int i = 0; i < skulker.size(); i++) {
         EnemyMoveUpate(skulker[i]);
     }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
 
     //480 rays for every x value in the 480x320 screen
     for (r = 0; r < 480; r++)

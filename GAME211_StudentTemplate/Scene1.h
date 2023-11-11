@@ -163,6 +163,39 @@ public:
     SDL_Surface* imageCeiling;
     SDL_Texture* textureCeiling;
 
+    // TTF stuff for the UI
+    TTF_Font* font;
+    SDL_Color colorFont;
+
+    SDL_Surface* health;
+    SDL_Texture* healthTexture;
+    SDL_Surface* healthName;
+    SDL_Texture* healthNameTexture;
+
+    SDL_Surface* ammo;
+    SDL_Texture* ammoTexture;
+    SDL_Surface* ammoName;
+    SDL_Texture* ammoNameTexture;
+
+    SDL_Surface* keyName;
+    SDL_Texture* keyNameTexture;
+
+    // png for the key in the UI
+    SDL_Surface* cardKey;
+    SDL_Texture* cardKeyTexture;
+
+    // SDL_Rect for UI
+    SDL_Rect healthRect;
+    SDL_Rect healthNameRect;
+    SDL_Rect ammoRect;
+    SDL_Rect ammoNameRect;
+    SDL_Rect keyNameRect;
+    SDL_Rect cardKeyRect;
+
+    //For the itoa
+    char playerHealth[12];
+    char playerAmmo[12];
+
     SDL_Surface* imageGun;
     SDL_Texture* textureGun[6]; //6 frames
     int currentGunFrame = 0;
