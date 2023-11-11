@@ -13,7 +13,16 @@ protected:
     Vec2 velocity;
    
     Vec2 position;
+<<<<<<< HEAD
 
+=======
+<<<<<<< Updated upstream
+    
+=======
+    bool exist;
+
+>>>>>>> Stashed changes
+>>>>>>> Ramy
 public:
 
     Entity();
@@ -27,7 +36,23 @@ public:
     Vec2 getVelocity();
 
     bool collField(Vec2 Position_);
+<<<<<<< HEAD
     SDL_Texture* texture;
+=======
+<<<<<<< Updated upstream
+=======
+    SDL_Texture* texture;
+
+    bool getExist() {
+        return exist;
+    }
+
+    void setExist(bool exist_) {
+
+        exist = exist_;
+    }
+>>>>>>> Stashed changes
+>>>>>>> Ramy
 };
 
 #endif /* ENTITY_H */

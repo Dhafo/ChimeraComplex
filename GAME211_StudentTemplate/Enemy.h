@@ -1,6 +1,7 @@
 #ifndef Enemy_H
 #define Enemy_H
 #include "Entity.h"
+#include"Player.h"
 #include <MMath.h>
 #include <VMath.h>
 #include <iostream>
@@ -29,7 +30,7 @@ public:
 
     bool predMoveCheck(Vec2 pointA, Vec2 pointB, Vec2 pointC);
 
-    
+    bool VisionCheck(Player player, float visionRange);
 
     float getOrientation() {
 
