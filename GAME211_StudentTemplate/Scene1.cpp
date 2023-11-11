@@ -4,7 +4,6 @@
 #include <algorithm>
 
 using namespace std;
-
 // See notes about this constructor in Scene1.h.
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -17,7 +16,6 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
     player = Player(100, 7, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
 
 }
-
 
 Scene1::~Scene1(){
 }
@@ -67,22 +65,6 @@ bool Scene1::OnCreate() {
     keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
-
-    for (int i = 0; i < 6; i++) {
-        std::string gunFrame = "Gun/gun" + std::to_string(i) + ".png";
-        SDL_Surface* gunSurf = IMG_Load(gunFrame.c_str());
-        SDL_Texture* gunTexture = SDL_CreateTextureFromSurface(renderer, gunSurf);
-        SDL_FreeSurface(gunSurf);
-        textureGun[i] = gunTexture;
-    }
-    currentGunFrame = 0;
-    predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
-    skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
-
-
-    keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
-    textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
-    textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
     for (int i = 0; i < 6; i++) {
         std::string gunFrame = "Gun/gun" + std::to_string(i) + ".png";
         SDL_Surface* gunSurf = IMG_Load(gunFrame.c_str());
@@ -101,8 +83,6 @@ bool Scene1::OnCreate() {
     key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
     //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
     //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
-    
-
     // Set player image to PacMan
 
     ammo.push_back(new Entity(Vec2(672, 928), Vec2(0, 0), ammoTexture));
@@ -190,8 +170,25 @@ void Scene1::OnDestroy()
 }
 
 void Scene1::Update(const float deltaTime) {
-   // player.getCurrentHealth();
-	// Update playerit
+
+    for (int i = 0; i < predator.size(); i++) {
+        if (predator[i]->getHealth() <= 0) {
+            predator[i]->setExist(false);
+            //   
+        }
+    }for (int i = 0; i < stalker.size(); i++) {
+        if (stalker[i]->getHealth() <= 0) {
+
+            stalker[i]->setExist(false);
+        }
+    }for (int i = 0; i < skulker.size(); i++) {
+        if (skulker[i]->getHealth() <= 0) {
+
+            skulker[i]->setExist(false);
+        }
+    }
+
+	// if player shoots, play animation
     if(shootGun)
     {
         timePassedGun += deltaTime;
@@ -207,6 +204,7 @@ void Scene1::Update(const float deltaTime) {
             shootGun = false;
         }
     }
+    //if player gets hit, start hit effect
     if (hit)
     {
         timePassedHit += deltaTime;
@@ -725,7 +723,7 @@ void Scene1::HandleMovement()
               //  entities.pop_back();
                 game->getSoundEngine()->play2D("beep.wav", false);
                 std::cout << "Ammo Collected!" << std::endl;
-                player.addAmmo(3);
+                player.addAmmo(7);
             }
         }
 
@@ -737,53 +735,41 @@ void Scene1::HandleMovement()
               //  entities.pop_back();
                 game->getSoundEngine()->play2D("beep.wav", false);
                 std::cout << "Health Acquired!" << std::endl;
-                player.addHealth(1);
+                player.addHealth(50);
             }
         }
+
         //Enemy attack check
 
         for (int i = 0; i < skulker.size(); i++) {
-            if (player.collField(skulker[i]->getPosition())) {
-                if(player.delayActive == false)
+            if (skulker[i]->getExist() && player.collField(skulker[i]->getPosition())) {
+                if (player.delayActive == false)
                 {
                     hit = true;
                 }
-                player.subHealth(15);
-                
+                player.subHealth(1);
+
                 // cout << "player hit!" << endl;
 
             }
         }
 
         for (int i = 0; i < predator.size(); i++) {
-            if (player.collField(predator[i]->getPosition())) {
+            if (predator[i]->getExist() && player.collField(predator[i]->getPosition())) {
 
-                player.subHealth(15);
+                player.subHealth(1);
                 // cout << "player hit!" << endl;
 
             }
         }
         for (int i = 0; i < stalker.size(); i++) {
-            if (player.collField(stalker[i]->getPosition())) {
+            if (stalker[i]->getExist() && player.collField(stalker[i]->getPosition())) {
 
-                player.subHealth(15);
+                player.subHealth(1);
                 // cout << "player hit!" << endl;
 
             }
         }
-        if (player.collField(healthItem.getPosition()) && hCollected == false) {
-            hCollected = true;
-            player.addHealth(50);
-            cout << "player healed!" << endl;
-            cout << "player health = " << player.getCurrentHealth() << endl;
-        }
-        if (player.collField(ammoItem.getPosition()) && aCollected == false) {
-            aCollected = true;
-            player.addAmmo(7);
-            cout << "player picked up ammo!" << endl;
-            cout << "player ammo = " << player.getAmmo() << endl;
-        }
-        
     }
 
 void Scene1::drawMap2D()
@@ -1092,12 +1078,7 @@ void Scene1::draw3D()
 
         }
     }
-
-   
-    
 }
-
-
 
 Uint32 Scene1::getpixel(SDL_Surface* surface, int x, int y)
 {

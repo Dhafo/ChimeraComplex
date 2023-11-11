@@ -26,7 +26,7 @@ private:
 	SDL_Renderer* renderer;	// the renderer associated with SDL window
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4     inverseProjection;	// set in OnCreate()
-    bool kCollected,aCollected,hCollected; //if key, ammo, health are collected
+    bool kCollected;
     Entity key,ammoItem,healthItem; 
     Player player;
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies

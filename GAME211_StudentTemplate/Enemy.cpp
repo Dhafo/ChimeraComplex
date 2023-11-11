@@ -42,12 +42,12 @@ void Enemy::addHealth(int addValue)
 
 void Enemy::subtractHealth(int subValue)
 {
-    currentHealth += subValue;
+    currentHealth -= subValue;
     if (currentHealth < 0) {
 
         currentHealth = maxHealth;
     }
-    cout << "enemy hit" << endl;
+    cout << "enemy hit for " << subValue << " damage!" << endl;
 
 }
 
@@ -83,23 +83,23 @@ bool Enemy::predMoveCheck(Vec2 pointA, Vec2 pointB, Vec2 pointC)
     Vec2 triBCCResult;
 
     float detT = (pointB.y - pointC.y) * (pointA.x - pointC.x) +
-                 (pointC.x - pointB.x) * (pointA.y - pointC.y);
-    
+        (pointC.x - pointB.x) * (pointA.y - pointC.y);
+
     triBCCResult.x = ((pointB.y - pointC.y) * (position.x - pointC.x) +
-                (pointC.x - pointB.x) * (position.y - pointC.y)) / detT;
-    
+        (pointC.x - pointB.x) * (position.y - pointC.y)) / detT;
+
     triBCCResult.y = ((pointC.y - pointA.y) * (position.x - pointC.x) +
-                (pointA.x - pointC.x) * (position.y - pointC.y)) / detT;
-    
-     triBCCResult;
-     
-     if (triBCCResult.x >= 0.0f && triBCCResult.y >= 0.0f && (triBCCResult.x + triBCCResult.y) <= 1.0f) {
-         return true;
-     }
-     else
-     {
-         return false;
-     }
+        (pointA.x - pointC.x) * (position.y - pointC.y)) / detT;
+
+    triBCCResult;
+
+    if (triBCCResult.x >= 0.0f && triBCCResult.y >= 0.0f && (triBCCResult.x + triBCCResult.y) <= 1.0f) {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -137,13 +137,13 @@ bool Enemy::VisionCheck(Player player, float visionRange)
 
 
     if (yTemp > -visionRange && yTemp < visionRange) {
-      
+
         return true;
     }
     else {
         return false;
     }
-    
+
 
 }
 

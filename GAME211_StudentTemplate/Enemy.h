@@ -12,14 +12,14 @@ protected:
     float orientation;
     int currentHealth;
     float speed;
-    
-  
+
+
 public:
     Enemy();
-    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) ;
+    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_);
 
-   // void CreateEnemy(int maxhealth_, Vec2 position_, Vec2 velocity_);
-    
+    // void CreateEnemy(int maxhealth_, Vec2 position_, Vec2 velocity_);
+
     void addHealth(int addValue);
 
     void subtractHealth(int subValue);
@@ -31,6 +31,11 @@ public:
     bool predMoveCheck(Vec2 pointA, Vec2 pointB, Vec2 pointC);
 
     bool VisionCheck(Player player, float visionRange);
+
+    int getHealth() {
+
+        return currentHealth;
+    }
 
     float getOrientation() {
 
