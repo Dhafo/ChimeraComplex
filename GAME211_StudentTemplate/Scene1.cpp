@@ -44,6 +44,7 @@ bool Scene1::OnCreate() {
 	game->getPlayer()->setImage(image);
 	game->getPlayer()->setTexture(texture);
 
+<<<<<<< Updated upstream
 	return true;
 }
 
@@ -52,6 +53,142 @@ void Scene1::OnDestroy() {}
 void Scene1::Update(const float deltaTime) {
 
 	// Update player
+=======
+    //Items
+    key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
+    //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
+    //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
+    
+    // Set player image to PacMan
+
+    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
+
+    predator.push_back(new Enemy(3, Vec2(544, 352), Vec2(0, 0), predatorTexture));
+
+    predCanSee[0] = false;
+
+    entities.reserve(predator.size() + skulker.size() + 1);
+
+    for(Entity* entity: predator)
+    {
+        entities.push_back(entity);
+    }
+    for (Entity* entity : skulker)
+    {
+        entities.push_back(entity);
+    }
+
+    entities.push_back(&key);
+
+
+    // Stuff We need for UI
+    // Color and the font
+    colorFont = { 255, 0, 255 };
+    font = TTF_OpenFont("Roboto-Regular.ttf", 24);
+
+    // itoa
+    _itoa_s(player.getMaxHealth(), playerHealth, sizeof(playerHealth), 10); // Gets the Max health for health ttf
+    _itoa_s(player.getMaxAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the Max ammo for ammo ttf
+
+    // The health 
+    health = TTF_RenderText_Solid(font, playerHealth, colorFont);
+    healthTexture = SDL_CreateTextureFromSurface(renderer, health);
+    healthName = TTF_RenderText_Solid(font, "Health: ", colorFont);
+    healthNameTexture = SDL_CreateTextureFromSurface(renderer, healthName);
+
+    // The ammo
+    ammo = TTF_RenderText_Solid(font, playerAmmo, colorFont);
+    ammoTexture = SDL_CreateTextureFromSurface(renderer, ammo);
+    ammoName = TTF_RenderText_Solid(font, "Ammo: ", colorFont);
+    ammoNameTexture = SDL_CreateTextureFromSurface(renderer, ammoName);
+
+    // The key
+    keyName = TTF_RenderText_Solid(font, "Key Collected: ", colorFont);
+    keyNameTexture = SDL_CreateTextureFromSurface(renderer, keyName);
+    cardKey = IMG_Load("CardKey.png");
+    keyTexture = SDL_CreateTextureFromSurface(renderer, cardKey);
+
+    // SDL Rect
+    healthRect = { 10,30,health->w,health->h };
+    healthNameRect = { 0,0,healthName->w,healthName->h };
+    ammoRect = { 150, 30, ammo->w, ammo->h };
+    ammoNameRect = { 130, 0, ammoName->w,ammoName->h };
+    keyNameRect = { 250, 0, keyName->w, keyName->h };
+    cardKeyRect = { 400,0, 64, 64 };
+
+	return true;
+}
+
+void Scene1::OnDestroy() 
+{
+    SDL_DestroyTexture(textureWall);
+    SDL_FreeSurface(imageWall);
+    SDL_DestroyTexture(textureWall2);
+    SDL_FreeSurface(imageWall2);
+    SDL_DestroyTexture(textureFloor);
+    SDL_FreeSurface(imageFloor);
+    SDL_DestroyTexture(textureCeiling);
+    SDL_FreeSurface(imageCeiling);
+    SDL_DestroyTexture(textureDoor);
+    SDL_FreeSurface(imageDoor);
+    SDL_DestroyTexture(predatorTexture);
+    SDL_FreeSurface(predatorSprite);
+    SDL_DestroyTexture(skulkerTexture);
+    SDL_FreeSurface(skulkerSprite);
+    SDL_DestroyTexture(buffer);
+    SDL_FreeSurface(surf);
+
+
+
+
+}
+
+void Scene1::Update(const float deltaTime) {
+   // player.getCurrentHealth();
+	// Update playerit
+    if(shootGun)
+    {
+        timePassedGun += deltaTime;
+        //shoot gun
+        if(timePassedGun >= 0.08f)
+        {
+            currentGunFrame += 1;
+            timePassedGun = 0;
+        }
+        if (currentGunFrame > 5)
+        {
+            currentGunFrame = 0;
+            shootGun = false;
+        }
+    }
+    if (hit)
+    {
+        timePassedHit += deltaTime;
+        //shoot gun
+        if (timePassedHit >= 0.06f)
+        {
+            fade += 50 * fadeDir;
+            timePassedHit = 0;
+        }
+        if (fade > 200)
+        {
+            fade = 200;
+            fadeDir = -1;
+        }
+        if(fade < 0 && fadeDir == -1)
+        {
+            fade = 0;
+            fadeDir = 1;
+            hit = false;
+        }
+    }
+
+    
+
+>>>>>>> Stashed changes
 	game->getPlayer()->Update(deltaTime);
     HandleMovement();
 }
@@ -66,7 +203,49 @@ void Scene1::Render() {
 	// render the player
 	game->RenderPlayer(1.0f);
 
+<<<<<<< Updated upstream
 	SDL_RenderPresent(renderer);
+=======
+    for(int i = 0; i < entities.size(); i++)
+    {
+        entityTick(entities[i], entities[i]->texture);
+    }
+
+    SDL_RenderCopy(renderer, textureGun[currentGunFrame], NULL, &gun);
+
+    if (kCollected)
+    {
+        // key collect UI
+        SDL_RenderCopy(renderer, keyTexture, NULL, &keyAcq);
+    }
+
+    SDL_Rect dmgFade = { 0,0, 960, 640 };
+    SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderFillRect(renderer, &dmgFade);
+    //SDL_RenderPresent(renderer);
+    //if we ever want to destroy
+    //SDL_DestroyTexture(textureWall);
+    //SDL_FreeSurface(imageWall);
+
+
+
+    // Renders the health and ammo of the UI
+    SDL_RenderCopy(renderer, healthTexture, NULL, &healthRect);
+    SDL_RenderCopy(renderer, healthNameTexture, NULL, &healthNameRect);
+    SDL_RenderCopy(renderer, ammoTexture, NULL, &ammoRect);
+    SDL_RenderCopy(renderer, ammoNameTexture, NULL, &ammoNameRect);
+   // SDL_RenderCopy(renderer, keyNameTexture, NULL, &keyNameRect);
+
+    // When key is collected it will display the cardkey png
+    if (kCollected == true) {
+        SDL_RenderCopy(renderer, keyNameTexture, NULL, &keyNameRect);
+        SDL_RenderCopy(renderer, keyTexture, NULL, &cardKeyRect);
+
+    }
+
+    SDL_RenderPresent(renderer);
+>>>>>>> Stashed changes
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)

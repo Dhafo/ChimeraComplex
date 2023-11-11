@@ -56,7 +56,79 @@ public:
     SDL_Surface* imageWall;
     SDL_Texture* textureWall;
 
+<<<<<<< Updated upstream
     Uint32 buffer[512][1024];
+=======
+    SDL_Surface* predatorSprite;
+    SDL_Texture* predatorTexture;
+
+    SDL_Surface* skulkerSprite;
+    SDL_Texture* skulkerTexture;
+
+    SDL_Surface* imageFloor;
+    SDL_Texture* textureFloor;
+
+    SDL_Surface* imageCeiling;
+    SDL_Texture* textureCeiling;
+
+    SDL_Surface* imageGun;
+    SDL_Texture* textureGun[6]; //6 frames
+
+
+    // TTF stuff for the UI
+    TTF_Font* font;
+    SDL_Color colorFont;
+
+    SDL_Surface* health;
+    SDL_Texture* healthTexture;
+    SDL_Surface* healthName;
+    SDL_Texture* healthNameTexture;
+
+    SDL_Surface* ammo;
+    SDL_Texture* ammoTexture;
+    SDL_Surface* ammoName;
+    SDL_Texture* ammoNameTexture;
+
+    SDL_Surface* keyName;
+    SDL_Texture* keyNameTexture;
+
+    // png for the key in the UI
+    SDL_Surface* cardKey;
+    SDL_Texture* cardKeyTexture;
+
+    // SDL_Rect for UI
+    SDL_Rect healthRect;
+    SDL_Rect healthNameRect;
+    SDL_Rect ammoRect;
+    SDL_Rect ammoNameRect;
+    SDL_Rect keyNameRect;
+    SDL_Rect cardKeyRect;
+
+    //For the _itoa_
+    char playerHealth[12];
+    char playerAmmo[12];
+
+
+
+    int currentGunFrame = 0;
+    bool shootGun = false;
+    bool hit = false;
+    float timePassedGun = 0.0f;
+    float timePassedHit = 0.0f;
+    int fade = 0;
+    int fadeDir = 1;
+    SDL_Rect gun = { 128, 128 - 8, 256, 256 };
+    //UI key collection
+    SDL_Rect keyAcq = { 32, 290, 64, 64 };
+    
+
+
+    SDL_Texture* buffer = NULL;
+    SDL_Surface* surf = NULL;
+
+    Uint32* pixels;
+    int pitch;
+>>>>>>> Stashed changes
 };
 
 #endif
