@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "Scene0.h"
 #include "Scene1.h"
+#include "Scene2.h"
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -23,8 +24,8 @@ bool GameManager::OnCreate() {
     //const int SCREEN_HEIGHT = 860;
 
     // Use 1000x600 for less than full screen
-    const int SCREEN_WIDTH = 1024;
-    const int SCREEN_HEIGHT = 512;
+    const int SCREEN_WIDTH = 960;
+    const int SCREEN_HEIGHT = 640;
 
     windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {
@@ -166,6 +167,13 @@ void GameManager::handleEvents()
             case SDL_SCANCODE_1:
                 LoadScene(0);
                 break;
+            case SDL_SCANCODE_2:
+                LoadScene(1);
+                break;
+            case SDL_SCANCODE_3:
+                LoadScene(2);
+                break;
+
             default:
                 break;
             }
@@ -248,6 +256,9 @@ void GameManager::LoadScene( int i )
             break;
         case 1:
             currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+            break;
+        case 2:
+            currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
             break;
         default:
             currentScene = new Scene0( windowPtr->GetSDL_Window(), this);

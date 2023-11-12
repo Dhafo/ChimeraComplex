@@ -1,0 +1,98 @@
+﻿  Scene1.cpp
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(30,138): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(30,113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(221,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(246,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(272,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(291,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(309,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(341,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(377,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(385,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(393,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(445,25): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(445,69): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(446,25): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(446,69): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(531,22): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(535,22): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(540,55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(547,55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(560,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(561,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(586,55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(593,55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(606,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(607,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(633,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(634,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(644,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(645,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(506,36): warning C4101: 'pra': unreferenced local variable
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(506,19): warning C4101: 'orDeg': unreferenced local variable
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(496,9): warning C4101: 'r': unreferenced local variable
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(667,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(670,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(674,102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(679,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(682,63): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(684,106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(705,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(705,61): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(705,112): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(706,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(706,61): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(706,112): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(791,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(803,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(816,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(829,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(837,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(862,19): warning C4101: 'yo': unreferenced local variable
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(862,15): warning C4101: 'xo': unreferenced local variable
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(924,35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(928,21): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(932,21): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(969,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(976,58): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(989,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(990,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1015,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1022,58): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1035,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1036,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1059,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1060,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1080,68): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1080,59): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1080,50): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1087,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1088,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1108,83): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1108,68): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1108,53): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1117,25): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1121,25): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1126,22): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1132,30): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1132,30): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1132,40): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1132,40): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1135,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1141,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1169,27): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1172,25): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1176,25): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1212,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1213,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1272,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1273,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1275,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1278,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1304,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1306,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1310,59): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1311,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1316,20): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\GAME211_StudentTemplate\Scene1.cpp(1318,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  GAME211_StudentTemplate.vcxproj -> C:\Users\ayomi\Downloads\midstone\ChimeraComplex-Ramy\Debug\GAME211_StudentTemplate.exe
