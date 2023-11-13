@@ -11,9 +11,9 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	renderer = SDL_GetRenderer(window);
 	xAxis = 1024.0f;
 	yAxis = 512.0f;
-    float orientation = 0.0f;
+    float orientation = 90 * DEGREES_TO_RADIANS;
     //Player
-    player = Player(100, 7, orientation, Vec2(0.8f * getxAxis() - 300, 1.6f * getyAxis()), Vec2(cos(orientation) * 1.75, sin(orientation) * 1.75));
+    player = Player(10, 6, orientation, Vec2(544, 864), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
 
 }
 
@@ -33,15 +33,14 @@ bool Scene1::OnCreate() {
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
-  /*  Entity Key(Vec2(0,0),Vec2(0,0));
-    Player player(10, 0, 0, Vec2(10, 10), Vec2(0, 0));*/
+  
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 
 	SDL_Surface* image;
     
 	SDL_Texture* texture;
-
+    //images for every entity
 	image = IMG_Load("pacman.png");
     imageWall = IMG_Load("wallTest.png");
     imageWall2 = IMG_Load("wallTest2.png");
@@ -81,9 +80,11 @@ bool Scene1::OnCreate() {
 
     //Items
     key = Entity(Vec2(192, 896), Vec2(0, 0), keyTexture);
-    //healthItem = Entity(Vec2(96, 416), Vec2(0, 0));
-    //ammoItem = Entity(Vec2(672, 928), Vec2(0, 0));
-    // Set player image to PacMan
+  
+
+
+    
+    // create all entities
 
     ammo.push_back(new Entity(Vec2(672, 928), Vec2(0, 0), ammoTexture));
     health.push_back(new Entity(Vec2(96, 416), Vec2(0, 0), healthTexture));
@@ -94,9 +95,9 @@ bool Scene1::OnCreate() {
     skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
 
 
-    predator.push_back(new Enemy(3, Vec2(544, 352), Vec2(0, 0), predatorTexture));
 
-    predCanSee[0] = false;
+
+   
 
     entities.reserve(predator.size() + skulker.size() + 1);
 
@@ -104,7 +105,7 @@ bool Scene1::OnCreate() {
 
     stalker.push_back(new Enemy(3, Vec2(800, 544), Vec2(0, 0),stalkerTexture));
 
-
+    //takes all the childs of entities and stores them and in a array to be sorted in the future
     entities.reserve(predator.size() + skulker.size() + stalker.size()+ ammo.size() + health.size() + 1);
 
     for(Entity* entity: predator)
@@ -116,7 +117,7 @@ bool Scene1::OnCreate() {
         entities.push_back(entity);
     }
 
-    entities.push_back(&key);
+  
 
     for (Entity* entity : stalker)
     {
@@ -154,8 +155,8 @@ void Scene1::OnDestroy()
     SDL_DestroyTexture(skulkerTexture);
     SDL_FreeSurface(skulkerSprite);
 
-    SDL_DestroyTexture(buffer);
-    SDL_FreeSurface(surf);
+  //  SDL_DestroyTexture(buffer);
+   // SDL_FreeSurface(surf);
 
     SDL_DestroyTexture(stalkerTexture);
     SDL_FreeSurface(stalkerSprite);
@@ -171,6 +172,8 @@ void Scene1::OnDestroy()
 
 void Scene1::Update(const float deltaTime) {
 
+
+    // if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering
     for (int i = 0; i < predator.size(); i++) {
         if (predator[i]->getHealth() <= 0) {
             predator[i]->setExist(false);
@@ -227,10 +230,14 @@ void Scene1::Update(const float deltaTime) {
         }
     }
     HandleMovement();
+
+
+
     player.playerUpdate(deltaTime);
-    for (int i = 0; i < skulker.size();i++) {
-     //   skulker[i]->updatePos(player.getPosition());
-    }
+
+
+
+   
     // 4/2 because of map size(4,4) = x,y
       // Stuff We need for UI
     // Color and the font
@@ -267,8 +274,10 @@ void Scene1::Update(const float deltaTime) {
     keyNameRect = { 250, 0, keyName->w, keyName->h };
     cardKeyRect = { 400,0, 64, 64 };
 
+
+    //depending on vision and open line of sight enemies will move towards the player
     for (int i = 0; i < predator.size(); i++) {
-        if (predator[i]->VisionCheck(player, 25) && EnemyMoveUpate(predator[i])) {
+        if (predator[i]->VisionCheck(player, 25) && EnemyMoveUpdate(predator[i])) {
 
             predator[i]->updatePos(player.getPosition());
         }
@@ -276,7 +285,7 @@ void Scene1::Update(const float deltaTime) {
 
 
     for (int i = 0; i < stalker.size(); i++) {
-        if (!stalker[i]->VisionCheck(player, 30) && EnemyMoveUpate(stalker[i])) {
+        if (!stalker[i]->VisionCheck(player, 30) && EnemyMoveUpdate(stalker[i])) {
 
             stalker[i]->updatePos(player.getPosition());
         }
@@ -284,7 +293,7 @@ void Scene1::Update(const float deltaTime) {
 
 
     for (int i = 0; i < skulker.size(); i++) {
-        if (EnemyMoveUpate(skulker[i])) {
+        if (EnemyMoveUpdate(skulker[i])) {
 
             skulker[i]->updatePos(player.getPosition());
         }
@@ -350,10 +359,13 @@ void Scene1::HandleEvents(const SDL_Event& event)
         if (event.type == SDL_KEYDOWN)
         {
             if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL) {
-                    if (player.getAmmo() > 0) {
 
+                //player will shoot only if they have ammo
+                    if (player.getAmmo() > 0) {
+                        
+                        // checks angle towards enemy and wall obstructions for the ability to damage foes
                         for (int i = 0; i < predator.size(); i++) {
-                            if (predator[i]->VisionCheck(player, 3) && EnemyMoveUpate(predator[i])) {
+                            if (predator[i]->VisionCheck(player, 3) && EnemyMoveUpdate(predator[i])) {
 
                               predator[i]->subtractHealth(1);
                             }
@@ -361,7 +373,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 
                         for (int i = 0; i < stalker.size(); i++) {
-                            if (stalker[i]->VisionCheck(player, 3) && EnemyMoveUpate(stalker[i])) {
+                            if (stalker[i]->VisionCheck(player, 3) && EnemyMoveUpdate(stalker[i])) {
 
                                 stalker[i]->subtractHealth(1);
                             }
@@ -369,7 +381,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 
                         for (int i = 0; i < skulker.size(); i++) {
-                            if (skulker[i]->VisionCheck(player, 3) && EnemyMoveUpate(skulker[i])) {
+                            if (skulker[i]->VisionCheck(player, 3) && EnemyMoveUpdate(skulker[i])) {
                              
                                 skulker[i]->subtractHealth(1);
                             }
@@ -470,7 +482,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
         }
 }
 
-bool Scene1::EnemyMoveUpate(Enemy* enemy_)
+bool Scene1::EnemyMoveUpdate(Enemy* enemy_)
 {
     int r, mx, my, mp, dof;
 
@@ -720,7 +732,7 @@ void Scene1::HandleMovement()
             {
 
                 ammo[i]->setExist(false);
-              //  entities.pop_back();
+             
                 game->getSoundEngine()->play2D("beep.wav", false);
                 std::cout << "Ammo Collected!" << std::endl;
                 player.addAmmo(7);
@@ -732,7 +744,7 @@ void Scene1::HandleMovement()
             {
                 health[i]->setExist(false);
                
-              //  entities.pop_back();
+             
                 game->getSoundEngine()->play2D("beep.wav", false);
                 std::cout << "Health Acquired!" << std::endl;
                 player.addHealth(50);
@@ -749,14 +761,17 @@ void Scene1::HandleMovement()
                 }
                 player.subHealth(1);
 
-                // cout << "player hit!" << endl;
+               
 
             }
         }
 
         for (int i = 0; i < predator.size(); i++) {
             if (predator[i]->getExist() && player.collField(predator[i]->getPosition())) {
-
+                if (player.delayActive == false)
+                {
+                    hit = true;
+                }
                 player.subHealth(1);
                 // cout << "player hit!" << endl;
 
@@ -764,7 +779,10 @@ void Scene1::HandleMovement()
         }
         for (int i = 0; i < stalker.size(); i++) {
             if (stalker[i]->getExist() && player.collField(stalker[i]->getPosition())) {
-
+                if (player.delayActive == false)
+                {
+                    hit = true;
+                }
                 player.subHealth(1);
                 // cout << "player hit!" << endl;
 
@@ -829,12 +847,11 @@ void Scene1::draw3D()
 
     float disT;
 
-    // PlayerBody* player = game->getPlayer();
+
 
     SDL_Texture* tempTex = textureWall;
-    //zone points used for the visual area detection of enemies
-    Vec2 zonePoint1;
-    Vec2 zonePoint2;
+ 
+  
 
     ra = -player.getOrientation() - DegToRad * 30;
 
@@ -1069,14 +1086,7 @@ void Scene1::draw3D()
             ra -= 2 * PI;
         }
 
-        if (r == 30) {
-            zonePoint1 = Vec2(rx, ry);
-
-        }
-        if (r == 450) {
-            zonePoint2 = Vec2(rx, ry);
-
-        }
+    
     }
 }
 

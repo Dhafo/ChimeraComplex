@@ -18,7 +18,7 @@ public:
     Enemy();
     Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_);
 
-    // void CreateEnemy(int maxhealth_, Vec2 position_, Vec2 velocity_);
+  
 
     void addHealth(int addValue);
 
@@ -28,8 +28,8 @@ public:
 
     void updatePos(Vec2 otherPos);
 
-    bool predMoveCheck(Vec2 pointA, Vec2 pointB, Vec2 pointC);
-
+   
+    //checks player orintation and if the enemy is within the angel of vision. The vision range value is actaully double the amount because it checks bot negative and positive
     bool VisionCheck(Player player, float visionRange);
 
     int getHealth() {

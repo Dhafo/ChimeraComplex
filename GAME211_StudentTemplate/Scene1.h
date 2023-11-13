@@ -27,12 +27,12 @@ private:
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4     inverseProjection;	// set in OnCreate()
     bool kCollected;
-    Entity key,ammoItem,healthItem; 
+    Entity key;
     Player player;
     std::vector<Enemy*> skulker;// Array for the Skulker Enemies
 
     std::vector<Enemy*> predator;// Array for the Skulker Enemies
-    bool predCanSee[1];
+   
 
     std::vector<Entity*> entities;
     std::vector<Enemy*> stalker;
@@ -143,7 +143,7 @@ public:
     int FixAng(int a) { if (a > 359) { a -= 360; } if (a < 0) { a += 360; } return a; }
 
     float dist(float ax, float ay, float bx, float by);
-    bool EnemyMoveUpate(Enemy* enemy_);
+    bool EnemyMoveUpdate(Enemy* enemy_);
     Uint32 getpixel(SDL_Surface* surface, int x, int y);
 
     //imported textures
