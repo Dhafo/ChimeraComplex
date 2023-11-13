@@ -14,27 +14,20 @@ protected:
     Vec2 position;
     bool exist;
 public:
-
     Entity();
     Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture);
-
     void setPosition(Vec2 position_);
     Vec2 getPosition();
-
     void setvelocity(Vec2 velocity_);
-
     Vec2 getVelocity();
-
     bool collField(Vec2 Position_);
-
     SDL_Texture* texture;
-
-    bool getExist() {
+    bool getExist() 
+    {
         return exist;
     }
-
-    void setExist(bool exist_) {
-
+    void setExist(bool exist_) 
+    {
         exist = exist_;
     }
 };

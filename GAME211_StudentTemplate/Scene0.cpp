@@ -2,7 +2,8 @@
 #include <VMath.h>
 
 // See notes about this constructor in Scene0.h.
-Scene0::Scene0(SDL_Window* sdlWindow_, GameManager* game_) {
+Scene0::Scene0(SDL_Window* sdlWindow_, GameManager* game_) 
+{
     window = sdlWindow_;
     game = game_;
     renderer = SDL_GetRenderer(window);
@@ -10,10 +11,12 @@ Scene0::Scene0(SDL_Window* sdlWindow_, GameManager* game_) {
     yAxis = 15.0f;
 }
 
-Scene0::~Scene0() {
+Scene0::~Scene0()
+{
 }
 
-bool Scene0::OnCreate() {
+bool Scene0::OnCreate()
+{
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
     SDL_RenderSetScale(renderer, 1, 1);
@@ -24,17 +27,11 @@ bool Scene0::OnCreate() {
     /// Turn on the SDL imaging subsystem
     IMG_Init(IMG_INIT_PNG);
 
-    // Set player image to PacMan
-
     startImage = IMG_Load("Start.png");
     startTexture = SDL_CreateTextureFromSurface(renderer, startImage);
-    //  /* SDL_Rect startButton = { 0, 0, 64,64 };
-    //   SDL_RenderCopy(renderer, startTexture, NULL, &startButton);*/
-
 
     endImage = IMG_Load("End.png");
     endTexture = SDL_CreateTextureFromSurface(renderer, endImage);
-
 
     backgroundImage = IMG_Load("space.png");
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundImage);
@@ -42,13 +39,13 @@ bool Scene0::OnCreate() {
     background = { 0, 0, 960,640 };
 
     TTF_Font* font;
-
     font = TTF_OpenFont("Lato-Regular.ttf", 24);
-
-    if (!font) {
+    if (!font) 
+    {
         std::cout << "Failed to load" << TTF_GetError() << std::endl;
     }
-    else {
+    else 
+    {
         // Set up a surface image with some text
         SDL_Surface* text;
 
@@ -56,63 +53,79 @@ bool Scene0::OnCreate() {
         SDL_Color color = { 255,255,255 };
 
         text = TTF_RenderText_Solid(font, "Press X to Start", color);
-        if (!text) {
+        if (!text) 
+        {
             std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
         }
-        else {
+        else 
+        {
             //Set up a texture from the surface and render it
             text_texture = SDL_CreateTextureFromSurface(renderer, text);
-            dest = { 512 + 128 + 32,256 + 128 - 16 + 112,text->w,text->h };
+            dest = { 672,480,text->w,text->h };
         }
 
         text = TTF_RenderText_Solid(font, "Press Q to Quit", color);
-        if (!text) {
+        if (!text)
+        {
             std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
         }
-        else {
+        else 
+        {
             //Set up a texture from the surface and render it
             text_texture2 = SDL_CreateTextureFromSurface(renderer, text);
-            dest2 = { 512 + 128 + 32,256 + 128 + 32 + 112,text->w,text->h };
+            dest2 = { 672,528,text->w,text->h };
         }
     }
 
     font = TTF_OpenFont("Lato-Regular.ttf", 80);
-    if (!font) {
+    if (!font) 
+    {
         std::cout << "Failed to load" << TTF_GetError() << std::endl;
     }
     else
     {
         SDL_Surface* text;
-        // Set color to white
+        // Set color to orange
         SDL_Color color = { 242,140,40 };
-
         text = TTF_RenderText_Solid(font, "Chimera Complex", color);
-        if (!text) {
+        if (!text) 
+        {
             std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
         }
-        else {
+        else 
+        {
             //Set up a texture from the surface and render it
             text_texture3 = SDL_CreateTextureFromSurface(renderer, text);
-            dest3 = { 256 - 64,256 - 80,text->w,text->h };
+            dest3 = { 192,176,text->w,text->h };
         }
 
     }
-
+    //play music
     game->getSoundEngine()->play2D("MyVeryOwnDeadShip.ogg", true);
-
     return true;
 }
 
 void Scene0::OnDestroy()
 {
     SDL_DestroyTexture(text_texture);
+    SDL_DestroyTexture(text_texture2);
+    SDL_DestroyTexture(text_texture3);
+
+    SDL_DestroyTexture(startTexture);
+    SDL_DestroyTexture(endTexture);
+    SDL_DestroyTexture(backgroundTexture);
+
+    SDL_FreeSurface(startImage);
+    SDL_FreeSurface(endImage);
+    SDL_FreeSurface(backgroundImage);
 }
 
-void Scene0::Update(const float deltaTime) {
-
+void Scene0::Update(const float deltaTime)
+{
 }
 
-void Scene0::Render() {
+void Scene0::Render() 
+{
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 
@@ -121,13 +134,14 @@ void Scene0::Render() {
     SDL_RenderCopy(renderer, text_texture, NULL, &dest);
     SDL_RenderCopy(renderer, text_texture2, NULL, &dest2);
     SDL_RenderCopy(renderer, text_texture3, NULL, &dest3);
+
     SDL_RenderPresent(renderer);
 }
 
-
 void Scene0::HandleEvents(const SDL_Event& event)
 {
-    if (event.type == SDL_KEYDOWN) {
+    if (event.type == SDL_KEYDOWN) 
+    {
         switch (event.key.keysym.scancode)
         {
         case SDL_SCANCODE_X:

@@ -1,14 +1,14 @@
 #include "Entity.h"
 
-Entity::Entity() {
-
+Entity::Entity() 
+{
     position = Vec2(0, 0);
     velocity = Vec2(0, 0);
     exist = true;
 }
 
-Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
-
+Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_)
+{
     position = position_;
     velocity = velocity_;
     texture = texture_;
@@ -18,8 +18,6 @@ Entity::Entity(Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) {
 void Entity::setPosition(Vec2 position_)
 {
     position = position_;
-
-
 }
 
 Vec2 Entity::getPosition()
@@ -30,7 +28,6 @@ Vec2 Entity::getPosition()
 void Entity::setvelocity(Vec2 velocity_)
 {
     velocity = velocity_;
-
 }
 
 Vec2 Entity::getVelocity()
@@ -40,25 +37,20 @@ Vec2 Entity::getVelocity()
 
 bool Entity::collField(Vec2 position_)
 {
-
     //finds distance between other object and self
     int distPosX = position.x - position_.x; //entity pos x - player pos.x
     int distPosY = position.y - position_.y; //entity pos y - player pos.y
-
-
     int dist = sqrt((distPosX * distPosX) + (distPosY * distPosY));
-
     // checks if distance is less than collision radius
-
-    if (dist < 16) {
+    if (dist < 16) 
+    {
 
         return true;
     }
     else
     {
         return false;
-    }
-    
+    } 
 }
 
 

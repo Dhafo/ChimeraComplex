@@ -1,7 +1,5 @@
 #include "Player.h"
 
-
-
 using namespace std;
 
 Player::Player()
@@ -18,8 +16,8 @@ Player::Player()
 }
 
 
-Player::Player(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, Vec2 velocity_) {
-
+Player::Player(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, Vec2 velocity_)
+{
     maxHealth= maxhealth_;
     currentHealth = maxHealth;
     maxAmmo = maxAmmo_;
@@ -34,24 +32,19 @@ Player::Player(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, V
     a = 0;
     s = 0;
     d = 0;
-
 }
 
 void Player::playerUpdate(float deltaTime)
 {
-
-    if (damageDelayTime >0) {
-
-
+    if (damageDelayTime >0) 
+    {
         damageDelayTime -= deltaTime;
-       /* cout << damageDelayTime << endl;*/
     }
-    else if (delayActive == true) {
+    else if (delayActive == true) 
+    {
         delayActive = false;
     }
-
 }
-
 
 
 void Player::addHealth(int addValue)
@@ -61,47 +54,39 @@ void Player::addHealth(int addValue)
 
         currentHealth = maxHealth;
     }
-
 }
 
 void Player::subHealth(int subValue)
 {
-    if ( delayActive == false) {
+    if ( delayActive == false) 
+    {
         cout << "player hit!" << endl;
         currentHealth -= subValue;
         delayActive = true;
         damageDelayTime = 2;
         cout << "player health = " << getCurrentHealth() << endl;
-        if (currentHealth < 0) {
-
+        if (currentHealth < 0) 
+        {
             currentHealth = 0;
-
         }
-       
-
     }
-
-    //else if( delayActive == false && damageDelayTime <= 0)
-    //{
-
-    //}
 }
 
 void Player::addAmmo(int addValue)
 {
     currentAmmo += addValue;
-    if (currentAmmo > maxAmmo) {
+    if (currentAmmo > maxAmmo) 
+    {
         currentAmmo = maxAmmo;
-
     }
 }
 
 void Player::subAmmo(int subValue)
 {
     currentAmmo -= subValue;
-    if (currentAmmo > maxAmmo) {
+    if (currentAmmo > maxAmmo) 
+    {
         currentAmmo = maxAmmo;
-
     }
 }
 
