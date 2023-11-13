@@ -38,6 +38,9 @@ private:
     //Combined array holding each entity
     std::vector<Entity*> entities;
 
+    int screenOffsetX = 16;
+    int screenOffsetY = 16;
+
 public:
     // This constructor may be different from what you've seen before
     // Notice the second parameter, and look in GameManager.cpp
@@ -216,6 +219,11 @@ public:
     SDL_Rect ammoRect;
     SDL_Rect ammoNameRect;
 
+    SDL_Rect Top = { 0, 0, 512, screenOffsetY + 2 };
+    SDL_Rect Bottom = { 0, 320 + screenOffsetY, 512, 64 };
+    SDL_Rect Left = { 0, 0, screenOffsetX, 384 };
+    SDL_Rect Right = { 496, 0, screenOffsetX, 384 };
+
     //for int to char* conversion of values
     char playerHealth[12];
     char playerAmmo[12];
@@ -226,7 +234,7 @@ public:
     int currentGunFrame = 0;
     float timePassedGun = 0.0f;
     bool shootGun = false;
-    SDL_Rect gun = { 128, 128 - 8, 256, 256 };
+    SDL_Rect gun = { screenOffsetX + 128,screenOffsetY + 128 + 16, 256, 256 };
 
     //player hit anim
     bool hit = false;
@@ -235,8 +243,11 @@ public:
     int fadeDir = 1;
     SDL_Rect dmgFade = { 0,0, 960, 640 };
 
+    SDL_Rect gameScreen = { screenOffsetX,screenOffsetY, 480, 320 };
+    SDL_Rect background = { 0,0, 480, 420 };
+
     //UI key collection
-    SDL_Rect keyAcq = { 32, 290, 64, 64 };
+    SDL_Rect keyAcq = { 224 + screenOffsetX, 326 + screenOffsetY, 32, 32 };
 
     //to hold our floor/ceiling rendering
     SDL_Texture* buffer = NULL;

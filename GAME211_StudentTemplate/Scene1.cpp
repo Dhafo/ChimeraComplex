@@ -52,12 +52,12 @@ bool Scene1::OnCreate()
     imageCeiling = IMG_Load("ceiling.png");
     //for item pickups:
     keySprite = IMG_Load("CardKey.png");
-    healthSprite = IMG_Load("CardKey.png");
-    ammoSprite = IMG_Load("CardKey.png");
+    healthSprite = IMG_Load("MedicalKit.png");
+    ammoSprite = IMG_Load("HandGunBullet.png");
     //for enemies:
     predatorSprite = IMG_Load("Blinky.png");
     skulkerSprite = IMG_Load("Blinky2.png");
-    stalkerSprite = IMG_Load("Blinky.png");
+    stalkerSprite = IMG_Load("Blinky3.png");
     
     //create textures from the images
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
@@ -126,14 +126,14 @@ bool Scene1::OnCreate()
     entities.push_back(&key);
 
     //for UI
-    colorFont = { 255, 0, 255 };
-    font = TTF_OpenFont("Lato-Regular.ttf", 24);
+    colorFont = { 238, 233, 138 };
+    font = TTF_OpenFont("Roboto-Regular.ttf", 24);
     healthName = TTF_RenderText_Solid(font, "Health: ", colorFont);
     healthNameTexture = SDL_CreateTextureFromSurface(renderer, healthName);
-    healthNameRect = { 0,0,healthName->w,healthName->h };
+    healthNameRect = { screenOffsetX,328 + screenOffsetY,healthName->w,healthName->h };
     ammoName = TTF_RenderText_Solid(font, "Ammo: ", colorFont);
     ammoNameTexture = SDL_CreateTextureFromSurface(renderer, ammoName);
-    ammoNameRect = { 130, 0, ammoName->w,ammoName->h };
+    ammoNameRect = { 320 + screenOffsetX + 64, 328 + screenOffsetY, ammoName->w,ammoName->h };
 
 	return true;
 }
@@ -242,6 +242,21 @@ void Scene1::Update(const float deltaTime)
     HandleMovement();
     player.playerUpdate(deltaTime);
 
+    //footstep sounds
+    if(player.w || player.s)
+    {
+        timePassedStep += deltaTime;
+        if(timePassedStep >= 0.45f)
+        {
+            //sound from: https://freesound.org/people/swuing/sounds/38873/
+            ISound* step = game->getSoundEngine()->play2D("step.wav", false, false, true);
+            //generate a random number to use as a pitch to create variation in the footsteps
+            float random = 0.85f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.89f - 0.85f));
+            step->setPlaybackSpeed(random);
+            timePassedStep = 0;
+        }  
+    }
+
     //update the health/ammo values that will be shown on the UI
     _itoa_s(player.getCurrentHealth(), playerHealth, sizeof(playerHealth), 10); // Gets the health for health ttf
     _itoa_s(player.getAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the ammo for ammo ttf
@@ -283,7 +298,7 @@ void Scene1::Render()
     //take the pixel buffer from drawFloorCeiling() and update the texture with it, then render on screen
     drawFloorCeiling();
     SDL_UpdateTexture(buffer, NULL, screenSurface->pixels, screenSurface->pitch);
-    SDL_RenderCopy(renderer, buffer, NULL, NULL);
+    SDL_RenderCopy(renderer, buffer, NULL, &gameScreen);
 
     //draw walls on top of this
     draw3D();
@@ -305,16 +320,22 @@ void Scene1::Render()
     //then render the gun/anim on top of everything else
     SDL_RenderCopy(renderer, textureGun[currentGunFrame], NULL, &gun);
 
+    //for the player hit/damaged effect
+    SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderFillRect(renderer, &dmgFade);
+
+    SDL_SetRenderDrawColor(renderer, 41, 21, 70, 255);
+    SDL_RenderFillRect(renderer, &Top);
+    SDL_RenderFillRect(renderer, &Bottom);
+    SDL_RenderFillRect(renderer, &Left);
+    SDL_RenderFillRect(renderer, &Right);
+
     //if we collected the key, render key UI
     if (kCollected)
     {
         SDL_RenderCopy(renderer, keyTexture, NULL, &keyAcq);
     }
-
-    //for the player hit/damaged effect
-    SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    SDL_RenderFillRect(renderer, &dmgFade);
 
     //health ui
     healthText = TTF_RenderText_Solid(font, playerHealth, colorFont);
@@ -325,8 +346,8 @@ void Scene1::Render()
     ammoTextTexture = SDL_CreateTextureFromSurface(renderer, ammoText);
 
     //update the rect for these new values
-    healthRect = { 10,30,healthText->w,healthText->h };
-    ammoRect = { 150, 30, ammoText->w, ammoText->h };
+    healthRect = { screenOffsetX + healthNameRect.w,328 + screenOffsetY,healthText->w,healthText->h };
+    ammoRect = { 320 + 80 + ammoNameRect.w, 328 + screenOffsetY, ammoText->w, ammoText->h };
 
     //render the health and ammo of the UI
     SDL_RenderCopy(renderer, healthTextTexture, NULL, &healthRect);
@@ -705,8 +726,8 @@ void Scene1::HandleMovement()
         {
 
             ammo[i]->setExist(false);
-
-            game->getSoundEngine()->play2D("beep.wav", false);
+            attribution: https://freesound.org/people/zivs/sounds/433771/
+            game->getSoundEngine()->play2D("ammo.ogg", false);
             std::cout << "Ammo Collected!" << std::endl;
             player.addAmmo(7);
         }
@@ -716,9 +737,7 @@ void Scene1::HandleMovement()
         if (player.collField(health[i]->getPosition()) && health[i]->getExist())
         {
             health[i]->setExist(false);
-
-
-            game->getSoundEngine()->play2D("beep.wav", false);
+            game->getSoundEngine()->play2D("pills.wav", false);
             std::cout << "Health Acquired!" << std::endl;
             player.addHealth(50);
         }
@@ -730,6 +749,7 @@ void Scene1::HandleMovement()
         {
             if (player.delayActive == false)
             {
+                game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
@@ -740,6 +760,7 @@ void Scene1::HandleMovement()
         {
             if (player.delayActive == false)
             {
+                game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
@@ -752,11 +773,10 @@ void Scene1::HandleMovement()
         {
             if (player.delayActive == false)
             {
+                game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
-            // cout << "player hit!" << endl;
-
         }
     }
        
@@ -1002,7 +1022,7 @@ void Scene1::draw3D()
         float lineO = 160 - lineH / 2; //offset so we don't start from the very top of the screen
 
         //make our line into a rect
-        SDL_Rect rect = { rayNum, lineO, 1, lineH };
+        SDL_Rect rect = {screenOffsetX + rayNum, screenOffsetY + lineO, 1, lineH };
 
         //where our textures go. depending on the angle, we mirror our textures or not
         int texVX = (rayY / 64 - mapY) * (64);
@@ -1042,8 +1062,6 @@ void Scene1::draw3D()
         {
             rayAngle -= 2 * PI;
         }
-
-    
     }
 }
 
@@ -1109,7 +1127,6 @@ void Scene1::drawFloorCeiling()
             pixels[x + y * 480] = getpixel(imageFloor, texX, texY);
             //ceiling
             pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling, texX, texY);
-
         }
     }
 }
@@ -1176,7 +1193,7 @@ void Scene1::entityTick(Entity* entity, SDL_Texture* entityTexture)
             int rayPos = (int)(((i) / 480.0) * 480); //530 is where the screen starts at the moment
             //if direction of this hits wall of distance greater than sprite
             if (dist < zBuffer[rayPos]) {
-                SDL_Rect spriteRect = { i, 320 / 2 + 4, 1,width };
+                SDL_Rect spriteRect = { screenOffsetX + i, screenOffsetY + 320 / 2 + 4, 1,width };
                 SDL_Rect crop = { int(i - (-width / 2 + xTemp)) * 64 / width,0,  1,  64 };
                 SDL_RenderCopy(renderer, entityTexture, &crop, &spriteRect);
             }

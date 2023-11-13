@@ -51,12 +51,12 @@ bool Scene2::OnCreate()
     imageCeiling = IMG_Load("ceiling.png");
     //for item pickups:
     keySprite = IMG_Load("CardKey.png");
-    healthSprite = IMG_Load("CardKey.png");
-    ammoSprite = IMG_Load("CardKey.png");
+    healthSprite = IMG_Load("MedicalKit.png");
+    ammoSprite = IMG_Load("HandGunBullet.png");
     //for enemies:
     predatorSprite = IMG_Load("Blinky.png");
     skulkerSprite = IMG_Load("Blinky2.png");
-    stalkerSprite = IMG_Load("Blinky.png");
+    stalkerSprite = IMG_Load("Blinky3.png");
 
     //create textures from the images
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
@@ -137,14 +137,14 @@ bool Scene2::OnCreate()
     entities.push_back(&key);
 
     //for UI
-    colorFont = { 255, 0, 255 };
-    font = TTF_OpenFont("Lato-Regular.ttf", 24);
+    colorFont = { 238, 233, 138 };
+    font = TTF_OpenFont("Roboto-Regular.ttf", 24);
     healthName = TTF_RenderText_Solid(font, "Health: ", colorFont);
     healthNameTexture = SDL_CreateTextureFromSurface(renderer, healthName);
-    healthNameRect = { 0,0,healthName->w,healthName->h };
+    healthNameRect = { screenOffsetX,328 + screenOffsetY,healthName->w,healthName->h };
     ammoName = TTF_RenderText_Solid(font, "Ammo: ", colorFont);
     ammoNameTexture = SDL_CreateTextureFromSurface(renderer, ammoName);
-    ammoNameRect = { 130, 0, ammoName->w,ammoName->h };
+    ammoNameRect = { 320 + screenOffsetX + 64, 328 + screenOffsetY, ammoName->w,ammoName->h };
 
     return true;
 }
@@ -294,7 +294,7 @@ void Scene2::Render()
     //take the pixel buffer from drawFloorCeiling() and update the texture with it, then render on screen
     drawFloorCeiling();
     SDL_UpdateTexture(buffer, NULL, screenSurface->pixels, screenSurface->pitch);
-    SDL_RenderCopy(renderer, buffer, NULL, NULL);
+    SDL_RenderCopy(renderer, buffer, NULL, &gameScreen);
 
     //draw walls on top of this
     draw3D();
@@ -308,8 +308,7 @@ void Scene2::Render()
     //now that the array is sorted, we can render them in order, if they still exist
     for (int i = 0; i < entities.size(); i++)
     {
-        if (entities[i]->getExist() == true) 
-        {
+        if (entities[i]->getExist() == true) {
             entityTick(entities[i], entities[i]->texture);
         }
     }
@@ -317,16 +316,22 @@ void Scene2::Render()
     //then render the gun/anim on top of everything else
     SDL_RenderCopy(renderer, textureGun[currentGunFrame], NULL, &gun);
 
+    //for the player hit/damaged effect
+    SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderFillRect(renderer, &dmgFade);
+
+    SDL_SetRenderDrawColor(renderer, 41, 21, 70, 255);
+    SDL_RenderFillRect(renderer, &Top);
+    SDL_RenderFillRect(renderer, &Bottom);
+    SDL_RenderFillRect(renderer, &Left);
+    SDL_RenderFillRect(renderer, &Right);
+
     //if we collected the key, render key UI
     if (kCollected)
     {
         SDL_RenderCopy(renderer, keyTexture, NULL, &keyAcq);
     }
-
-    //for the player hit/damaged effect
-    SDL_SetRenderDrawColor(renderer, 180, 15, 15, fade);
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    SDL_RenderFillRect(renderer, &dmgFade);
 
     //health ui
     healthText = TTF_RenderText_Solid(font, playerHealth, colorFont);
@@ -337,8 +342,8 @@ void Scene2::Render()
     ammoTextTexture = SDL_CreateTextureFromSurface(renderer, ammoText);
 
     //update the rect for these new values
-    healthRect = { 10,30,healthText->w,healthText->h };
-    ammoRect = { 150, 30, ammoText->w, ammoText->h };
+    healthRect = { screenOffsetX + healthNameRect.w,328 + screenOffsetY,healthText->w,healthText->h };
+    ammoRect = { 320 + 80 + ammoNameRect.w, 328 + screenOffsetY, ammoText->w, ammoText->h };
 
     //render the health and ammo of the UI
     SDL_RenderCopy(renderer, healthTextTexture, NULL, &healthRect);
@@ -717,8 +722,8 @@ void Scene2::HandleMovement()
         {
 
             ammo[i]->setExist(false);
-
-            game->getSoundEngine()->play2D("beep.wav", false);
+            attribution: https://freesound.org/people/zivs/sounds/433771/
+            game->getSoundEngine()->play2D("ammo.ogg", false);
             std::cout << "Ammo Collected!" << std::endl;
             player.addAmmo(7);
         }
@@ -742,6 +747,7 @@ void Scene2::HandleMovement()
         {
             if (player.delayActive == false)
             {
+                game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
@@ -752,6 +758,7 @@ void Scene2::HandleMovement()
         {
             if (player.delayActive == false)
             {
+                game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
@@ -764,6 +771,7 @@ void Scene2::HandleMovement()
         {
             if (player.delayActive == false)
             {
+                game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
@@ -1014,7 +1022,7 @@ void Scene2::draw3D()
         float lineO = 160 - lineH / 2; //offset so we don't start from the very top of the screen
 
         //make our line into a rect
-        SDL_Rect rect = { rayNum, lineO, 1, lineH };
+        SDL_Rect rect = { screenOffsetX + rayNum, screenOffsetY + lineO, 1, lineH };
 
         //where our textures go. depending on the angle, we mirror our textures or not
         int texVX = (rayY / 64 - mapY) * (64);
@@ -1188,7 +1196,7 @@ void Scene2::entityTick(Entity* entity, SDL_Texture* entityTexture)
             int rayPos = (int)(((i) / 480.0) * 480); //530 is where the screen starts at the moment
             //if direction of this hits wall of distance greater than sprite
             if (dist < zBuffer[rayPos]) {
-                SDL_Rect spriteRect = { i, 320 / 2 + 4, 1,width };
+                SDL_Rect spriteRect = { screenOffsetX + i, screenOffsetY + 320 / 2 + 4, 1,width };
                 SDL_Rect crop = { int(i - (-width / 2 + xTemp)) * 64 / width,0,  1,  64 };
                 SDL_RenderCopy(renderer, entityTexture, &crop, &spriteRect);
             }

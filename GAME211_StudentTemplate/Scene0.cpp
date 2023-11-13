@@ -36,7 +36,7 @@ bool Scene0::OnCreate()
     backgroundImage = IMG_Load("space.png");
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundImage);
 
-    background = { 0, 0, 960,640 };
+    background = { 0, 0, 1024,768 };
 
     TTF_Font* font;
     font = TTF_OpenFont("Lato-Regular.ttf", 24);
@@ -61,7 +61,7 @@ bool Scene0::OnCreate()
         {
             //Set up a texture from the surface and render it
             text_texture = SDL_CreateTextureFromSurface(renderer, text);
-            dest = { 672,480,text->w,text->h };
+            dest = { 672,544 ,text->w,text->h };
         }
 
         text = TTF_RenderText_Solid(font, "Press Q to Quit", color);
@@ -73,7 +73,7 @@ bool Scene0::OnCreate()
         {
             //Set up a texture from the surface and render it
             text_texture2 = SDL_CreateTextureFromSurface(renderer, text);
-            dest2 = { 672,528,text->w,text->h };
+            dest2 = { 672,592,text->w,text->h };
         }
     }
 
