@@ -243,6 +243,7 @@ public:
     int fadeDir = 1;
     SDL_Rect dmgFade = { 0,0, 960, 640 };
 
+    float timePassedStep = 0.0f;
     SDL_Rect gameScreen = { screenOffsetX,screenOffsetY, 480, 320 };
     SDL_Rect background = { 0,0, 480, 420 };
 

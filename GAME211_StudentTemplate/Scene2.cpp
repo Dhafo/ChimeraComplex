@@ -253,6 +253,21 @@ void Scene2::Update(const float deltaTime)
     HandleMovement();
     player.playerUpdate(deltaTime);
 
+    //footstep sounds
+    if (player.w || player.s)
+    {
+        timePassedStep += deltaTime;
+        if (timePassedStep >= 0.45f)
+        {
+            //sound from: https://freesound.org/people/swuing/sounds/38873/
+            ISound* step = game->getSoundEngine()->play2D("step.wav", false, false, true);
+            //generate a random number to use as a pitch to create variation in the footsteps
+            float random = 0.85f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.89f - 0.85f));
+            step->setPlaybackSpeed(random);
+            timePassedStep = 0;
+        }
+    }
+
     //update the health/ammo values that will be shown on the UI
     _itoa_s(player.getCurrentHealth(), playerHealth, sizeof(playerHealth), 10); // Gets the health for health ttf
     _itoa_s(player.getAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the ammo for ammo ttf
