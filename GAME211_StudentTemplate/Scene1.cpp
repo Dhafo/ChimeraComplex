@@ -365,7 +365,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
         if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
         {
             //player will shoot only if they have ammo
-            if (player.getAmmo() > 0)
+            if (player.getAmmo() > 0 && !shootGun)
             {
                 //checks angle towards enemy and wall obstructions for the ability to damage foes
                 for (int i = 0; i < predator.size(); i++)
