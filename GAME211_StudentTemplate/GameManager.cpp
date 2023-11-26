@@ -1,5 +1,10 @@
 #include "GameManager.h"
 #include "Scene1.h"
+<<<<<<< Updated upstream
+=======
+#include "Scene2.h"
+#include "Scene4.h"
+>>>>>>> Stashed changes
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -110,6 +115,52 @@ void GameManager::handleEvents()
         {
             isRunning = false;
         }
+<<<<<<< Updated upstream
+=======
+        else if(event.type == changeScenceEventType)
+        {
+            //switch scene
+            currentScene->OnDestroy();
+            delete currentScene;
+
+            // this will take the user code and run the case
+            switch (event.user.code)
+            {
+
+            case 1:
+                currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+                if (!currentScene->OnCreate())
+                {
+                    isRunning = false;
+                }
+                break;
+
+            case 2:
+                isRunning = false;
+                currentScene = nullptr;
+                break;
+
+
+
+            case 3:
+                currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+                if (!currentScene->OnCreate())
+                {
+                    isRunning = false;
+                }
+                break;
+
+
+            }
+
+          
+            
+        }
+
+
+
+
+>>>>>>> Stashed changes
         else if (event.type == SDL_KEYDOWN)
         {
             switch (event.key.keysym.scancode)
