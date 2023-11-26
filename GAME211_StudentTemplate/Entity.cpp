@@ -53,4 +53,28 @@ bool Entity::collField(Vec2 position_)
     } 
 }
 
+bool Entity::isCloser(Vec2 position1, Vec2 position2)
+{
+    //finds distance between first object and self
+    int distPosX = position.x - position1.x; //entity pos x - player pos.x
+    int distPosY = position.y - position1.y; //entity pos y - player pos.y
+    int dist1 = sqrt((distPosX * distPosX) + (distPosY * distPosY));
+
+    //finds distance between second object and self
+    distPosX = position.x - position2.x;
+    distPosY = position.y - position2.y;
+    int dist2 = sqrt((distPosX * distPosX) + (distPosY * distPosY));
+
+    //checks if object first is closer than second
+
+    if (dist1 < dist2) {
+        return true;
+    }
+
+    else {
+        return false;
+    }
+    
+}
+
 

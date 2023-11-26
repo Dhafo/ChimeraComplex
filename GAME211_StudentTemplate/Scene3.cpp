@@ -1,11 +1,11 @@
-#include "Scene2.h"
+#include "Scene3.h"
 #include <VMath.h>
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
-// See notes about this constructor in Scene2.h.
-Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_) 
+// See notes about this constructor in Scene3.h.
+Scene3::Scene3(SDL_Window* sdlWindow_, GameManager* game_)
 {
     xAxis = 1024.0f;
     yAxis = 512.0f;
@@ -13,15 +13,22 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_)
     game = game_;
     renderer = SDL_GetRenderer(window);
     float orientation = 90 * DEGREES_TO_RADIANS;
-    player = Player(10, 6, orientation, Vec2(928, 928), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
+    player = Player(10, 6, orientation, Vec2(480, 928), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
 }
 
-Scene2::~Scene2()
+Scene3::~Scene3()
 {
+
+
 }
 
-bool Scene2::OnCreate() 
+bool Scene3::OnCreate()
 {
+    //setting timers to a value
+    timeSecond = 0;
+    time = 0;
+    ammoTimer, healthTimer, skulker1Timer, skulker2Timer = 15;
+    
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
     //render in 2x scale to stretch image
@@ -32,7 +39,7 @@ bool Scene2::OnCreate()
     buffer = SDL_CreateTextureFromSurface(renderer, screenSurface);
 
     //if key has been collected
-    kCollected = false;
+
 
     Matrix4 ndc = MMath::viewportNDC(w, h);
     Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
@@ -50,13 +57,16 @@ bool Scene2::OnCreate()
     imageFloor = IMG_Load("floor2.png");
     imageCeiling = IMG_Load("ceiling.png");
     //for item pickups:
-    keySprite = IMG_Load("CardKey.png");
+   
     healthSprite = IMG_Load("MedicalKit.png");
     ammoSprite = IMG_Load("HandGunBullet.png");
+
     //for enemies:
-    predatorSprite = IMG_Load("Blinky.png");
+  
     skulkerSprite = IMG_Load("Blinky2.png");
-    stalkerSprite = IMG_Load("Blinky3.png");
+   
+    bossSprite = IMG_Load("Blinky.png");
+    tendrilSprite = IMG_Load("Blinky3.png");
 
     //create textures from the images
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
@@ -66,13 +76,15 @@ bool Scene2::OnCreate()
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
 
-    keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
+ 
     ammoTexture = SDL_CreateTextureFromSurface(renderer, ammoSprite);
     healthTexture = SDL_CreateTextureFromSurface(renderer, healthSprite);
 
-    predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
+   
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
-    stalkerTexture = SDL_CreateTextureFromSurface(renderer, stalkerSprite);
+   
+    bossTexture = SDL_CreateTextureFromSurface(renderer, bossSprite);
+    tendrilTexture = SDL_CreateTextureFromSurface(renderer, tendrilSprite);
 
     //load all frames of the gun animation
     for (int i = 0; i < 6; i++)
@@ -86,43 +98,86 @@ bool Scene2::OnCreate()
     currentGunFrame = 0;
 
     //Items
-    key = Entity(Vec2(288, 928), Vec2(0, 0), keyTexture);
+   
 
     // create all entities
-    ammo.push_back(new Entity(Vec2(736, 800), Vec2(0, 0), ammoTexture));
-    ammo.push_back(new Entity(Vec2(160, 96), Vec2(0, 0), ammoTexture));
-    ammo.push_back(new Entity(Vec2(928, 672), Vec2(0, 0), ammoTexture));
+    ammo.push_back(new Entity(Vec2(736, 928), Vec2(0, 0), ammoTexture));
+   
 
-    health.push_back(new Entity(Vec2(608, 96), Vec2(0, 0), healthTexture));
+    health.push_back(new Entity(Vec2(224, 928), Vec2(0, 0), healthTexture));
 
-    skulker.push_back(new Enemy(3, Vec2(608, 544), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(480, 544), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(800, 96), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(416, 608), Vec2(0, 0), skulkerTexture));
+    skulker.push_back(new Enemy(3, Vec2(544, 608), Vec2(0, 0), skulkerTexture));
+   
+  
+    boss.push_back(new Enemy(3, Vec2(480, 608), Vec2(0, 0), bossTexture));
 
-    predator.push_back(new Enemy(3, Vec2(736, 928), Vec2(0, 0), predatorTexture));
-    predator.push_back(new Enemy(3, Vec2(608, 96), Vec2(0, 0), predatorTexture));
+    //Forward attacking tendrals seperated by their grouping
+    //1
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 672), Vec2(0, 0), tendrilTexture));
+    //2
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 736), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(416, 736), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(544, 736), Vec2(0, 0), tendrilTexture));
+    //3
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 800), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(416, 800), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(544, 800), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(608, 800), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(352, 800), Vec2(0, 0), tendrilTexture));
+    //4
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(416, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(544, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(608, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(352, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(288, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(672, 864), Vec2(0, 0), tendrilTexture));
 
-    stalker.push_back(new Enemy(3, Vec2(608, 96), Vec2(0, 0), stalkerTexture));
-    stalker.push_back(new Enemy(3, Vec2(416, 928), Vec2(0, 0), stalkerTexture));
-    stalker.push_back(new Enemy(3, Vec2(288, 800), Vec2(0, 0), stalkerTexture));
+    //Side attacking tendrals seperated by their grouping
+    //1
+    sideTendrils.push_back(new Enemy(3, Vec2(416, 608), Vec2(0, 0), tendrilTexture));
 
-    predator.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0), predatorTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(544, 608), Vec2(0, 0), tendrilTexture));
+    //2
+    sideTendrils.push_back(new Enemy(3, Vec2(352, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(352, 672), Vec2(0, 0), tendrilTexture));
 
-    stalker.push_back(new Enemy(3, Vec2(800, 544), Vec2(0, 0), stalkerTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(608, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(608, 672), Vec2(0, 0), tendrilTexture));
+    //3
+    sideTendrils.push_back(new Enemy(3, Vec2(288, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(288, 672), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(288, 736), Vec2(0, 0), tendrilTexture));
+
+    sideTendrils.push_back(new Enemy(3, Vec2(672, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(672, 672), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(672, 736), Vec2(0, 0), tendrilTexture));
+    //4
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 672), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 736), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0), tendrilTexture));
+
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 672), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 736), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 800), Vec2(0, 0), tendrilTexture));
+
+    for (int i = 1; i < forwardTendrils.size(); i++) {
+        forwardTendrils[i]->setExist(false);
+    }
+
+    for (int i = 2; i < sideTendrils.size(); i++) {
+        sideTendrils[i]->setExist(false);
+    }
+
 
     //takes all the childs of entities and stores them and in a array to be sorted in the future
-    entities.reserve(predator.size() + skulker.size() + stalker.size() + ammo.size() + health.size() + 1);
+    entities.reserve( skulker.size() + ammo.size() + health.size() + forwardTendrils.size()+ sideTendrils.size() + boss.size());
 
-    for (Entity* entity : predator)
-    {
-        entities.push_back(entity);
-    }
+  
     for (Entity* entity : skulker)
-    {
-        entities.push_back(entity);
-    }
-    for (Entity* entity : stalker)
     {
         entities.push_back(entity);
     }
@@ -134,7 +189,19 @@ bool Scene2::OnCreate()
     {
         entities.push_back(entity);
     }
-    entities.push_back(&key);
+    for (Entity* entity : forwardTendrils)
+    {
+        entities.push_back(entity);
+    }
+    for (Entity* entity : sideTendrils)
+    {
+        entities.push_back(entity);
+    }
+    for (Entity* entity : boss)
+    {
+        entities.push_back(entity);
+    }
+  
 
     //for UI
     colorFont = { 238, 233, 138 };
@@ -149,7 +216,7 @@ bool Scene2::OnCreate()
     return true;
 }
 
-void Scene2::OnDestroy()
+void Scene3::OnDestroy()
 {
     SDL_DestroyTexture(textureWall);
     SDL_DestroyTexture(textureWall2);
@@ -162,46 +229,39 @@ void Scene2::OnDestroy()
     SDL_FreeSurface(imageFloor);
     SDL_FreeSurface(imageCeiling);
     SDL_FreeSurface(imageDoor);
-
-    SDL_DestroyTexture(keyTexture);
+  
     SDL_DestroyTexture(ammoTexture);
     SDL_DestroyTexture(healthTexture);
 
-    SDL_FreeSurface(keySprite);
-    SDL_FreeSurface(healthSprite);
+      SDL_FreeSurface(healthSprite);
     SDL_FreeSurface(ammoSprite);
 
-    SDL_DestroyTexture(predatorTexture);
     SDL_DestroyTexture(skulkerTexture);
-    SDL_DestroyTexture(stalkerTexture);
-
-    SDL_FreeSurface(predatorSprite);
+    
     SDL_FreeSurface(skulkerSprite);
-    SDL_FreeSurface(stalkerSprite);
 
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(screenSurface);
 }
 
-void Scene2::Update(const float deltaTime)
+void Scene3::Update(const float deltaTime)
 {
-    //if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering
-    for (int i = 0; i < predator.size(); i++)
-    {
-        if (predator[i]->getHealth() <= 0)
-        {
-            predator[i]->setExist(false);
-            //   
-        }
-    }
-    for (int i = 0; i < stalker.size(); i++)
-    {
-        if (stalker[i]->getHealth() <= 0)
-        {
+    
 
-            stalker[i]->setExist(false);
-        }
+
+    timeSecond += deltaTime;
+
+    if (timeSecond > 1 ) {
+        time +=1;
+        timeSecond = 0;
     }
+    TendrilTimeing(time);
+    
+
+
+
+    //if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering)
+   
     for (int i = 0; i < skulker.size(); i++)
     {
         if (skulker[i]->getHealth() <= 0)
@@ -211,6 +271,11 @@ void Scene2::Update(const float deltaTime)
         }
     }
 
+    if (boss[0]->getHealth() <= 0)
+    {
+
+        boss[0]->setExist(false);
+    }
     //if player shoots, play animation by going through all the frames
     if (shootGun)
     {
@@ -273,23 +338,9 @@ void Scene2::Update(const float deltaTime)
     _itoa_s(player.getAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the ammo for ammo ttf
 
     //depending on vision and open line of sight enemies will move towards the player
-    for (int i = 0; i < predator.size(); i++)
-    {
-        if (predator[i]->VisionCheck(player, 25) && EnemyCanSeePlayer(predator[i]))
-        {
+  
 
-            predator[i]->updatePos(player.getPosition());
-        }
-    }
-
-    for (int i = 0; i < stalker.size(); i++)
-    {
-        if (!stalker[i]->VisionCheck(player, 30) && EnemyCanSeePlayer(stalker[i]))
-        {
-
-            stalker[i]->updatePos(player.getPosition());
-        }
-    }
+   
 
     for (int i = 0; i < skulker.size(); i++)
     {
@@ -300,9 +351,13 @@ void Scene2::Update(const float deltaTime)
         }
 
     }
+
+    Spawns(deltaTime);
 }
 
-void Scene2::Render()
+
+
+void Scene3::Render()
 {
     SDL_RenderClear(renderer);
 
@@ -343,10 +398,7 @@ void Scene2::Render()
     SDL_RenderFillRect(renderer, &Right);
 
     //if we collected the key, render key UI
-    if (kCollected)
-    {
-        SDL_RenderCopy(renderer, keyTexture, NULL, &keyAcq);
-    }
+    
 
     //health ui
     healthText = TTF_RenderText_Solid(font, playerHealth, colorFont);
@@ -369,7 +421,7 @@ void Scene2::Render()
     SDL_RenderPresent(renderer);
 }
 
-void Scene2::HandleEvents(const SDL_Event& event)
+void Scene3::HandleEvents(const SDL_Event& event)
 {
     if (event.type == SDL_KEYDOWN)
     {
@@ -379,33 +431,28 @@ void Scene2::HandleEvents(const SDL_Event& event)
             if (player.getAmmo() > 0)
             {
                 //checks angle towards enemy and wall obstructions for the ability to damage foes
-                for (int i = 0; i < predator.size(); i++)
-                {
-                    if (predator[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(predator[i]))
-                    {
+                
 
-                        predator[i]->subtractHealth(1);
-                    }
-                }
-
-                for (int i = 0; i < stalker.size(); i++)
-                {
-                    if (stalker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(stalker[i]))
-                    {
-
-                        stalker[i]->subtractHealth(1);
-                    }
-                }
+             
 
                 for (int i = 0; i < skulker.size(); i++)
                 {
-                    if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]))
+                    if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i])==false )
                     {
 
                         skulker[i]->subtractHealth(1);
                     }
 
                 }
+
+               
+                if (boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0])== false)
+                {
+
+                    boss[0]->subtractHealth(1);
+                }
+
+                
 
                 game->getSoundEngine()->play2D("pistol_shot.wav", false);
                 shootGun = true;
@@ -459,21 +506,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
                 mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
             }
             //5 = door locked by green keycard
-            else if (kCollected == true && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
-            {
-                game->getSoundEngine()->play2D("door2.wav", false);
-                player.w = 0;
-                player.a = 0;
-                player.s = 0;
-                player.d = 0;
-                //load next level
-                game->LoadScene(3);
-            }
-            else if (kCollected == false && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
-            {
-                //play rejection noise if no keycard
-                game->getSoundEngine()->play2D("denied.wav", false);
-            }
+          
 
         }
     }
@@ -499,7 +532,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
     }
 }
 
-bool Scene2::EnemyCanSeePlayer(Enemy* enemy_)
+bool Scene3::EnemyCanSeePlayer(Enemy* enemy_)
 {
     int mapX, mapY, mapIndex, dof;
     float rayX, rayY;
@@ -652,7 +685,7 @@ bool Scene2::EnemyCanSeePlayer(Enemy* enemy_)
     }
 }
 
-void Scene2::HandleMovement()
+void Scene3::HandleMovement()
 {
     //if player.a or player.d is 1, we are in the process of turning the player
     if (player.a == 1)
@@ -724,20 +757,14 @@ void Scene2::HandleMovement()
 
     //after moving, we go through each of the possible collisions:
     //starting with picking up the key
-    if (player.collField(key.getPosition()) && kCollected == false)
-    {
-        kCollected = true;
-        entities.pop_back();
-        game->getSoundEngine()->play2D("beep.wav", false);
-        std::cout << "Green Key Acquired!" << std::endl;
-    }
+   
     //picking up the ammo
     for (int i = 0; i < ammo.size(); i++) {
         if (player.collField(ammo[i]->getPosition()) && ammo[i]->getExist())
         {
 
             ammo[i]->setExist(false);
-            attribution: https://freesound.org/people/zivs/sounds/433771/
+        attribution: https://freesound.org/people/zivs/sounds/433771/
             game->getSoundEngine()->play2D("ammo.ogg", false);
             std::cout << "Ammo Collected!" << std::endl;
             player.addAmmo(7);
@@ -768,8 +795,8 @@ void Scene2::HandleMovement()
             player.subHealth(1);
         }
     }
-    for (int i = 0; i < predator.size(); i++) {
-        if (predator[i]->getExist() && player.collField(predator[i]->getPosition()))
+    for (int i = 0; i < forwardTendrils.size(); i++) {
+        if (forwardTendrils[i]->getExist() && player.collField(forwardTendrils[i]->getPosition()))
         {
             if (player.delayActive == false)
             {
@@ -777,12 +804,10 @@ void Scene2::HandleMovement()
                 hit = true;
             }
             player.subHealth(1);
-            // cout << "player hit!" << endl;
-
         }
     }
-    for (int i = 0; i < stalker.size(); i++) {
-        if (stalker[i]->getExist() && player.collField(stalker[i]->getPosition()))
+    for (int i = 0; i < sideTendrils.size(); i++) {
+        if (sideTendrils[i]->getExist() && player.collField(sideTendrils[i]->getPosition()))
         {
             if (player.delayActive == false)
             {
@@ -790,14 +815,24 @@ void Scene2::HandleMovement()
                 hit = true;
             }
             player.subHealth(1);
-            // cout << "player hit!" << endl;
-
         }
     }
+
+    if (boss[0]->getExist() && player.collField(boss[0]->getPosition()))
+    {
+        if (player.delayActive == false)
+        {
+            game->getSoundEngine()->play2D("pain.wav", false);
+            hit = true;
+        }
+        player.subHealth(1);
+    }
+   
+   
 
 }
 
-void Scene2::drawMap2D()
+void Scene3::drawMap2D()
 {
     //we go through the entire map array and render a 2D grid of different colored squares for each index, currently unused
     for (int y = 0; y < mapWallsY; y++)
@@ -831,19 +866,19 @@ void Scene2::drawMap2D()
     }
 }
 
-float Scene2::dist(float ax, float ay, float bx, float by)
+float Scene3::dist(float ax, float ay, float bx, float by)
 {
     return(sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
-bool Scene2::sortByDistance(Entity* entity1, Entity* entity2)
+bool Scene3::sortByDistance(Entity* entity1, Entity* entity2)
 {
     float distanceA = dist(entity1->getPosition().x, entity1->getPosition().y, player.getPosition().x, player.getPosition().y);
     float distanceB = dist(entity2->getPosition().x, entity2->getPosition().y, player.getPosition().x, player.getPosition().y);
     return distanceA > distanceB;
 }
 
-void Scene2::draw3D()
+void Scene3::draw3D()
 {
     int mapX, mapY, mapIndex, dof;
 
@@ -1082,7 +1117,7 @@ void Scene2::draw3D()
     }
 }
 
-Uint32 Scene2::getpixel(SDL_Surface* surface, int x, int y)
+Uint32 Scene3::getpixel(SDL_Surface* surface, int x, int y)
 {
     //https://stackoverflow.com/questions/53033971/how-to-get-the-color-of-a-specific-pixel-from-sdl-surface
     int bpp = surface->format->BytesPerPixel;
@@ -1096,7 +1131,183 @@ Uint32 Scene2::getpixel(SDL_Surface* surface, int x, int y)
     return SDL_MapRGBA(surface->format, blue, green, red, alpha);
 }
 
-void Scene2::drawFloorCeiling()
+void Scene3::TendrilTimeing(int time)
+{
+    // depending on the time the different tendrils will be actived in a pattern.
+    if (time < 15) {
+        if (time % 3 == 0 && time % 6 != 0) {
+            forwardTendrils[0]->setExist(true);
+            for (int i = 1; i < forwardTendrils.size(); i++) {
+                forwardTendrils[i]->setExist(false);
+            }
+        }
+        if (time % 6 == 0) {
+            forwardTendrils[0]->setExist(false);
+            for (int i = 1; i < 4; i++) {
+                forwardTendrils[i]->setExist(true);
+            }
+            //
+            sideTendrils[0]->setExist(true);
+            sideTendrils[1]->setExist(true);
+        }
+        if (time % 9 == 0) {
+            for (int i = 1; i < 4; i++) {
+                forwardTendrils[i]->setExist(false);
+            }
+            for (int i = 4; i < 9; i++) {
+                forwardTendrils[i]->setExist(true);
+            }
+            //
+            sideTendrils[0]->setExist(false);
+            sideTendrils[1]->setExist(false);
+            for (int i = 2; i < 6; i++) {
+                sideTendrils[i]->setExist(true);
+            }
+        }
+        if (time % 12 == 0) {
+
+            for (int i = 9; i < 16; i++) {
+                forwardTendrils[i]->setExist(true);
+            }
+            for (int i = 4; i < 9; i++) {
+                forwardTendrils[i]->setExist(false);
+            }
+            //
+            for (int i = 2; i < 6; i++) {
+                sideTendrils[i]->setExist(false);
+            }
+
+            for (int i = 6; i < 14; i++) {
+                sideTendrils[i]->setExist(false);
+            }
+        }
+    }
+    else {
+        if (time % 3 == 0 && time % 6 != 0) {
+
+            forwardTendrils[0]->setExist(true);
+            for (int i = 1; i < forwardTendrils.size(); i++) {
+                forwardTendrils[i]->setExist(false);
+            }
+            for (int i = 4; i < 9; i++) {
+                forwardTendrils[i]->setExist(true);
+            }
+            for (int i = 9; i < 16; i++) {
+                forwardTendrils[i]->setExist(false);
+            }
+            //
+            sideTendrils[0]->setExist(false);
+            sideTendrils[1]->setExist(false);
+            for (int i = 2; i < 6; i++) {
+                sideTendrils[i]->setExist(true);
+            }
+            for (int i = 6; i < 12; i++) {
+                sideTendrils[i]->setExist(false);
+            }
+            for (int i = 12; i < 20; i++) {
+                sideTendrils[i]->setExist(true);
+            }
+        }
+        else  if (time % 6 == 0) {
+            forwardTendrils[0]->setExist(false);
+            for (int i = 1; i < 4; i++) {
+                forwardTendrils[i]->setExist(true);
+            }
+            for (int i = 9; i < 16; i++) {
+                forwardTendrils[i]->setExist(true);
+            }
+            for (int i = 4; i < 9; i++) {
+                forwardTendrils[i]->setExist(false);
+            }
+            //
+            sideTendrils[0]->setExist(true);
+            sideTendrils[1]->setExist(true);
+            for (int i = 2; i < 6; i++) {
+                sideTendrils[i]->setExist(false);
+            }
+            for (int i = 6; i < 12; i++) {
+                sideTendrils[i]->setExist(true);
+            }
+            for (int i = 12; i < 20; i++) {
+                sideTendrils[i]->setExist(false);
+            }
+        }
+
+    }
+}
+
+void Scene3::Spawns(float deltatime)
+{
+    if (health[0]->getExist() == false) {
+        healthTimer -= deltatime;
+
+        if (healthTimer <= 0) {
+            health[0]->setExist(true);
+            healthTimer = 15.0f;
+
+        }
+    }
+    if (ammo[0]->getExist() == false) {
+         ammoTimer -= deltatime;
+
+        if (ammoTimer <= 0) {
+            ammo[0]->setExist(true);
+            ammoTimer = 15.0f;
+
+        }
+    }
+    if (skulker[0]->getExist() == false) {
+        skulker1Timer -= deltatime;
+
+        if (skulker1Timer <= 0) {
+
+            skulker[0]->setPosition(Vec2(416, 608));
+            skulker[0]->addHealth(3);
+            skulker[0]->setExist(true);
+            skulker1Timer = 15.0f;
+
+        }
+    }
+    if (skulker[1]->getExist() == false) {
+        skulker2Timer -= deltatime;
+
+        if (skulker2Timer <= 0) {
+
+            skulker[1]->setPosition(Vec2(544, 608));
+            skulker[1]->addHealth(3);
+            skulker[1]->setExist(true);
+            skulker2Timer = 15.0f;
+
+        }
+    }
+}
+
+bool Scene3::TendrilBlock(Enemy* enemy)
+{
+    for (int i = 0; i < forwardTendrils.size(); i++)
+    {
+        if (forwardTendrils[i]->getExist()&& player.isCloser( forwardTendrils[i]->getPosition(), enemy->getPosition()) &&  forwardTendrils[i]->VisionCheck(player,4))
+        {
+
+            return true;
+        }
+
+    }
+
+    for (int i = 0; i < sideTendrils.size(); i++)
+    {
+        if (sideTendrils[i]->getExist() && player.isCloser(sideTendrils[i]->getPosition(), enemy->getPosition()) && sideTendrils[i]->VisionCheck(player, 4))
+        {
+
+            return true;
+        }
+
+    }
+    
+    return false;
+}
+
+void Scene3::drawFloorCeiling()
 {
     //big help from lodev again: https://lodev.org/cgtutor/raycasting2.html
     //also this resource helped reduce lag by offering an alternative to rendercopying rects: https://benedicthenshaw.com/soft_render_sdl2.html
@@ -1149,7 +1360,7 @@ void Scene2::drawFloorCeiling()
     }
 }
 
-void Scene2::entityTick(Entity* entity, SDL_Texture* entityTexture)
+void Scene3::entityTick(Entity* entity, SDL_Texture* entityTexture)
 {
     //Major help from:
     //https://www.youtube.com/watch?v=eBFOjriHMc8
