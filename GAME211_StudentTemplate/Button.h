@@ -20,12 +20,20 @@ private:
     SDL_Rect square;
     Scene* scene;
 
+    // stuff needed to detect a click
+    Vec3 position;
+    Vec3 topLeft;
+    Vec3 bottomRight;
+
 public:
-    Button(const string &fileName, Scene* owner_);
+    Button(const string& fileName, Vec3 position, Scene* owner_);
     ~Button();
     bool OnCreate();
     void Render();
-    Vec3 buttonLocation(float x_, float y_, float z_);
+
+
+    // to check if the button is clicked
+    bool clicked(Vec3 mousePos);
 
 };
 

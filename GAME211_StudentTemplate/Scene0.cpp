@@ -20,20 +20,21 @@ bool Scene0::OnCreate() {
     Matrix4 ndc = MMath::viewportNDC(w, h);
     Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
     projectionMatrix = ndc * ortho;
-
+    inverseProjection = MMath::inverse(projectionMatrix);
     /// Turn on the SDL imaging subsystem
     IMG_Init(IMG_INIT_PNG);
 
     // Set player image to PacMan
 
-    startImage = IMG_Load("Start.png");
-    startTexture = SDL_CreateTextureFromSurface(renderer, startImage);
-    //  /* SDL_Rect startButton = { 0, 0, 64,64 };
-    //   SDL_RenderCopy(renderer, startTexture, NULL, &startButton);*/
-
-
-    endImage = IMG_Load("End.png");
-    endTexture = SDL_CreateTextureFromSurface(renderer, endImage);
+    // Buttons
+    buttonStart = new Button("ButtonBorder.png", Vec3(17.0, 3.67f, 0.0f), this);
+    if (!buttonStart->OnCreate()) {
+        return false;
+    }
+    buttonEnd = new Button("ButtonBorder.png", Vec3(17.0f, 2.55f, 0.0f), this);
+    if (!buttonEnd->OnCreate()) {
+        return false;
+    }
 
 
     backgroundImage = IMG_Load("space.png");
@@ -121,6 +122,11 @@ void Scene0::Render() {
 
     SDL_RenderCopy(renderer, backgroundTexture, NULL, &background);
 
+    // renders the button on the screen
+    buttonStart->Render();
+    buttonEnd->Render();
+
+
     SDL_RenderCopy(renderer, text_texture, NULL, &dest);
     SDL_RenderCopy(renderer, text_texture2, NULL, &dest2);
     SDL_RenderCopy(renderer, text_texture3, NULL, &dest3);
@@ -148,4 +154,46 @@ void Scene0::HandleEvents(const SDL_Event& event)
         }
 
     }
+
+       Vec3 mousePos = getMousePosition();
+    if (event.button.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT)
+    {
+        if (buttonStart->clicked(mousePos))
+        {
+            std::cout << "Start Button clicked\n" << std::endl;
+            // This code works when there is only have one button when moving scenes
+            // it will not work when the buttonEnd exists
+            //game->LoadScene(1);
+            //This code works for changing scenes when the buttonEnd exists
+            SDL_Event event;
+            SDL_memset(&event, 0, sizeof(event));
+            event.type = game->getChangeScence();
+            event.user.code = 1;
+            event.user.data1 = nullptr;
+            event.user.data2 = nullptr;
+            SDL_PushEvent(&event);
+        }
+
+        if (buttonEnd->clicked(mousePos))
+        {
+            std::cout << "End Button clicked\n" << std::endl;
+            SDL_Event event;
+            SDL_memset(&event, 0, sizeof(event));
+            event.type = game->getChangeScence();
+            event.user.code = 2; // change this to 3 to move to scene4 you can all check other cases in GameManager.cpp
+            event.user.data1 = nullptr;
+            event.user.data2 = nullptr;
+            SDL_PushEvent(&event);
+        }
+    }
+}
+Vec3 Scene0::getMousePosition()
+{
+    Uint32 buttons;
+    // mouse position in screen coords x,y
+    int x, y; 
+    buttons = SDL_GetMouseState(&x, &y);
+    Vec3 mouseScreenCoords = Vec3(float(x), float(y), 0.0f);
+    Vec3 mouseWorldCoords = inverseProjection * (mouseScreenCoords);
+    return mouseWorldCoords;
 }

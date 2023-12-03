@@ -52,6 +52,8 @@ public:
     SDL_Rect dest3;
     SDL_Rect background;
     bool playing = false;
+
+    Vec3 getMousePosition();
 };
 
 #endif

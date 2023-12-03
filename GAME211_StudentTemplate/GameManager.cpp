@@ -2,6 +2,7 @@
 #include "Scene0.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "Scene4.h"
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -114,15 +115,16 @@ void GameManager::Run() {
         
         handleEvents();
 		timer->UpdateFrameTicks();
-        currentScene->Update(timer->GetDeltaTime());
-		currentScene->Render();
-
+        if (currentScene) {
+            currentScene->Update(timer->GetDeltaTime());
+            currentScene->Render();
+        }
 		/// Keep the event loop running at a proper rate
 		SDL_Delay(timer->GetSleepTime(60)); ///60 frames per sec
 	}
 }
 
-void GameManager::handleEvents() 
+void GameManager::handleEvents()
 {
     SDL_Event event;
 
@@ -139,18 +141,50 @@ void GameManager::handleEvents()
         {
             isRunning = false;
         }
-        else if(event.type == changeScenceEventType)
+        else if (event.type == changeScenceEventType)
         {
             //switch scene
             currentScene->OnDestroy();
             delete currentScene;
 
-            currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
-            if(!currentScene->OnCreate())
+            // this will take the user code and run the case
+            switch (event.user.code)
             {
+            case 1:
+                currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+                if (!currentScene->OnCreate())
+                {
+                    isRunning = false;
+                }
+                break;
+
+            case 2:
                 isRunning = false;
+                currentScene = nullptr;
+                break;
+
+            case 3:
+                currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+                if (!currentScene->OnCreate())
+                {
+                    isRunning = false;
+                }
+                break;
+
+            case 4:
+                currentScene = new Scene0(windowPtr->GetSDL_Window(), this);
+                if (!currentScene->OnCreate())
+                {
+                    isRunning = false;
+                }
+                break;
+
             }
+
+
         }
+
+
         else if (event.type == SDL_KEYDOWN)
         {
             switch (event.key.keysym.scancode)
@@ -178,10 +212,14 @@ void GameManager::handleEvents()
                 break;
             }
         }
-    
-        currentScene->HandleEvents(event);
+
+        if (currentScene) {
+            currentScene->HandleEvents(event);
+        }
     }
 }
+
+
 
 GameManager::~GameManager() {}
 
