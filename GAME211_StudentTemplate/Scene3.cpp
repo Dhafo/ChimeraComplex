@@ -810,7 +810,7 @@ void Scene3::HandleMovement()
 
             game->getSoundEngine()->play2D("beep.wav", false);
             std::cout << "Health Acquired!" << std::endl;
-            player.addHealth(3);
+            player.addHealth(5);
         }
     }
 
@@ -1294,7 +1294,7 @@ void Scene3::Spawns(float deltatime)
         if (skulker1Timer <= 0) {
 
             skulker[0]->setPosition(Vec2(416, 608));
-            skulker[0]->addHealth(5);
+            skulker[0]->addHealth(3);
             skulker[0]->setExist(true);
             skulker1Timer = 15.0f;
 
