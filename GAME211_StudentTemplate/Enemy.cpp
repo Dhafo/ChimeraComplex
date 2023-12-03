@@ -13,14 +13,14 @@ Enemy::Enemy()
     exist = true;
 }
 
- Enemy::Enemy(int maxHealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_) 
+ Enemy::Enemy(int maxHealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_,float speed_)
  {
     maxHealth = maxHealth_;
     currentHealth = maxHealth;
     position = position_;
     velocity = velocity;
     texture = texture_;
-    speed = 0.5;
+    speed = speed_;
     exist = true;
 }
 

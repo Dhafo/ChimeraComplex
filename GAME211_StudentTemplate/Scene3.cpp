@@ -13,7 +13,7 @@ Scene3::Scene3(SDL_Window* sdlWindow_, GameManager* game_)
     game = game_;
     renderer = SDL_GetRenderer(window);
     float orientation = 90 * DEGREES_TO_RADIANS;
-    player = Player(10, 6, orientation, Vec2(480, 928), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
+    player = Player(10, 7, orientation, Vec2(480, 928), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
 }
 
 Scene3::~Scene3()
@@ -24,6 +24,7 @@ Scene3::~Scene3()
 
 bool Scene3::OnCreate()
 {
+
     //setting timers to a value
     timeSecond = 0;
     time = 0;
@@ -106,63 +107,66 @@ bool Scene3::OnCreate()
 
     health.push_back(new Entity(Vec2(224, 928), Vec2(0, 0), healthTexture));
 
-    skulker.push_back(new Enemy(3, Vec2(416, 608), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(544, 608), Vec2(0, 0), skulkerTexture));
-   
+    skulker.push_back(new Enemy(3, Vec2(416, 608), Vec2(0, 0), skulkerTexture, 1.0f));
+    skulker.push_back(new Enemy(3, Vec2(544, 608), Vec2(0, 0), skulkerTexture, 1.0f));
+    for (int i = 0; i < skulker.size(); i++)
+    {
+        skulkADelay[i] = 1;
+    }
   
-    boss.push_back(new Enemy(3, Vec2(480, 608), Vec2(0, 0), bossTexture));
+    boss.push_back(new Enemy(15, Vec2(480, 608), Vec2(0, 0), bossTexture, 0.0f));
 
     //Forward attacking tendrals seperated by their grouping
     //1
-    forwardTendrils.push_back(new Enemy(3, Vec2(480, 672), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 672), Vec2(0, 0), tendrilTexture, 0.0f));
     //2
-    forwardTendrils.push_back(new Enemy(3, Vec2(480, 736), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(416, 736), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(544, 736), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 736), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(416, 736), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(544, 736), Vec2(0, 0), tendrilTexture, 0.0f));
     //3
-    forwardTendrils.push_back(new Enemy(3, Vec2(480, 800), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(416, 800), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(544, 800), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(608, 800), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(352, 800), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 800), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(416, 800), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(544, 800), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(608, 800), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(352, 800), Vec2(0, 0), tendrilTexture, 0.0f));
     //4
-    forwardTendrils.push_back(new Enemy(3, Vec2(480, 864), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(416, 864), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(544, 864), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(608, 864), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(352, 864), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(288, 864), Vec2(0, 0), tendrilTexture));
-    forwardTendrils.push_back(new Enemy(3, Vec2(672, 864), Vec2(0, 0), tendrilTexture));
+    forwardTendrils.push_back(new Enemy(3, Vec2(480, 864), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(416, 864), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(544, 864), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(608, 864), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(352, 864), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(288, 864), Vec2(0, 0), tendrilTexture, 0.0f));
+    forwardTendrils.push_back(new Enemy(3, Vec2(672, 864), Vec2(0, 0), tendrilTexture, 0.0f));
 
     //Side attacking tendrals seperated by their grouping
     //1
-    sideTendrils.push_back(new Enemy(3, Vec2(416, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(416, 608), Vec2(0, 0), tendrilTexture, 0.0f));
 
-    sideTendrils.push_back(new Enemy(3, Vec2(544, 608), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(544, 608), Vec2(0, 0), tendrilTexture, 0.0f));
     //2
-    sideTendrils.push_back(new Enemy(3, Vec2(352, 608), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(352, 672), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(352, 608), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(352, 672), Vec2(0, 0), tendrilTexture, 0.0f));
 
-    sideTendrils.push_back(new Enemy(3, Vec2(608, 608), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(608, 672), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(608, 608), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(608, 672), Vec2(0, 0), tendrilTexture, 0.0f));
     //3
-    sideTendrils.push_back(new Enemy(3, Vec2(288, 608), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(288, 672), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(288, 736), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(288, 608), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(288, 672), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(288, 736), Vec2(0, 0), tendrilTexture, 0.0f));
 
-    sideTendrils.push_back(new Enemy(3, Vec2(672, 608), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(672, 672), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(672, 736), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(672, 608), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(672, 672), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(672, 736), Vec2(0, 0), tendrilTexture, 0.0f));
     //4
-    sideTendrils.push_back(new Enemy(3, Vec2(224, 608), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(224, 672), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(224, 736), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 608), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 672), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 736), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0), tendrilTexture, 0.0f));
 
-    sideTendrils.push_back(new Enemy(3, Vec2(736, 608), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(736, 672), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(736, 736), Vec2(0, 0), tendrilTexture));
-    sideTendrils.push_back(new Enemy(3, Vec2(736, 800), Vec2(0, 0), tendrilTexture));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 608), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 672), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 736), Vec2(0, 0), tendrilTexture, 0.0f));
+    sideTendrils.push_back(new Enemy(3, Vec2(736, 800), Vec2(0, 0), tendrilTexture, 0.0f));
 
     for (int i = 1; i < forwardTendrils.size(); i++) {
         forwardTendrils[i]->setExist(false);
@@ -232,9 +236,13 @@ void Scene3::OnDestroy()
   
     SDL_DestroyTexture(ammoTexture);
     SDL_DestroyTexture(healthTexture);
+    SDL_DestroyTexture(tendrilTexture);
+    SDL_DestroyTexture(bossTexture);
 
-      SDL_FreeSurface(healthSprite);
+    SDL_FreeSurface(healthSprite);
     SDL_FreeSurface(ammoSprite);
+    SDL_FreeSurface(bossSprite);
+    SDL_FreeSurface(tendrilSprite);
 
     SDL_DestroyTexture(skulkerTexture);
     
@@ -246,7 +254,11 @@ void Scene3::OnDestroy()
 
 void Scene3::Update(const float deltaTime)
 {
-    
+    //sets scene on player death
+    if (player.getCurrentHealth() <= 0)
+    {
+        game->LoadScene(0);
+    }
 
 
     timeSecond += deltaTime;
@@ -269,12 +281,16 @@ void Scene3::Update(const float deltaTime)
 
             skulker[i]->setExist(false);
         }
+        if (skulkADelay[i] >= 0) {
+            skulkADelay[i] -= deltaTime;
+        }
     }
 
     if (boss[0]->getHealth() <= 0)
     {
 
         boss[0]->setExist(false);
+        game->LoadScene(0);
     }
     //if player shoots, play animation by going through all the frames
     if (shootGun)
@@ -344,7 +360,7 @@ void Scene3::Update(const float deltaTime)
 
     for (int i = 0; i < skulker.size(); i++)
     {
-        if (EnemyCanSeePlayer(skulker[i]))
+        if (EnemyCanSeePlayer(skulker[i]) && skulkADelay[i] <= 0)
         {
 
             skulker[i]->updatePos(player.getPosition());
@@ -431,27 +447,42 @@ void Scene3::HandleEvents(const SDL_Event& event)
             if (player.getAmmo() > 0)
             {
                 //checks angle towards enemy and wall obstructions for the ability to damage foes
-                
-
-             
-
+            
                 for (int i = 0; i < skulker.size(); i++)
                 {
-                    if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i])==false )
-                    {
+                    if (player.getDistance(skulker[i]->getPosition()) < 64 ) {
 
-                        skulker[i]->subtractHealth(1);
+                        if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
+                        {
+                            skulker[i]->subtractHealth(1);
+                        }
+
+                    }
+                    else {
+                        if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
+                        {
+                            skulker[i]->subtractHealth(1);
+                        }
                     }
 
                 }
 
                
-                if (boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0])== false)
-                {
+                if (player.getDistance(boss[0]->getPosition()) < 64) {
 
-                    boss[0]->subtractHealth(1);
+                    if (boss[0]->VisionCheck(player, 20) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
+                    {
+                        boss[0]->subtractHealth(1);
+                    }
+
                 }
-
+                else {
+                    if (boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
+                    {
+                        boss[0]->subtractHealth(1);
+                    }
+                }
+               
                 
 
                 game->getSoundEngine()->play2D("pistol_shot.wav", false);
@@ -779,7 +810,7 @@ void Scene3::HandleMovement()
 
             game->getSoundEngine()->play2D("beep.wav", false);
             std::cout << "Health Acquired!" << std::endl;
-            player.addHealth(50);
+            player.addHealth(3);
         }
     }
 
@@ -792,7 +823,8 @@ void Scene3::HandleMovement()
                 game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
-            player.subHealth(1);
+            player.subHealth(2);
+            skulkADelay[i] = 1;
         }
     }
     for (int i = 0; i < forwardTendrils.size(); i++) {
@@ -803,7 +835,7 @@ void Scene3::HandleMovement()
                 game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
-            player.subHealth(1);
+            player.subHealth(3);
         }
     }
     for (int i = 0; i < sideTendrils.size(); i++) {
@@ -814,7 +846,7 @@ void Scene3::HandleMovement()
                 game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
-            player.subHealth(1);
+            player.subHealth(3);
         }
     }
 
@@ -825,7 +857,7 @@ void Scene3::HandleMovement()
             game->getSoundEngine()->play2D("pain.wav", false);
             hit = true;
         }
-        player.subHealth(1);
+        player.subHealth(5);
     }
    
    
@@ -1262,7 +1294,7 @@ void Scene3::Spawns(float deltatime)
         if (skulker1Timer <= 0) {
 
             skulker[0]->setPosition(Vec2(416, 608));
-            skulker[0]->addHealth(3);
+            skulker[0]->addHealth(5);
             skulker[0]->setExist(true);
             skulker1Timer = 15.0f;
 

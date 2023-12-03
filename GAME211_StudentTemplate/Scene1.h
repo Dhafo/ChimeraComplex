@@ -37,6 +37,10 @@ private:
     std::vector<Entity*> health;
     //Combined array holding each entity
     std::vector<Entity*> entities;
+    // enemies will stop after an attack for a set amount of time
+    float skulkADelay[4];
+    float predADelay;
+    float stalkADelay;
 
     int screenOffsetX = 16;
     int screenOffsetY = 16;

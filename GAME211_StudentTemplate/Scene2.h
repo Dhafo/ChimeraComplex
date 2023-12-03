@@ -32,6 +32,11 @@ private:
     std::vector<Enemy*> skulker;
     std::vector<Enemy*> predator;
     std::vector<Enemy*> stalker;
+    //Enemies will stop after an attack for a set amount of time
+    float skulkADelay[4];
+    float predADelay[3];
+    float stalkADelay[4];
+
     //Arrays for each item
     std::vector<Entity*> ammo;
     std::vector<Entity*> health;

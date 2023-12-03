@@ -16,7 +16,7 @@ protected:
 
 public:
     Enemy();
-    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_);
+    Enemy(int maxhealth_, Vec2 position_, Vec2 velocity_, SDL_Texture* texture_,float speed);
     void addHealth(int addValue);
     void subtractHealth(int subValue);
     // gets angle towards a given postion and returns the cos/sin so we can move towards that direction

@@ -26,6 +26,7 @@ public:
     //checks if position 1 is closer than position 2
     bool isCloser(Vec2 position1,Vec2 position2);
 
+    float getDistance(Vec2 otherPosition);
 
     bool getExist() 
     {

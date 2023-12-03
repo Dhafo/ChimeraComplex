@@ -14,7 +14,7 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_)
     game = game_;
 	renderer = SDL_GetRenderer(window);
     float orientation = 90 * DEGREES_TO_RADIANS;
-    player = Player(10, 6, orientation, Vec2(544, 864), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
+    player = Player(10, 7, orientation, Vec2(544, 864), Vec2(cos(orientation) * 1.75, -sin(orientation) * 1.75));
 }
 
 Scene1::~Scene1()
@@ -93,13 +93,25 @@ bool Scene1::OnCreate()
     health.push_back(new Entity(Vec2(96, 416), Vec2(0, 0), healthTexture));
 
     //enemies
-    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), skulkerTexture));
-    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture));
-    predator.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0),predatorTexture));
-    stalker.push_back(new Enemy(3, Vec2(800, 544), Vec2(0, 0),stalkerTexture));
-
+    skulker.push_back(new Enemy(3, Vec2(160, 160), Vec2(0, 0), skulkerTexture,1.0f));
+    skulker.push_back(new Enemy(3, Vec2(928, 96), Vec2(0, 0), skulkerTexture, 1.0f));
+    skulker.push_back(new Enemy(3, Vec2(96, 672), Vec2(0, 0), skulkerTexture, 1.0f));
+    skulker.push_back(new Enemy(3, Vec2(544, 224), Vec2(0, 0), skulkerTexture, 1.0f));
+    predator.push_back(new Enemy(3, Vec2(224, 800), Vec2(0, 0),predatorTexture, 2.0f));
+    stalker.push_back(new Enemy(3, Vec2(800, 544), Vec2(0, 0),stalkerTexture, 2.0f));
+    for (int i = 0; i < predator.size(); i++)
+    {
+        predADelay = 1;
+        
+    }
+    for (int i = 0; i < stalker.size(); i++)
+    {
+        stalkADelay = 1;
+    }
+    for (int i = 0; i < skulker.size(); i++)
+    {
+        skulkADelay[i] = 1;
+    }
     //takes all the childs of entities and stores them and in a array to be sorted in the future
     entities.reserve(predator.size() + skulker.size() + stalker.size()+ ammo.size() + health.size() + 1); //where +1 is key
 
@@ -174,6 +186,12 @@ void Scene1::OnDestroy()
 
 void Scene1::Update(const float deltaTime) 
 {
+    //sets scene on player death
+    if (player.getCurrentHealth() <= 0)
+    {
+        game->LoadScene(0);
+
+    }
     //if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering
     for (int i = 0; i < predator.size(); i++) 
     {
@@ -182,6 +200,10 @@ void Scene1::Update(const float deltaTime)
             predator[i]->setExist(false);
             //   
         }
+    
+    }
+    if (predADelay >= 0) {
+        predADelay -= deltaTime;
     }
     for (int i = 0; i < stalker.size(); i++)
     {
@@ -190,6 +212,10 @@ void Scene1::Update(const float deltaTime)
 
             stalker[i]->setExist(false);
         }
+      
+    }
+    if (stalkADelay >= 0) {
+        stalkADelay -= deltaTime;
     }
     for (int i = 0; i < skulker.size(); i++) 
     {
@@ -197,6 +223,9 @@ void Scene1::Update(const float deltaTime)
         {
 
             skulker[i]->setExist(false);
+        }
+        if (skulkADelay[i] >= 0) {
+            skulkADelay[i] -= deltaTime;
         }
     }
 
@@ -264,7 +293,7 @@ void Scene1::Update(const float deltaTime)
     //depending on vision and open line of sight enemies will move towards the player
     for (int i = 0; i < predator.size(); i++)
     {
-        if (predator[i]->VisionCheck(player, 25) && EnemyCanSeePlayer(predator[i])) 
+        if (predator[i]->VisionCheck(player, 25) && EnemyCanSeePlayer(predator[i]) && predADelay<=0) 
         {
 
             predator[i]->updatePos(player.getPosition());
@@ -273,7 +302,7 @@ void Scene1::Update(const float deltaTime)
 
     for (int i = 0; i < stalker.size(); i++) 
     {
-        if (!stalker[i]->VisionCheck(player, 30) && EnemyCanSeePlayer(stalker[i])) 
+        if (!stalker[i]->VisionCheck(player, 30) && EnemyCanSeePlayer(stalker[i]) && stalkADelay <= 0)
         {
 
             stalker[i]->updatePos(player.getPosition());
@@ -282,7 +311,7 @@ void Scene1::Update(const float deltaTime)
 
     for (int i = 0; i < skulker.size(); i++) 
     {
-        if (EnemyCanSeePlayer(skulker[i])) 
+        if (EnemyCanSeePlayer(skulker[i]) && skulkADelay[i] <= 0)
         {
 
             skulker[i]->updatePos(player.getPosition());
@@ -370,28 +399,59 @@ void Scene1::HandleEvents(const SDL_Event& event)
                 //checks angle towards enemy and wall obstructions for the ability to damage foes
                 for (int i = 0; i < predator.size(); i++)
                 {
-                    if (predator[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(predator[i]))
-                    {
+                    if (player.getDistance(predator[i]->getPosition()) < 64) {
 
-                        predator[i]->subtractHealth(1);
+                        if (predator[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(predator[i]))
+                        {
+                            predator[i]->subtractHealth(1);
+                        }
+
                     }
+                    else{
+                        if (predator[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(predator[i]))
+                        {
+                            predator[i]->subtractHealth(1);
+                        }
+                    }
+
+                   
                 }
 
                 for (int i = 0; i < stalker.size(); i++)
                 {
-                    if (stalker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(stalker[i]))
-                    {
+                    if (player.getDistance(stalker[i]->getPosition()) < 64) {
 
-                        stalker[i]->subtractHealth(1);
+                        if (stalker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(stalker[i]))
+                        {
+                            stalker[i]->subtractHealth(1);
+                        }
+
                     }
+                    else {
+                        if (stalker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(stalker[i]))
+                        {
+                            stalker[i]->subtractHealth(1);
+                        }
+                    }
+
+                   
                 }
 
                 for (int i = 0; i < skulker.size(); i++)
                 {
-                    if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]))
-                    {
+                    if (player.getDistance(skulker[i]->getPosition()) < 64) {
 
-                        skulker[i]->subtractHealth(1);
+                        if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]))
+                        {
+                            skulker[i]->subtractHealth(1);
+                        }
+
+                    }
+                    else {
+                        if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]))
+                        {
+                            skulker[i]->subtractHealth(1);
+                        }
                     }
 
                 }
@@ -739,7 +799,7 @@ void Scene1::HandleMovement()
             health[i]->setExist(false);
             game->getSoundEngine()->play2D("pills.wav", false);
             std::cout << "Health Acquired!" << std::endl;
-            player.addHealth(50);
+            player.addHealth(5);
         }
     }
 
@@ -753,6 +813,7 @@ void Scene1::HandleMovement()
                 hit = true;
             }
             player.subHealth(1);
+            skulkADelay[i] = 1;
         }
     }
     for (int i = 0; i < predator.size(); i++) {
@@ -763,9 +824,9 @@ void Scene1::HandleMovement()
                 game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
-            player.subHealth(1);
+            player.subHealth(3);
             // cout << "player hit!" << endl;
-
+            predADelay = 1;
         }
     }
     for (int i = 0; i < stalker.size(); i++) {
@@ -776,7 +837,8 @@ void Scene1::HandleMovement()
                 game->getSoundEngine()->play2D("pain.wav", false);
                 hit = true;
             }
-            player.subHealth(1);
+            player.subHealth(3);
+            stalkADelay = 1;
         }
     }
        

@@ -47,7 +47,7 @@ private:
     std::vector<Entity*> health;
     //Combined array holding each entity
     std::vector<Entity*> entities;
-
+    float skulkADelay[2];
     int centerAttackPhase;
 
     int screenOffsetX = 16;
