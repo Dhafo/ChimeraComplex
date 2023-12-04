@@ -33,29 +33,29 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 
     SDL_Surface* startImage;
-    SDL_Surface* endImage;
-    SDL_Surface* backgroundImage;
-
     SDL_Texture* startTexture;
+
+    SDL_Surface* endImage;
     SDL_Texture* endTexture;
+
+    SDL_Surface* backgroundImage;
     SDL_Texture* backgroundTexture;
 
     Button *buttonStart;
     Button *buttonEnd;
 
-    //menu text
     SDL_Texture* text_texture;
     SDL_Texture* text_texture2;
     SDL_Texture* text_texture3;
-
-    //menu rects
+    SDL_Texture* text_lore;
     SDL_Rect dest;
     SDL_Rect dest2;
     SDL_Rect dest3;
-
+    SDL_Rect dest4;
     SDL_Rect background;
+    bool playing = true;
 
-    bool playing = false;
+    Vec3 getMousePosition();
 };
 
 #endif

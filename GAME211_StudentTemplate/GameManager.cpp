@@ -3,6 +3,7 @@
 #include "Scene1.h"
 #include "Scene2.h"
 #include "Scene3.h"
+#include "Scene4.h"
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -90,14 +91,16 @@ Uint32 GameManager::getChangeScence() {
 void GameManager::Run() {
     
 	timer->Start();
-    SDL_SetWindowFullscreen(windowPtr->GetSDL_Window(), SDL_WINDOW_FULLSCREEN);
-    SDL_ShowCursor(SDL_DISABLE);
+    //SDL_SetWindowFullscreen(windowPtr->GetSDL_Window(), SDL_WINDOW_FULLSCREEN);
+    
 	while (isRunning) {
         
         handleEvents();
 		timer->UpdateFrameTicks();
-        currentScene->Update(timer->GetDeltaTime());
-		currentScene->Render();
+        if (currentScene) {
+            currentScene->Update(timer->GetDeltaTime());
+            currentScene->Render();
+        }
 
 		/// Keep the event loop running at a proper rate
 		SDL_Delay(timer->GetSleepTime(60)); ///60 frames per sec
@@ -158,13 +161,18 @@ void GameManager::handleEvents()
             case SDL_SCANCODE_4:
                 LoadScene(3);
                 break;
+            case SDL_SCANCODE_5:
+                LoadScene(4);
+                break;
 
             default:
                 break;
             }
         }
     
-        currentScene->HandleEvents(event);
+        if (currentScene) {
+            currentScene->HandleEvents(event);
+        }
     }
 }
 
@@ -218,6 +226,9 @@ void GameManager::LoadScene( int i )
         case 3:
             currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
             break;
+        case 4:
+            currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+            break;
         default:
             currentScene = new Scene0( windowPtr->GetSDL_Window(), this);
             break;
@@ -239,4 +250,9 @@ bool GameManager::ValidateCurrentScene()
         return false;
     }
     return true;
+}
+
+void GameManager::Quit()
+{
+    isRunning = false;
 }

@@ -24,6 +24,7 @@ public:
     void updatePos(Vec2 otherPos);
     //checks player orintation and if the enemy is within the angel of vision. The vision range value is actaully double the amount because it checks bot negative and positive
     bool VisionCheck(Player player, float visionRange);
+    bool agitated = false;
     int getHealth() 
     {
 

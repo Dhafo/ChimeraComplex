@@ -42,7 +42,7 @@ void Enemy::subtractHealth(int subValue)
     if (currentHealth < 0) 
     {
 
-        currentHealth = maxHealth;
+        currentHealth = 0;
     }
     cout << "enemy hit for " << subValue << " damage!" << endl;
 

@@ -15,7 +15,6 @@ class Player: public Entity
   protected:
     int maxHealth;
     int currentHealth;
-    int maxAmmo;
     int currentAmmo;
     float damageDelayTime; 
     float orientation;

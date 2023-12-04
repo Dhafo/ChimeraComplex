@@ -22,7 +22,6 @@ public:
     Vec2 getVelocity();
     bool collField(Vec2 Position_);
     SDL_Texture* texture;
-
     //checks if position 1 is closer than position 2
     bool isCloser(Vec2 position1,Vec2 position2);
 

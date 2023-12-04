@@ -6,7 +6,6 @@ Player::Player()
 {
     maxHealth = 1;
     currentHealth = maxHealth;
-    maxAmmo = 0;
     currentAmmo = 0;
     orientation = 0;
     position = Vec2(0,0);
@@ -20,7 +19,6 @@ Player::Player(int maxhealth_,int maxAmmo_, float orientation_,Vec2 position_, V
 {
     maxHealth= maxhealth_;
     currentHealth = maxHealth;
-    maxAmmo = maxAmmo_;
     currentAmmo = 7;
     orientation = orientation_;
     position = position_;
@@ -75,18 +73,14 @@ void Player::subHealth(int subValue)
 void Player::addAmmo(int addValue)
 {
     currentAmmo += addValue;
-    if (currentAmmo > maxAmmo) 
-    {
-        currentAmmo = maxAmmo;
-    }
 }
 
 void Player::subAmmo(int subValue)
 {
     currentAmmo -= subValue;
-    if (currentAmmo > maxAmmo) 
+    if (currentAmmo < 0)
     {
-        currentAmmo = maxAmmo;
+        currentAmmo = 0;
     }
 }
 

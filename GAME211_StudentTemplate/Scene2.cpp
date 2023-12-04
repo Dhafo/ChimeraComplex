@@ -43,20 +43,23 @@ bool Scene2::OnCreate()
 
     //load all the images
     //for level generation:
-    imageWall = IMG_Load("wallTest.png");
-    imageWall2 = IMG_Load("wallTest2.png");
-    imageDoor = IMG_Load("door.png");
-    imageDoor2 = IMG_Load("door2.png");
-    imageFloor = IMG_Load("floor2.png");
-    imageCeiling = IMG_Load("ceiling.png");
+    imageWall = IMG_Load("Sprites/Level/wallTest.png");
+    imageWall2 = IMG_Load("Sprites/Level/wallTest2.png");
+    imageDoor = IMG_Load("Sprites/Level/door.png");
+    imageDoor2 = IMG_Load("Sprites/Level/door2.png");
+    imageFloor = IMG_Load("Sprites/Level/floor2.png");
+    imageFloor2 = IMG_Load("Sprites/Level/floor1.png");
+    imageCeiling = IMG_Load("Sprites/Level/ceiling.png");
+    imageCeiling2 = IMG_Load("Sprites/Level/ceiling2.png");
     //for item pickups:
-    keySprite = IMG_Load("CardKey.png");
-    healthSprite = IMG_Load("MedicalKit.png");
-    ammoSprite = IMG_Load("HandGunBullet.png");
+    keySprite = IMG_Load("Sprites/Entities/CardKey.png");
+    healthSprite = IMG_Load("Sprites/Entities/MedicalKit.png");
+    ammoSprite = IMG_Load("Sprites/Entities/HandGunMagazine.png");
     //for enemies:
-    predatorSprite = IMG_Load("Blinky.png");
-    skulkerSprite = IMG_Load("Blinky2.png");
-    stalkerSprite = IMG_Load("Blinky3.png");
+    predatorSprite = IMG_Load("Sprites/Entities/Enemy_Predator.png");
+    predatorAgiSprite = IMG_Load("Sprites/Entities/Enemy_PredatorAgi.png");
+    skulkerSprite = IMG_Load("Sprites/Entities/Enemy_Skulker.png");
+    stalkerSprite = IMG_Load("Sprites/Entities/Enemy_Stalker.png");
 
     //create textures from the images
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
@@ -64,20 +67,23 @@ bool Scene2::OnCreate()
     textureDoor = SDL_CreateTextureFromSurface(renderer, imageDoor);
     textureDoor2 = SDL_CreateTextureFromSurface(renderer, imageDoor2);
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
+    textureFloor2 = SDL_CreateTextureFromSurface(renderer, imageFloor2);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
+    textureCeiling2 = SDL_CreateTextureFromSurface(renderer, imageCeiling2);
 
     keyTexture = SDL_CreateTextureFromSurface(renderer, keySprite);
     ammoTexture = SDL_CreateTextureFromSurface(renderer, ammoSprite);
     healthTexture = SDL_CreateTextureFromSurface(renderer, healthSprite);
 
     predatorTexture = SDL_CreateTextureFromSurface(renderer, predatorSprite);
+    predatorAgiTexture = SDL_CreateTextureFromSurface(renderer, predatorAgiSprite);
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
     stalkerTexture = SDL_CreateTextureFromSurface(renderer, stalkerSprite);
 
     //load all frames of the gun animation
     for (int i = 0; i < 6; i++)
     {
-        std::string gunFrame = "Gun/gun" + std::to_string(i) + ".png";
+        std::string gunFrame = "Sprites/Gun/gun" + std::to_string(i) + ".png";
         SDL_Surface* gunSurf = IMG_Load(gunFrame.c_str());
         SDL_Texture* gunTexture = SDL_CreateTextureFromSurface(renderer, gunSurf);
         SDL_FreeSurface(gunSurf);
@@ -170,13 +176,17 @@ void Scene2::OnDestroy()
     SDL_DestroyTexture(textureWall);
     SDL_DestroyTexture(textureWall2);
     SDL_DestroyTexture(textureFloor);
+    SDL_DestroyTexture(textureFloor2);
     SDL_DestroyTexture(textureCeiling);
+    SDL_DestroyTexture(textureCeiling2);
     SDL_DestroyTexture(textureDoor);
 
     SDL_FreeSurface(imageWall);
     SDL_FreeSurface(imageWall2);
     SDL_FreeSurface(imageFloor);
+    SDL_FreeSurface(imageFloor2);
     SDL_FreeSurface(imageCeiling);
+    SDL_FreeSurface(imageCeiling2);
     SDL_FreeSurface(imageDoor);
 
     SDL_DestroyTexture(keyTexture);
@@ -205,39 +215,44 @@ void Scene2::Update(const float deltaTime)
     if (player.getCurrentHealth() <= 0)
     {
         game->LoadScene(0);
-          
+        return;
     }
+
     //if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering
     for (int i = 0; i < predator.size(); i++)
     {
-        if (predator[i]->getHealth() <= 0)
+        if (predator[i]->getExist() && predator[i]->getHealth() <= 0)
         {
+            game->getSoundEngine()->play2D("Audio/predatorDeath.wav", false);
             predator[i]->setExist(false);
-            //   
         }
         if (predADelay[i] >= 0) {
             predADelay[i] -= deltaTime;
         }
+
     }
+    
     for (int i = 0; i < stalker.size(); i++)
     {
-        if (stalker[i]->getHealth() <= 0)
+        if (stalker[i]->getExist() && stalker[i]->getHealth() <= 0)
         {
-
+            game->getSoundEngine()->play2D("Audio/stalkerDeath.wav", false);
             stalker[i]->setExist(false);
         }
+
         if (stalkADelay[i] >= 0) {
             stalkADelay[i] -= deltaTime;
         }
+
     }
+    
     for (int i = 0; i < skulker.size(); i++)
     {
-        if (skulker[i]->getHealth() <= 0)
+        if (skulker[i]->getExist() && skulker[i]->getHealth() <= 0)
         {
-
+            game->getSoundEngine()->play2D("Audio/skulkerDeath.ogg", false);
             skulker[i]->setExist(false);
         }
-
         if (skulkADelay[i] >= 0) {
             skulkADelay[i] -= deltaTime;
         }
@@ -282,6 +297,19 @@ void Scene2::Update(const float deltaTime)
         }
     }
 
+
+    //if player hits something
+    if (aim)
+    {
+        timePassedHit += deltaTime;
+        if (timePassedHit >= 0.1f)
+        {
+            game->getSoundEngine()->play2D("Audio/hit.ogg", false);
+            aim = false;
+            timePassedHit = 0;
+        }
+    }
+
     HandleMovement();
     player.playerUpdate(deltaTime);
 
@@ -292,7 +320,7 @@ void Scene2::Update(const float deltaTime)
         if (timePassedStep >= 0.45f)
         {
             //sound from: https://freesound.org/people/swuing/sounds/38873/
-            ISound* step = game->getSoundEngine()->play2D("step.wav", false, false, true);
+            ISound* step = game->getSoundEngine()->play2D("Audio/step.wav", false, false, true);
             //generate a random number to use as a pitch to create variation in the footsteps
             float random = 0.85f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.89f - 0.85f));
             step->setPlaybackSpeed(random);
@@ -309,8 +337,16 @@ void Scene2::Update(const float deltaTime)
     {
         if (predator[i]->VisionCheck(player, 25) && EnemyCanSeePlayer(predator[i]) && predADelay[i] <= 0)
         {
-
+            if (predator[i]->getExist() && predator[i]->agitated == false)
+            {
+                predator[i]->agitated = true;
+                game->getSoundEngine()->play2D("Audio/predator.wav", false);
+            }
             predator[i]->updatePos(player.getPosition());
+        }
+        else
+        {
+            predator[i]->agitated = false;
         }
     }
 
@@ -318,8 +354,16 @@ void Scene2::Update(const float deltaTime)
     {
         if (!stalker[i]->VisionCheck(player, 30) && EnemyCanSeePlayer(stalker[i]) && stalkADelay[i] <= 0)
         {
-
+            if (stalker[i]->getExist() && stalker[i]->agitated == false)
+            {
+                stalker[i]->agitated = true;
+                game->getSoundEngine()->play2D("Audio/stalker.wav", false);
+            }
             stalker[i]->updatePos(player.getPosition());
+        }
+        else
+        {
+            stalker[i]->agitated = false;
         }
     }
 
@@ -327,8 +371,16 @@ void Scene2::Update(const float deltaTime)
     {
         if (EnemyCanSeePlayer(skulker[i]) && skulkADelay[i] <= 0)
         {
-
+            if (skulker[i]->getExist() && skulker[i]->agitated == false)
+            {
+                skulker[i]->agitated = true;
+                game->getSoundEngine()->play2D("Audio/skulker.wav", false);
+            }
             skulker[i]->updatePos(player.getPosition());
+        }
+        else
+        {
+            skulker[i]->agitated = false;
         }
 
     }
@@ -351,6 +403,19 @@ void Scene2::Render()
         {
             return sortByDistance(a, b);
         });
+
+    for (Enemy* ent : predator)
+    {
+        if (ent->agitated)
+        {
+            ent->texture = predatorAgiTexture;
+        }
+        else
+        {
+            ent->texture = predatorTexture;
+        }
+    }
+
 
     //now that the array is sorted, we can render them in order, if they still exist
     for (int i = 0; i < entities.size(); i++)
@@ -417,6 +482,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
 
                         if (predator[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(predator[i]))
                         {
+                            aim = true;
                             predator[i]->subtractHealth(1);
                         }
 
@@ -424,6 +490,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
                     else {
                         if (predator[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(predator[i]))
                         {
+                            aim = true;
                             predator[i]->subtractHealth(1);
                         }
                     }
@@ -437,6 +504,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
 
                         if (stalker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(stalker[i]))
                         {
+                            aim = true;
                             stalker[i]->subtractHealth(1);
                         }
 
@@ -444,6 +512,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
                     else {
                         if (stalker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(stalker[i]))
                         {
+                            aim = true;
                             stalker[i]->subtractHealth(1);
                         }
                     }
@@ -457,6 +526,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
 
                         if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]))
                         {
+                            aim = true;
                             skulker[i]->subtractHealth(1);
                         }
 
@@ -464,13 +534,14 @@ void Scene2::HandleEvents(const SDL_Event& event)
                     else {
                         if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]))
                         {
+                            aim = true;
                             skulker[i]->subtractHealth(1);
                         }
                     }
 
                 }
 
-                game->getSoundEngine()->play2D("pistol_shot.wav", false);
+                game->getSoundEngine()->play2D("Audio/pistol_shot.wav", false);
                 shootGun = true;
                 player.subAmmo(1);
             }
@@ -518,13 +589,13 @@ void Scene2::HandleEvents(const SDL_Event& event)
             //4 = regular door
             if (mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 4)
             {
-                game->getSoundEngine()->play2D("door2.wav", false);
+                game->getSoundEngine()->play2D("Audio/door.wav", false);
                 mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
             }
             //5 = door locked by green keycard
             else if (kCollected == true && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
             {
-                game->getSoundEngine()->play2D("door2.wav", false);
+                game->getSoundEngine()->play2D("Audio/door.wav", false);
                 player.w = 0;
                 player.a = 0;
                 player.s = 0;
@@ -535,7 +606,7 @@ void Scene2::HandleEvents(const SDL_Event& event)
             else if (kCollected == false && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
             {
                 //play rejection noise if no keycard
-                game->getSoundEngine()->play2D("denied.wav", false);
+                game->getSoundEngine()->play2D("Audio/denied.wav", false);
             }
 
         }
@@ -790,8 +861,8 @@ void Scene2::HandleMovement()
     if (player.collField(key.getPosition()) && kCollected == false)
     {
         kCollected = true;
-        entities.pop_back();
-        game->getSoundEngine()->play2D("beep.wav", false);
+        key.setExist(false);
+        game->getSoundEngine()->play2D("Audio/beep.wav", false);
         std::cout << "Green Key Acquired!" << std::endl;
     }
     //picking up the ammo
@@ -801,7 +872,7 @@ void Scene2::HandleMovement()
 
             ammo[i]->setExist(false);
             attribution: https://freesound.org/people/zivs/sounds/433771/
-            game->getSoundEngine()->play2D("ammo.ogg", false);
+            game->getSoundEngine()->play2D("Audio/ammo.ogg", false);
             std::cout << "Ammo Collected!" << std::endl;
             player.addAmmo(7);
         }
@@ -813,7 +884,7 @@ void Scene2::HandleMovement()
             health[i]->setExist(false);
 
 
-            game->getSoundEngine()->play2D("beep.wav", false);
+            game->getSoundEngine()->play2D("Audio/pills.wav", false);
             std::cout << "Health Acquired!" << std::endl;
             player.addHealth(5);
         }
@@ -825,7 +896,7 @@ void Scene2::HandleMovement()
         {
             if (player.delayActive == false)
             {
-                game->getSoundEngine()->play2D("pain.wav", false);
+                game->getSoundEngine()->play2D("Audio/pain.wav", false);
                 hit = true;
             }
             player.subHealth(1);
@@ -837,7 +908,7 @@ void Scene2::HandleMovement()
         {
             if (player.delayActive == false)
             {
-                game->getSoundEngine()->play2D("pain.wav", false);
+                game->getSoundEngine()->play2D("Audio/pain.wav", false);
                 hit = true;
             }
             player.subHealth(4);
@@ -850,7 +921,7 @@ void Scene2::HandleMovement()
         {
             if (player.delayActive == false)
             {
-                game->getSoundEngine()->play2D("pain.wav", false);
+                game->getSoundEngine()->play2D("Audio/pain.wav", false);
                 hit = true;
             }
             player.subHealth(3);
@@ -1201,14 +1272,24 @@ void Scene2::drawFloorCeiling()
             floorX += floorStepX;
             floorY += floorStepY;
 
-            //we can also change textures using:
-            //if (mapFloor[mapY * mapFloorX + mapX] == 0){}
-
             //floor
-            pixels[x + y * 480] = getpixel(imageFloor, texX, texY);
+            if (mapFloor[mapY * mapWallsX + mapX] == 0)
+            {
+                pixels[x + y * 480] = getpixel(imageFloor, texX, texY);
+            }
+            else if (mapFloor[mapY * mapWallsX + mapX] == 1)
+            {
+                pixels[x + y * 480] = getpixel(imageFloor2, texX, texY);
+            }
             //ceiling
-            pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling, texX, texY);
-
+            if (mapCeiling[mapY * mapWallsX + mapX] == 0)
+            {
+                pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling, texX, texY);
+            }
+            else if (mapCeiling[mapY * mapWallsX + mapX] == 1)
+            {
+                pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling2, texX, texY);
+            }
         }
     }
 }

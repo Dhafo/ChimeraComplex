@@ -51,23 +51,21 @@ bool Scene3::OnCreate()
 
     //load all the images
     //for level generation:
-    imageWall = IMG_Load("wallTest.png");
-    imageWall2 = IMG_Load("wallTest2.png");
-    imageDoor = IMG_Load("door.png");
-    imageDoor2 = IMG_Load("door2.png");
-    imageFloor = IMG_Load("floor2.png");
-    imageCeiling = IMG_Load("ceiling.png");
+    imageWall = IMG_Load("Sprites/Level/wallTest.png");
+    imageWall2 = IMG_Load("Sprites/Level/wallTest2.png");
+    imageDoor = IMG_Load("Sprites/Level/door.png");
+    imageDoor2 = IMG_Load("Sprites/Level/door2.png");
+    imageFloor = IMG_Load("Sprites/Level/floor2.png");
+    imageFloor2 = IMG_Load("Sprites/Level/floor1.png");
+    imageCeiling = IMG_Load("Sprites/Level/ceiling.png");
+    imageCeiling2 = IMG_Load("Sprites/Level/ceiling2.png");
     //for item pickups:
-   
-    healthSprite = IMG_Load("MedicalKit.png");
-    ammoSprite = IMG_Load("HandGunBullet.png");
-
+    healthSprite = IMG_Load("Sprites/Entities/MedicalKit.png");
+    ammoSprite = IMG_Load("Sprites/Entities/HandGunMagazine.png");
     //for enemies:
-  
-    skulkerSprite = IMG_Load("Blinky2.png");
-   
-    bossSprite = IMG_Load("Blinky.png");
-    tendrilSprite = IMG_Load("Blinky3.png");
+    skulkerSprite = IMG_Load("Sprites/Entities/Enemy_Skulker.png");
+    bossSprite = IMG_Load("Sprites/Entities/Boss.png");
+    tendrilSprite = IMG_Load("Sprites/Entities/GroundTendrils.png");
 
     //create textures from the images
     textureWall = SDL_CreateTextureFromSurface(renderer, imageWall);
@@ -75,13 +73,13 @@ bool Scene3::OnCreate()
     textureDoor = SDL_CreateTextureFromSurface(renderer, imageDoor);
     textureDoor2 = SDL_CreateTextureFromSurface(renderer, imageDoor2);
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
+    textureFloor2 = SDL_CreateTextureFromSurface(renderer, imageFloor2);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
+    textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling2);
 
- 
     ammoTexture = SDL_CreateTextureFromSurface(renderer, ammoSprite);
     healthTexture = SDL_CreateTextureFromSurface(renderer, healthSprite);
 
-   
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
    
     bossTexture = SDL_CreateTextureFromSurface(renderer, bossSprite);
@@ -90,7 +88,7 @@ bool Scene3::OnCreate()
     //load all frames of the gun animation
     for (int i = 0; i < 6; i++)
     {
-        std::string gunFrame = "Gun/gun" + std::to_string(i) + ".png";
+        std::string gunFrame = "Sprites/Gun/gun" + std::to_string(i) + ".png";
         SDL_Surface* gunSurf = IMG_Load(gunFrame.c_str());
         SDL_Texture* gunTexture = SDL_CreateTextureFromSurface(renderer, gunSurf);
         SDL_FreeSurface(gunSurf);
@@ -225,13 +223,17 @@ void Scene3::OnDestroy()
     SDL_DestroyTexture(textureWall);
     SDL_DestroyTexture(textureWall2);
     SDL_DestroyTexture(textureFloor);
+    SDL_DestroyTexture(textureFloor2);
     SDL_DestroyTexture(textureCeiling);
+    SDL_DestroyTexture(textureCeiling2);
     SDL_DestroyTexture(textureDoor);
 
     SDL_FreeSurface(imageWall);
     SDL_FreeSurface(imageWall2);
     SDL_FreeSurface(imageFloor);
+    SDL_FreeSurface(imageFloor2);
     SDL_FreeSurface(imageCeiling);
+    SDL_FreeSurface(imageCeiling2);
     SDL_FreeSurface(imageDoor);
   
     SDL_DestroyTexture(ammoTexture);
@@ -258,27 +260,29 @@ void Scene3::Update(const float deltaTime)
     if (player.getCurrentHealth() <= 0)
     {
         game->LoadScene(0);
+        return;
     }
-
-
+    if (boss[0]->getHealth() <= 0)
+    {
+        boss[0]->setExist(false);
+        game->LoadScene(4);
+        return;
+    }
     timeSecond += deltaTime;
 
-    if (timeSecond > 1 ) {
-        time +=1;
+    if (timeSecond > 1) {
+        time += 1;
         timeSecond = 0;
     }
     TendrilTimeing(time);
-    
-
-
 
     //if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering)
-   
+
     for (int i = 0; i < skulker.size(); i++)
     {
-        if (skulker[i]->getHealth() <= 0)
+        if (skulker[i]->getExist() && skulker[i]->getHealth() <= 0)
         {
-
+            game->getSoundEngine()->play2D("Audio/skulkerDeath.ogg", false);
             skulker[i]->setExist(false);
         }
         if (skulkADelay[i] >= 0) {
@@ -286,12 +290,7 @@ void Scene3::Update(const float deltaTime)
         }
     }
 
-    if (boss[0]->getHealth() <= 0)
-    {
 
-        boss[0]->setExist(false);
-        game->LoadScene(0);
-    }
     //if player shoots, play animation by going through all the frames
     if (shootGun)
     {
@@ -331,6 +330,18 @@ void Scene3::Update(const float deltaTime)
         }
     }
 
+    //if player hits something
+    if (aim)
+    {
+        timePassedHit += deltaTime;
+        if (timePassedHit >= 0.1f)
+        {
+            game->getSoundEngine()->play2D("Audio/hit.ogg", false);
+            aim = false;
+            timePassedHit = 0;
+        }
+    }
+
     HandleMovement();
     player.playerUpdate(deltaTime);
 
@@ -341,7 +352,7 @@ void Scene3::Update(const float deltaTime)
         if (timePassedStep >= 0.45f)
         {
             //sound from: https://freesound.org/people/swuing/sounds/38873/
-            ISound* step = game->getSoundEngine()->play2D("step.wav", false, false, true);
+            ISound* step = game->getSoundEngine()->play2D("Audio/step.wav", false, false, true);
             //generate a random number to use as a pitch to create variation in the footsteps
             float random = 0.85f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.89f - 0.85f));
             step->setPlaybackSpeed(random);
@@ -354,21 +365,31 @@ void Scene3::Update(const float deltaTime)
     _itoa_s(player.getAmmo(), playerAmmo, sizeof(playerAmmo), 10); // Gets the ammo for ammo ttf
 
     //depending on vision and open line of sight enemies will move towards the player
-  
 
-   
+
+
 
     for (int i = 0; i < skulker.size(); i++)
     {
         if (EnemyCanSeePlayer(skulker[i]) && skulkADelay[i] <= 0)
         {
-
+            if (skulker[i]->getExist() && skulker[i]->agitated == false)
+            {
+                skulker[i]->agitated = true;
+                game->getSoundEngine()->play2D("Audio/skulker.wav", false);
+            }
             skulker[i]->updatePos(player.getPosition());
+        }
+        else
+        {
+            skulker[i]->agitated = false;
         }
 
     }
 
     Spawns(deltaTime);
+        
+     
 }
 
 
@@ -450,10 +471,16 @@ void Scene3::HandleEvents(const SDL_Event& event)
             
                 for (int i = 0; i < skulker.size(); i++)
                 {
+                    if (TendrilBlock(skulker[i]))
+                    {
+                        aim = true;
+                    }
+
                     if (player.getDistance(skulker[i]->getPosition()) < 64 ) {
 
                         if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
                         {
+                            aim = true;
                             skulker[i]->subtractHealth(1);
                         }
 
@@ -461,31 +488,37 @@ void Scene3::HandleEvents(const SDL_Event& event)
                     else {
                         if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
                         {
+                            aim = true;
                             skulker[i]->subtractHealth(1);
                         }
                     }
 
                 }
 
-               
+                if(TendrilBlock(boss[0]))
+                {
+                    aim = true;
+                }
                 if (player.getDistance(boss[0]->getPosition()) < 64) {
 
-                    if (boss[0]->VisionCheck(player, 20) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
+                    if (boss[0]->getExist() && boss[0]->VisionCheck(player, 20) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
                     {
+                        aim = true;
                         boss[0]->subtractHealth(1);
                     }
 
                 }
                 else {
-                    if (boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
+                    if (boss[0]->getExist() && boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
                     {
+                        aim = true;
                         boss[0]->subtractHealth(1);
                     }
                 }
                
                 
 
-                game->getSoundEngine()->play2D("pistol_shot.wav", false);
+                game->getSoundEngine()->play2D("Audio/pistol_shot.wav", false);
                 shootGun = true;
                 player.subAmmo(1);
             }
@@ -533,7 +566,7 @@ void Scene3::HandleEvents(const SDL_Event& event)
             //4 = regular door
             if (mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 4)
             {
-                game->getSoundEngine()->play2D("door2.wav", false);
+                game->getSoundEngine()->play2D("Audio/door.wav", false);
                 mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
             }
             //5 = door locked by green keycard
@@ -796,7 +829,7 @@ void Scene3::HandleMovement()
 
             ammo[i]->setExist(false);
         attribution: https://freesound.org/people/zivs/sounds/433771/
-            game->getSoundEngine()->play2D("ammo.ogg", false);
+            game->getSoundEngine()->play2D("Audio/ammo.ogg", false);
             std::cout << "Ammo Collected!" << std::endl;
             player.addAmmo(7);
         }
@@ -808,7 +841,7 @@ void Scene3::HandleMovement()
             health[i]->setExist(false);
 
 
-            game->getSoundEngine()->play2D("beep.wav", false);
+            game->getSoundEngine()->play2D("Audio/beep.wav", false);
             std::cout << "Health Acquired!" << std::endl;
             player.addHealth(5);
         }
@@ -820,7 +853,7 @@ void Scene3::HandleMovement()
         {
             if (player.delayActive == false)
             {
-                game->getSoundEngine()->play2D("pain.wav", false);
+                game->getSoundEngine()->play2D("Audio/pain.wav", false);
                 hit = true;
             }
             player.subHealth(2);
@@ -832,7 +865,7 @@ void Scene3::HandleMovement()
         {
             if (player.delayActive == false)
             {
-                game->getSoundEngine()->play2D("pain.wav", false);
+                game->getSoundEngine()->play2D("Audio/pain.wav", false);
                 hit = true;
             }
             player.subHealth(3);
@@ -843,7 +876,7 @@ void Scene3::HandleMovement()
         {
             if (player.delayActive == false)
             {
-                game->getSoundEngine()->play2D("pain.wav", false);
+                game->getSoundEngine()->play2D("Audio/pain.wav", false);
                 hit = true;
             }
             player.subHealth(3);
@@ -854,7 +887,7 @@ void Scene3::HandleMovement()
     {
         if (player.delayActive == false)
         {
-            game->getSoundEngine()->play2D("pain.wav", false);
+            game->getSoundEngine()->play2D("Audio/pain.wav", false);
             hit = true;
         }
         player.subHealth(5);
@@ -1380,13 +1413,25 @@ void Scene3::drawFloorCeiling()
             floorX += floorStepX;
             floorY += floorStepY;
 
-            //we can also change textures using:
-            //if (mapFloor[mapY * mapFloorX + mapX] == 0){}
-
             //floor
-            pixels[x + y * 480] = getpixel(imageFloor, texX, texY);
+            if (mapFloor[mapY * mapWallsX + mapX] == 0)
+            {
+                pixels[x + y * 480] = getpixel(imageFloor, texX, texY);
+            }
+            else if (mapFloor[mapY * mapWallsX + mapX] == 1)
+            {
+                pixels[x + y * 480] = getpixel(imageFloor2, texX, texY);
+            }
             //ceiling
-            pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling, texX, texY);
+            if (mapCeiling[mapY * mapWallsX + mapX] == 0)
+            {
+                pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling, texX, texY);
+            }
+            else if (mapCeiling[mapY * mapWallsX + mapX] == 1)
+            {
+                pixels[x + ((320 - y + 1) * 480)] = getpixel(imageCeiling2, texX, texY);
+            }
+            
 
         }
     }

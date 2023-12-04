@@ -48,6 +48,8 @@ public:
     bool ValidateCurrentScene();
 
     Uint32 getChangeScence();
+
+    void Quit();
  
     
 };
