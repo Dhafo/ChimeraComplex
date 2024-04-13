@@ -80,6 +80,7 @@ bool Scene2::OnCreate()
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
     stalkerTexture = SDL_CreateTextureFromSurface(renderer, stalkerSprite);
 
+
     //load all frames of the gun animation
     for (int i = 0; i < 6; i++)
     {
@@ -464,6 +465,13 @@ void Scene2::Render()
     SDL_RenderCopy(renderer, ammoNameTexture, NULL, &ammoNameRect);
 
     SDL_RenderPresent(renderer);
+
+    //fix crashes thanks hassan
+    SDL_DestroyTexture(healthTextTexture);
+    SDL_FreeSurface(healthText);
+
+    SDL_DestroyTexture(ammoTextTexture);
+    SDL_FreeSurface(ammoText);
 }
 
 void Scene2::HandleEvents(const SDL_Event& event)

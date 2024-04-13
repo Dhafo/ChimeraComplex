@@ -447,6 +447,13 @@ void Scene1::Render()
     SDL_RenderCopy(renderer, ammoNameTexture, NULL, &ammoNameRect);
 
     SDL_RenderPresent(renderer);
+
+    //fix crashes thanks hassan
+    SDL_DestroyTexture(healthTextTexture);
+    SDL_FreeSurface(healthText);
+
+    SDL_DestroyTexture(ammoTextTexture);
+    SDL_FreeSurface(ammoText);
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)
