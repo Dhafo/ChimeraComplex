@@ -65,7 +65,7 @@ bool Scene0::OnCreate() {
             text_texture = SDL_CreateTextureFromSurface(renderer, text);
             dest = { 672,544,text->w,text->h };
         }
-
+        SDL_FreeSurface(text);
         text = TTF_RenderText_Solid(font, "Quit", color);
         if (!text) {
             std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
@@ -75,7 +75,7 @@ bool Scene0::OnCreate() {
             text_texture2 = SDL_CreateTextureFromSurface(renderer, text);
             dest2 = { 672,592,text->w,text->h };
         }
-
+        SDL_FreeSurface(text);
         text = TTF_RenderText_Solid_Wrapped(font, "The facility was once hailed as the pinnacle of scientific achievement, now it's teeming with grotesque monsters. You're just another mercenary that has been thrown at the problem. You have to get to the source.", color, 500);
         if (!text) {
             std::cout << "Failed to render text: " << TTF_GetError() << std::endl;
@@ -85,8 +85,9 @@ bool Scene0::OnCreate() {
             text_lore = SDL_CreateTextureFromSurface(renderer, text);
             dest4 = { 136,448,text->w,text->h };
         }
+        SDL_FreeSurface(text);
     }
-
+    TTF_CloseFont(font);
     font = TTF_OpenFont("Lato-Regular.ttf", 80);
     if (!font) {
         std::cout << "Failed to load" << TTF_GetError() << std::endl;
@@ -106,6 +107,7 @@ bool Scene0::OnCreate() {
             text_texture3 = SDL_CreateTextureFromSurface(renderer, text);
             dest3 = { 256 - 64,256 - 80,text->w,text->h };
         }
+        SDL_FreeSurface(text);
 
     }
 
