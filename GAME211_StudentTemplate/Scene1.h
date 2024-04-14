@@ -20,7 +20,6 @@ class Scene1 : public Scene {
 
 private:
     SDL_GameController* gameController;
-    SDL_Joystick* joystick;
     float xAxis;     // scene width, in game coords, set in constructor
     float yAxis;	// scene height, in game coords, set in constructor
 	SDL_Window* window;		// an SDL window with a SDL renderer

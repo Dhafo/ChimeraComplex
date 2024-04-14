@@ -24,6 +24,10 @@ Scene3::~Scene3()
 
 bool Scene3::OnCreate()
 {
+        // Initialize SDL's joystick subsystem
+    SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
+    // Open the first joystick
+    SDL_GameController* gameController = SDL_GameControllerOpen(0);
     //setting timers to a value
     timeSecond = 0;
     time = 0;
@@ -477,71 +481,143 @@ void Scene3::Render()
     SDL_FreeSurface(ammoText);
 }
 
+void Scene3::Shoot()
+{
+    //player will shoot only if they have ammo
+    if (player.getAmmo() > 0)
+    {
+        //checks angle towards enemy and wall obstructions for the ability to damage foes
+
+        for (int i = 0; i < skulker.size(); i++)
+        {
+            if (TendrilBlock(skulker[i]))
+            {
+                aim = true;
+            }
+
+            if (player.getDistance(skulker[i]->getPosition()) < 64) {
+
+                if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
+                {
+                    aim = true;
+                    skulker[i]->subtractHealth(1);
+                }
+
+            }
+            else {
+                if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
+                {
+                    aim = true;
+                    skulker[i]->subtractHealth(1);
+                }
+            }
+
+        }
+
+        if (TendrilBlock(boss[0]))
+        {
+            aim = true;
+        }
+        if (player.getDistance(boss[0]->getPosition()) < 64) {
+
+            if (boss[0]->getExist() && boss[0]->VisionCheck(player, 20) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
+            {
+                aim = true;
+                boss[0]->subtractHealth(1);
+            }
+
+        }
+        else {
+            if (boss[0]->getExist() && boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
+            {
+                aim = true;
+                boss[0]->subtractHealth(1);
+            }
+        }
+
+
+
+        game->getSoundEngine()->play2D("Audio/pistol_shot.wav", false);
+        shootGun = true;
+        player.subAmmo(1);
+    }
+}
+
 void Scene3::HandleEvents(const SDL_Event& event)
 {
-    if (event.type == SDL_KEYDOWN)
+    if (event.type == SDL_CONTROLLERAXISMOTION)
+    {
+        // Handle move
+        if (event.jaxis.which == 0)
+        {
+            if (event.jaxis.axis == 1) // Y-axis motion
+            {
+                if (event.jaxis.value < -8000)
+                {
+                    player.w = 1;// Handle Y-axis motion (up/down)
+                }
+                else if (event.jaxis.value > 8000)
+                {
+                    player.s = 1;// Handle Y-axis motion (up/down)
+                }
+                else
+                {
+                    player.w = 0;
+                    player.s = 0;
+                }
+
+
+            }
+            else if (event.jaxis.axis == 2)
+            {
+                if (event.jaxis.value < -8000)
+                {
+                    player.a = 1;// Handle Y-axis motion (up/down)
+                }
+                else if (event.jaxis.value > 8000)
+                {
+                    player.d = 1;// Handle Y-axis motion (up/down)
+                }
+                else
+                {
+                    player.a = 0;
+                    player.d = 0;
+                }
+            }
+
+            // You can add more conditions for other axes if needed
+        }
+    }
+    else if (event.type == SDL_CONTROLLERBUTTONDOWN)
+    {
+        if (event.cbutton.which == 0) // Check if the event is from the first joystick
+        {
+            if (event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) // Check if it's the right trigger
+            {
+
+                Shoot();
+                std::cout << "RShoulder\n" << event.cbutton.button;
+
+            }
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+            {
+
+                Interact();
+                std::cout << "LShoulder\n";
+            }
+
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+            {
+                Interact();
+                std::cout << "LShoulder\n";
+            }
+        }
+    }
+    else if (event.type == SDL_KEYDOWN)
     {
         if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
         {
-            //player will shoot only if they have ammo
-            if (player.getAmmo() > 0)
-            {
-                //checks angle towards enemy and wall obstructions for the ability to damage foes
-            
-                for (int i = 0; i < skulker.size(); i++)
-                {
-                    if (TendrilBlock(skulker[i]))
-                    {
-                        aim = true;
-                    }
-
-                    if (player.getDistance(skulker[i]->getPosition()) < 64 ) {
-
-                        if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
-                        {
-                            aim = true;
-                            skulker[i]->subtractHealth(1);
-                        }
-
-                    }
-                    else {
-                        if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]) && TendrilBlock(skulker[i]) == false)
-                        {
-                            aim = true;
-                            skulker[i]->subtractHealth(1);
-                        }
-                    }
-
-                }
-
-                if(TendrilBlock(boss[0]))
-                {
-                    aim = true;
-                }
-                if (player.getDistance(boss[0]->getPosition()) < 64) {
-
-                    if (boss[0]->getExist() && boss[0]->VisionCheck(player, 20) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
-                    {
-                        aim = true;
-                        boss[0]->subtractHealth(1);
-                    }
-
-                }
-                else {
-                    if (boss[0]->getExist() && boss[0]->VisionCheck(player, 3) && EnemyCanSeePlayer(boss[0]) && TendrilBlock(boss[0]) == false)
-                    {
-                        aim = true;
-                        boss[0]->subtractHealth(1);
-                    }
-                }
-               
-                
-
-                game->getSoundEngine()->play2D("Audio/pistol_shot.wav", false);
-                shootGun = true;
-                player.subAmmo(1);
-            }
-
+            Shoot();
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
         {
@@ -561,36 +637,6 @@ void Scene3::HandleEvents(const SDL_Event& event)
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
         {
-            //check if interactable is close enough in front of us
-            int xOffset = 0, yOffset = 0;
-            if (player.getVelocity().x < 0)
-            {
-                xOffset = -25;
-            }
-            else
-            {
-                xOffset = 25;
-            }
-            if (player.getVelocity().y < 0)
-            {
-                yOffset = -25;
-            }
-            else
-            {
-                yOffset = 25;
-            }
-            //using the offsets, we shoot a ray in front of us and check what kind of interactable it is on the grid
-            int gridPlayerX_add_xOffset = (player.getPosition().x + xOffset) / 64.0;
-            int gridPlayerY_add_yOffset = (player.getPosition().y + yOffset) / 64.0;
-            //4 = regular door
-            if (mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 4)
-            {
-                game->getSoundEngine()->play2D("Audio/door.wav", false);
-                mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
-            }
-            //5 = door locked by green keycard
-          
-
         }
     }
     if (event.type == SDL_KEYUP)
@@ -613,6 +659,39 @@ void Scene3::HandleEvents(const SDL_Event& event)
             player.s = 0;
         }
     }
+}
+
+void Scene3::Interact()
+{
+    //check if interactable is close enough in front of us
+    int xOffset = 0, yOffset = 0;
+    if (player.getVelocity().x < 0)
+    {
+        xOffset = -25;
+    }
+    else
+    {
+        xOffset = 25;
+    }
+    if (player.getVelocity().y < 0)
+    {
+        yOffset = -25;
+    }
+    else
+    {
+        yOffset = 25;
+    }
+    //using the offsets, we shoot a ray in front of us and check what kind of interactable it is on the grid
+    int gridPlayerX_add_xOffset = (player.getPosition().x + xOffset) / 64.0;
+    int gridPlayerY_add_yOffset = (player.getPosition().y + yOffset) / 64.0;
+    //4 = regular door
+    if (mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 4)
+    {
+        game->getSoundEngine()->play2D("Audio/door.wav", false);
+        mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
+    }
+    //5 = door locked by green keycard
+
 }
 
 bool Scene3::EnemyCanSeePlayer(Enemy* enemy_)

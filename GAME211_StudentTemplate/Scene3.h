@@ -19,6 +19,7 @@ using namespace MATH;
 class Scene3 : public Scene
 {
 private:
+    SDL_GameController* gameController;
     float xAxis;     // scene width, in game coords, set in constructor
     float yAxis;	// scene height, in game coords, set in constructor
     SDL_Window* window;		// an SDL window with a SDL renderer
@@ -68,6 +69,8 @@ public:
     void Update(const float time);
     void Render();
     void HandleEvents(const SDL_Event& event);
+    void Shoot();
+    void Interact();
 
     float getxAxis()
     {

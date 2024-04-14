@@ -25,14 +25,9 @@ bool Scene1::OnCreate()
 {
     // Initialize SDL's joystick subsystem
     SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
-
-    // Check if any joysticks are available
-  
+    // Open the first joystick
+    SDL_GameController* gameController = SDL_GameControllerOpen(0);
         
-        // Open the first joystick
-        SDL_GameController* gameController = SDL_GameControllerOpen(0);
-  
-
 	int w, h;
 	SDL_GetWindowSize(window,&w,&h);
     //render in 2x scale to stretch image
@@ -169,8 +164,6 @@ bool Scene1::OnCreate()
 void Scene1::OnDestroy() 
 {
     SDL_GameControllerClose(gameController);
-
-  
     TTF_CloseFont(font);
 
     SDL_DestroyTexture(textureWall);
@@ -556,21 +549,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
             {
                 Interact();
                 std::cout << "LShoulder\n";
-            }
-            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
-            {
-                std::cout << "BUTTON_B\n"<< SDL_GameControllerGetBindForButton(gameController, SDL_CONTROLLER_BUTTON_B).value.button;
-            }
-            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-            {
-                std::cout << "BUTTON_X\n";
-            }
-            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
-            {
-                std::cout << "BUTTON_Y\n";
-            }
-
-            
+            }  
         }
     }
     else if (event.type == SDL_KEYDOWN)
