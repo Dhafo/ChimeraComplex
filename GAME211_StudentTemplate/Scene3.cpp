@@ -260,9 +260,10 @@ void Scene3::OnDestroy()
 
     SDL_FreeSurface(ammoName);
     SDL_FreeSurface(healthName);
-    for (Entity* entity : entities)
+    for (int i = 0; i < 6; i++)
     {
-        delete entity;
+
+        SDL_DestroyTexture(textureGun[i]);
     }
     entities.clear();
 
