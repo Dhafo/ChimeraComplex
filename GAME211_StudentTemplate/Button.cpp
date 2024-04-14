@@ -55,6 +55,12 @@ bool Button::OnCreate()
 }
 
 
+void Button::OnDestroy()
+{
+    SDL_DestroyTexture(texture);
+}
+
+
 void Button::Render()
 {
     SDL_Renderer* renderer;

@@ -24,7 +24,6 @@ Scene3::~Scene3()
 
 bool Scene3::OnCreate()
 {
-
     //setting timers to a value
     timeSecond = 0;
     time = 0;
@@ -75,13 +74,12 @@ bool Scene3::OnCreate()
     textureFloor = SDL_CreateTextureFromSurface(renderer, imageFloor);
     textureFloor2 = SDL_CreateTextureFromSurface(renderer, imageFloor2);
     textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling);
-    textureCeiling = SDL_CreateTextureFromSurface(renderer, imageCeiling2);
+    textureCeiling2 = SDL_CreateTextureFromSurface(renderer, imageCeiling2);
 
     ammoTexture = SDL_CreateTextureFromSurface(renderer, ammoSprite);
     healthTexture = SDL_CreateTextureFromSurface(renderer, healthSprite);
 
     skulkerTexture = SDL_CreateTextureFromSurface(renderer, skulkerSprite);
-   
     bossTexture = SDL_CreateTextureFromSurface(renderer, bossSprite);
     tendrilTexture = SDL_CreateTextureFromSurface(renderer, tendrilSprite);
 
@@ -220,6 +218,7 @@ bool Scene3::OnCreate()
 
 void Scene3::OnDestroy()
 {
+    TTF_CloseFont(font);
     SDL_DestroyTexture(textureWall);
     SDL_DestroyTexture(textureWall2);
     SDL_DestroyTexture(textureFloor);
@@ -227,6 +226,7 @@ void Scene3::OnDestroy()
     SDL_DestroyTexture(textureCeiling);
     SDL_DestroyTexture(textureCeiling2);
     SDL_DestroyTexture(textureDoor);
+    SDL_DestroyTexture(textureDoor2);
 
     SDL_FreeSurface(imageWall);
     SDL_FreeSurface(imageWall2);
@@ -235,6 +235,7 @@ void Scene3::OnDestroy()
     SDL_FreeSurface(imageCeiling);
     SDL_FreeSurface(imageCeiling2);
     SDL_FreeSurface(imageDoor);
+    SDL_FreeSurface(imageDoor2);
   
     SDL_DestroyTexture(ammoTexture);
     SDL_DestroyTexture(healthTexture);
@@ -249,6 +250,17 @@ void Scene3::OnDestroy()
     SDL_DestroyTexture(skulkerTexture);
     
     SDL_FreeSurface(skulkerSprite);
+
+    SDL_DestroyTexture(ammoNameTexture);
+    SDL_DestroyTexture(healthNameTexture);
+
+    SDL_FreeSurface(ammoName);
+    SDL_FreeSurface(healthName);
+    for (Entity* entity : entities)
+    {
+        delete entity;
+    }
+    entities.clear();
 
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(screenSurface);

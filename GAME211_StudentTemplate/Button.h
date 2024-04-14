@@ -29,6 +29,7 @@ public:
     Button(const string& fileName, Vec3 position, Scene* owner_);
     ~Button();
     bool OnCreate();
+    void OnDestroy();
     void Render();
     bool clicked(Vec3 mousePos);
 

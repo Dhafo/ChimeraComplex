@@ -110,16 +110,21 @@ bool Scene0::OnCreate() {
     }
 
     game->getSoundEngine()->play2D("Audio/MyVeryOwnDeadShip.ogg", true);
-
+    TTF_CloseFont(font);
     return true;
 }
 
 void Scene0::OnDestroy()
 {
     SDL_DestroyTexture(text_texture);
-
+    SDL_DestroyTexture(text_texture2);
+    SDL_DestroyTexture(text_texture3);
+    SDL_DestroyTexture(text_lore);
     SDL_DestroyTexture(backgroundTexture);
     SDL_FreeSurface(backgroundImage);
+
+    buttonStart->OnDestroy();
+    buttonEnd->OnDestroy();
 
     delete buttonStart;
     delete buttonEnd;

@@ -174,6 +174,7 @@ bool Scene2::OnCreate()
 
 void Scene2::OnDestroy()
 {
+    TTF_CloseFont(font);
     SDL_DestroyTexture(textureWall);
     SDL_DestroyTexture(textureWall2);
     SDL_DestroyTexture(textureFloor);
@@ -181,6 +182,9 @@ void Scene2::OnDestroy()
     SDL_DestroyTexture(textureCeiling);
     SDL_DestroyTexture(textureCeiling2);
     SDL_DestroyTexture(textureDoor);
+    SDL_DestroyTexture(textureDoor2);
+
+    entities.clear();
 
     SDL_FreeSurface(imageWall);
     SDL_FreeSurface(imageWall2);
@@ -189,6 +193,7 @@ void Scene2::OnDestroy()
     SDL_FreeSurface(imageCeiling);
     SDL_FreeSurface(imageCeiling2);
     SDL_FreeSurface(imageDoor);
+    SDL_FreeSurface(imageDoor2);
 
     SDL_DestroyTexture(keyTexture);
     SDL_DestroyTexture(ammoTexture);
@@ -198,13 +203,27 @@ void Scene2::OnDestroy()
     SDL_FreeSurface(healthSprite);
     SDL_FreeSurface(ammoSprite);
 
+    SDL_DestroyTexture(ammoNameTexture);
+    SDL_DestroyTexture(healthNameTexture);
+
+    SDL_FreeSurface(ammoName);
+    SDL_FreeSurface(healthName);
+
     SDL_DestroyTexture(predatorTexture);
+    SDL_DestroyTexture(predatorAgiTexture);
     SDL_DestroyTexture(skulkerTexture);
     SDL_DestroyTexture(stalkerTexture);
 
     SDL_FreeSurface(predatorSprite);
+    SDL_FreeSurface(predatorAgiSprite);
     SDL_FreeSurface(skulkerSprite);
     SDL_FreeSurface(stalkerSprite);
+
+    for (int i = 0; i < 6; i++)
+    {
+
+        SDL_DestroyTexture(textureGun[i]);
+    }
 
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(screenSurface);

@@ -32,7 +32,7 @@ bool Scene4::OnCreate() {
 
     colorFont = { 255, 255, 255 };
     font = TTF_OpenFont("Lato-Regular.ttf", 24);
-
+    
     // Buttons
     ReplayButton = new Button("ButtonBorder.png", Vec3(15.8, 4.35f, 0.0f), this);
     if (!ReplayButton->OnCreate()) {
@@ -53,7 +53,7 @@ bool Scene4::OnCreate() {
     endText = TTF_RenderText_Solid_Wrapped(font, "With unwavering determination, you emerged victorious, the facility now silent, save for your echoing footsteps.", colorFont, 600);
     endTextTexture = SDL_CreateTextureFromSurface(renderer, endText);
 
-    endCredits = TTF_RenderText_Solid(font, "Created by: Yev, Ramy, Peter, Ayo (Attribution in ReadMe)", colorFont);
+    endCredits = TTF_RenderText_Solid(font, "Created by: Yev, Ramy, Peter (Attribution in ReadMe)", colorFont);
     endCreditsTexture = SDL_CreateTextureFromSurface(renderer, endCredits);
     
     // Rects
@@ -76,6 +76,25 @@ bool Scene4::OnCreate() {
 
 void Scene4::OnDestroy()
 {
+    ReplayButton->OnDestroy();
+    QuitButton->OnDestroy();
+    delete ReplayButton;
+    delete QuitButton;
+
+    SDL_DestroyTexture(restartTexture);
+    SDL_FreeSurface(restartText);
+    SDL_DestroyTexture(quitTexture);
+    SDL_FreeSurface(quitText);
+    SDL_DestroyTexture(endTextTexture);
+    SDL_FreeSurface(endText);
+    SDL_DestroyTexture(endCreditsTexture);
+    SDL_FreeSurface(endCredits);
+
+
+
+    TTF_CloseFont(font);
+    SDL_DestroyTexture(backgroundTexture);
+    SDL_FreeSurface(backgroundImage);
 
 
 }

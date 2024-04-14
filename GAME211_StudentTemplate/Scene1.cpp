@@ -23,6 +23,28 @@ Scene1::~Scene1()
 
 bool Scene1::OnCreate() 
 {
+    // Initialize SDL's joystick subsystem
+    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+
+    // Check if any joysticks are available
+    if (SDL_NumJoysticks() > 0)
+    {
+        // Open the first joystick
+        SDL_Joystick* joystick = SDL_JoystickOpen(0);
+        if (joystick)
+        {
+            // Joystick is successfully opened, you can use it
+        }
+        else
+        {
+            // Failed to open joystick
+        }
+    }
+    else
+    {
+        // No joysticks available
+    }
+
 	int w, h;
 	SDL_GetWindowSize(window,&w,&h);
     //render in 2x scale to stretch image
@@ -158,6 +180,9 @@ bool Scene1::OnCreate()
 
 void Scene1::OnDestroy() 
 {
+    SDL_JoystickClose(joystick);
+    TTF_CloseFont(font);
+
     SDL_DestroyTexture(textureWall);
     SDL_DestroyTexture(textureWall2);
     SDL_DestroyTexture(textureFloor);
@@ -165,6 +190,9 @@ void Scene1::OnDestroy()
     SDL_DestroyTexture(textureCeiling);
     SDL_DestroyTexture(textureCeiling2);
     SDL_DestroyTexture(textureDoor);
+    SDL_DestroyTexture(textureDoor2);
+
+    entities.clear();
 
     SDL_FreeSurface(imageWall);
     SDL_FreeSurface(imageWall2);
@@ -173,6 +201,7 @@ void Scene1::OnDestroy()
     SDL_FreeSurface(imageCeiling);
     SDL_FreeSurface(imageCeiling2);
     SDL_FreeSurface(imageDoor);
+    SDL_FreeSurface(imageDoor2);
 
     SDL_DestroyTexture(keyTexture);
     SDL_DestroyTexture(ammoTexture);
@@ -181,14 +210,28 @@ void Scene1::OnDestroy()
     SDL_FreeSurface(keySprite);
     SDL_FreeSurface(healthSprite);
     SDL_FreeSurface(ammoSprite);
+
+    SDL_DestroyTexture(ammoNameTexture);
+    SDL_DestroyTexture(healthNameTexture);
+
+    SDL_FreeSurface(ammoName);
+    SDL_FreeSurface(healthName);
     
     SDL_DestroyTexture(predatorTexture);
+    SDL_DestroyTexture(predatorAgiTexture);
     SDL_DestroyTexture(skulkerTexture);
     SDL_DestroyTexture(stalkerTexture);
 
     SDL_FreeSurface(predatorSprite);
+    SDL_FreeSurface(predatorAgiSprite);
     SDL_FreeSurface(skulkerSprite);
     SDL_FreeSurface(stalkerSprite);
+
+    for (int i = 0; i < 6; i++)
+    {
+      
+        SDL_DestroyTexture(textureGun[i]);
+    }
 
     SDL_DestroyTexture(buffer);
     SDL_FreeSurface(screenSurface);
@@ -458,84 +501,68 @@ void Scene1::Render()
 
 void Scene1::HandleEvents(const SDL_Event& event)
 {
-    if (event.type == SDL_KEYDOWN)
+    if (event.type == SDL_JOYAXISMOTION)
+    {
+        // Handle move
+        if (event.jaxis.which == 0) 
+        {
+            if (event.jaxis.axis == 1) // Y-axis motion
+            {
+                if (event.jaxis.value < -8000)
+                {
+                    player.w = 1;// Handle Y-axis motion (up/down)
+                }
+                else if (event.jaxis.value > 8000)
+                {
+                    player.s = 1;// Handle Y-axis motion (up/down)
+                }
+                else
+                {
+                    player.w = 0;
+                    player.s = 0;
+                }
+
+                
+            }
+            else if (event.jaxis.axis == 2)
+            {
+                if (event.jaxis.value < -8000)
+                {
+                    player.a = 1;// Handle Y-axis motion (up/down)
+                }
+                else if (event.jaxis.value > 8000)
+                {
+                    player.d = 1;// Handle Y-axis motion (up/down)
+                }
+                else
+                {
+                    player.a = 0;
+                    player.d = 0;
+                }
+            }
+        
+            // You can add more conditions for other axes if needed
+        }
+    }
+    else if (event.type == SDL_JOYBUTTONDOWN)
+    {
+        if (event.jbutton.which == 0) // Check if the event is from the first joystick
+        {
+            if (event.jbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) // Check if it's the right trigger
+            {
+                Shoot();
+            }
+            else if (event.jbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+            {
+                Interact();
+            }
+        }
+    }
+    else if (event.type == SDL_KEYDOWN)
     {
         if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
         {
-            //player will shoot only if they have ammo
-            if (player.getAmmo() > 0 && !shootGun)
-            {
-                //checks angle towards enemy and wall obstructions for the ability to damage foes
-                for (int i = 0; i < predator.size(); i++)
-                {
-                    if (player.getDistance(predator[i]->getPosition()) < 64) {
-
-                        if (predator[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(predator[i]))
-                        {
-                            aim = true;
-                            predator[i]->subtractHealth(1);
-                        }
-
-                    }
-                    else{
-                        if (predator[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(predator[i]))
-                        {
-                            aim = true;
-                            predator[i]->subtractHealth(1);
-                        }
-                    }
-
-                   
-                }
-
-                for (int i = 0; i < stalker.size(); i++)
-                {
-                    if (player.getDistance(stalker[i]->getPosition()) < 64) {
-
-                        if (stalker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(stalker[i]))
-                        {
-                            aim = true;
-                            stalker[i]->subtractHealth(1);
-                        }
-
-                    }
-                    else {
-                        if (stalker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(stalker[i]))
-                        {
-                            aim = true;
-                            stalker[i]->subtractHealth(1);
-                        }
-                    }
-
-                   
-                }
-
-                for (int i = 0; i < skulker.size(); i++)
-                {
-                    if (player.getDistance(skulker[i]->getPosition()) < 64) {
-
-                        if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]))
-                        {
-                            aim = true;
-                            skulker[i]->subtractHealth(1);
-                        }
-
-                    }
-                    else {
-                        if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]))
-                        {
-                            aim = true;
-                            skulker[i]->subtractHealth(1);
-                        }
-                    }
-
-                }
-
-                game->getSoundEngine()->play2D("Audio/pistol_shot.wav", false);
-                shootGun = true;
-                player.subAmmo(1);
-            }
-
+            Shoot();
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
         {
@@ -555,50 +582,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
         {
-            //check if interactable is close enough in front of us
-            int xOffset = 0, yOffset = 0;
-            if (player.getVelocity().x < 0)
-            {
-                xOffset = -25;
-            }
-            else
-            {
-                xOffset = 25;
-            }
-            if (player.getVelocity().y < 0)
-            {
-                yOffset = -25;
-            }
-            else
-            {
-                yOffset = 25;
-            }
-            //using the offsets, we shoot a ray in front of us and check what kind of interactable it is on the grid
-            int gridPlayerX_add_xOffset = (player.getPosition().x + xOffset) / 64.0;
-            int gridPlayerY_add_yOffset = (player.getPosition().y + yOffset) / 64.0;
-            //4 = regular door
-            if (mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 4)
-            {
-                game->getSoundEngine()->play2D("Audio/door.wav", false);
-                mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
-            }
-            //5 = door locked by green keycard
-            else if (kCollected == true && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
-            {
-                game->getSoundEngine()->play2D("Audio/door.wav", false);
-                player.w = 0;
-                player.a = 0;
-                player.s = 0;
-                player.d = 0;
-                //load next level
-                game->LoadScene(2);
-            }
-            else if (kCollected == false && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
-            {
-                //play rejection noise if no keycard
-                game->getSoundEngine()->play2D("Audio/denied.wav", false);
-            }
-
+            Interact();
         }
     }
     if (event.type == SDL_KEYUP)
@@ -621,6 +605,135 @@ void Scene1::HandleEvents(const SDL_Event& event)
             player.s = 0;
         }
     }      
+}
+void Scene1::Interact()
+{
+    //check if interactable is close enough in front of us
+    int xOffset = 0, yOffset = 0;
+    if (player.getVelocity().x < 0)
+    {
+        xOffset = -25;
+    }
+    else
+    {
+        xOffset = 25;
+    }
+    if (player.getVelocity().y < 0)
+    {
+        yOffset = -25;
+    }
+    else
+    {
+        yOffset = 25;
+    }
+    //using the offsets, we shoot a ray in front of us and check what kind of interactable it is on the grid
+    int gridPlayerX_add_xOffset = (player.getPosition().x + xOffset) / 64.0;
+    int gridPlayerY_add_yOffset = (player.getPosition().y + yOffset) / 64.0;
+    //4 = regular door
+    if (mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 4)
+    {
+        game->getSoundEngine()->play2D("Audio/door.wav", false);
+        mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] = 0;
+    }
+    //5 = door locked by green keycard
+    else if (kCollected == true && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
+    {
+        game->getSoundEngine()->play2D("Audio/door.wav", false);
+        player.w = 0;
+        player.a = 0;
+        player.s = 0;
+        player.d = 0;
+        //load next level
+        game->LoadScene(2);
+    }
+    else if (kCollected == false && mapWalls[gridPlayerY_add_yOffset * mapWallsX + gridPlayerX_add_xOffset] == 5)
+    {
+        //play rejection noise if no keycard
+        game->getSoundEngine()->play2D("Audio/denied.wav", false);
+    }
+}
+
+void Scene1::Shoot()
+{
+    //player will shoot only if they have ammo
+    if (player.getAmmo() > 0 && !shootGun)
+    {
+        //checks angle towards enemy and wall obstructions for the ability to damage foes
+        for (int i = 0; i < predator.size(); i++)
+        {
+            if (player.getDistance(predator[i]->getPosition()) < 64)
+            {
+
+                if (predator[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(predator[i]))
+                {
+                    aim = true;
+                    predator[i]->subtractHealth(1);
+                }
+
+            }
+            else
+            {
+                if (predator[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(predator[i]))
+                {
+                    aim = true;
+                    predator[i]->subtractHealth(1);
+                }
+            }
+
+
+        }
+
+        for (int i = 0; i < stalker.size(); i++)
+        {
+            if (player.getDistance(stalker[i]->getPosition()) < 64)
+            {
+
+                if (stalker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(stalker[i]))
+                {
+                    aim = true;
+                    stalker[i]->subtractHealth(1);
+                }
+
+            }
+            else
+            {
+                if (stalker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(stalker[i]))
+                {
+                    aim = true;
+                    stalker[i]->subtractHealth(1);
+                }
+            }
+
+
+        }
+
+        for (int i = 0; i < skulker.size(); i++)
+        {
+            if (player.getDistance(skulker[i]->getPosition()) < 64)
+            {
+
+                if (skulker[i]->VisionCheck(player, 20) && EnemyCanSeePlayer(skulker[i]))
+                {
+                    aim = true;
+                    skulker[i]->subtractHealth(1);
+                }
+
+            }
+            else
+            {
+                if (skulker[i]->VisionCheck(player, 3) && EnemyCanSeePlayer(skulker[i]))
+                {
+                    aim = true;
+                    skulker[i]->subtractHealth(1);
+                }
+            }
+
+        }
+
+        game->getSoundEngine()->play2D("Audio/pistol_shot.wav", false);
+        shootGun = true;
+        player.subAmmo(1);
+    }
 }
 
 bool Scene1::EnemyCanSeePlayer(Enemy* enemy_)
