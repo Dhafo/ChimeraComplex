@@ -24,26 +24,14 @@ Scene1::~Scene1()
 bool Scene1::OnCreate() 
 {
     // Initialize SDL's joystick subsystem
-    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+    SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
 
     // Check if any joysticks are available
-    if (SDL_NumJoysticks() > 0)
-    {
+  
+        
         // Open the first joystick
-        SDL_Joystick* joystick = SDL_JoystickOpen(0);
-        if (joystick)
-        {
-            // Joystick is successfully opened, you can use it
-        }
-        else
-        {
-            // Failed to open joystick
-        }
-    }
-    else
-    {
-        // No joysticks available
-    }
+        SDL_GameController* gameController = SDL_GameControllerOpen(0);
+  
 
 	int w, h;
 	SDL_GetWindowSize(window,&w,&h);
@@ -180,7 +168,9 @@ bool Scene1::OnCreate()
 
 void Scene1::OnDestroy() 
 {
-    SDL_JoystickClose(joystick);
+    SDL_GameControllerClose(gameController);
+
+  
     TTF_CloseFont(font);
 
     SDL_DestroyTexture(textureWall);
@@ -501,7 +491,7 @@ void Scene1::Render()
 
 void Scene1::HandleEvents(const SDL_Event& event)
 {
-    if (event.type == SDL_JOYAXISMOTION)
+    if (event.type == SDL_CONTROLLERAXISMOTION)
     {
         // Handle move
         if (event.jaxis.which == 0) 
@@ -544,25 +534,50 @@ void Scene1::HandleEvents(const SDL_Event& event)
             // You can add more conditions for other axes if needed
         }
     }
-    else if (event.type == SDL_JOYBUTTONDOWN)
+    else if (event.type == SDL_CONTROLLERBUTTONDOWN)
     {
-        if (event.jbutton.which == 0) // Check if the event is from the first joystick
+        if (event.cbutton.which == 0) // Check if the event is from the first joystick
         {
-            if (event.jbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) // Check if it's the right trigger
+            if (event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) // Check if it's the right trigger
             {
-                Shoot();
+               
+                    Shoot();
+                    std::cout << "RShoulder\n"<< event.cbutton.button;
+               
             }
-            else if (event.jbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+            {
+
+                Interact();
+                std::cout << "LShoulder\n";
+            }
+           
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
             {
                 Interact();
+                std::cout << "LShoulder\n";
             }
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+            {
+                std::cout << "BUTTON_B\n"<< SDL_GameControllerGetBindForButton(gameController, SDL_CONTROLLER_BUTTON_B).value.button;
+            }
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+            {
+                std::cout << "BUTTON_X\n";
+            }
+            else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
+            {
+                std::cout << "BUTTON_Y\n";
+            }
+
+            
         }
     }
     else if (event.type == SDL_KEYDOWN)
     {
         if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
         {
-            Shoot();
+          Shoot();
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
         {
@@ -580,11 +595,11 @@ void Scene1::HandleEvents(const SDL_Event& event)
         {
             player.s = 1;
         }
-        if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+        if (event.key.keysym.scancode == SDL_SCANCODE_SPACE )
         {
             Interact();
         }
-    }
+    }                               
     if (event.type == SDL_KEYUP)
     {
         if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
