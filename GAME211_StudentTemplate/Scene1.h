@@ -46,6 +46,8 @@ private:
     int screenOffsetX = 16;
     int screenOffsetY = 16;
 
+    float PointDirection(float, float, float, float);
+
 public:
 
 	// This constructor may be different from what you've seen before

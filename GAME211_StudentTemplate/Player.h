@@ -41,5 +41,14 @@ class Player: public Entity
     int getCurrentHealth();
     int getMaxHealth();
     int getAmmo();
+
+
+    void Move(float dx, float dy)
+    {
+
+
+        position.x += dx;
+        position.y += dy;
+    }
 };
 

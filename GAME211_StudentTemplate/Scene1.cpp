@@ -220,6 +220,9 @@ void Scene1::OnDestroy()
     SDL_FreeSurface(screenSurface);
 }
 
+static int yrel = 0;
+static int xrel = 0;
+
 void Scene1::Update(const float deltaTime) 
 {
     //sets scene on player death
@@ -228,6 +231,71 @@ void Scene1::Update(const float deltaTime)
         game->LoadScene(0);
         return;
     }
+
+
+    Vec3 dir = Vec3(xrel, yrel, 0.0f);
+    float mag = VMath::mag(dir);
+
+    if (mag > 8000.0f)
+    {
+
+        float angle = PointDirection(0, 0, (float)xrel, -(float)yrel) - player.getOrientation() * RADIANS_TO_DEGREES;
+        float moveDistance = 0.000001f;
+
+        float xDist = cos(angle * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+        float yDist = sin(angle * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+
+        int xSign = 0;
+        if (abs(xDist) > 0.0f)
+        {
+            xSign = xDist / abs(xDist);
+        }
+        int ySign = 0;
+        if (abs(yDist) > 0.0f)
+        {
+            ySign = yDist / abs(yDist);
+        }
+
+        float collisionDist = 14.0f;
+
+        int gxd = floor((player.getPosition().x + xDist + collisionDist * xSign) / 64.0f);
+        int gyd = floor((player.getPosition().y + yDist + collisionDist * ySign) / 64.0f);
+        
+        if (mapWalls[gyd * mapWallsX + gxd] == 0)
+        {
+            player.Move(xDist, yDist);
+        }
+        else
+        {
+            /// Angle sweep
+            for (int a = 0; a <= 75; a += 5)
+            {
+                float _ang = angle + a;
+                float xDist = cos(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                float yDist = sin(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                int gxd = floor((player.getPosition().x + xDist + collisionDist * xSign) / 64.0f);
+                int gyd = floor((player.getPosition().y + yDist + collisionDist * ySign) / 64.0f);
+                if (mapWalls[gyd * mapWallsX + gxd] == 0)
+                {
+                    player.Move(xDist, yDist);
+                    break;
+                }
+
+                _ang = angle - a;
+                xDist = cos(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                yDist = sin(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                gxd = floor((player.getPosition().x + xDist + collisionDist * xSign) / 64.0f);
+                gyd = floor((player.getPosition().y + yDist + collisionDist * ySign) / 64.0f);
+                if (mapWalls[gyd * mapWallsX + gxd] == 0)
+                {
+                    player.Move(xDist, yDist);
+                    break;
+                }
+            }
+        }
+
+    }
+
 
     //if the enemies are dead their exist bools are set as false(this bool is a requirment for the object functions and rendering
     for (int i = 0; i < predator.size(); i++)
@@ -399,6 +467,7 @@ void Scene1::Render()
 {
     SDL_RenderClear(renderer);
 
+
     //take the pixel buffer from drawFloorCeiling() and update the texture with it, then render on screen
     drawFloorCeiling();
     SDL_UpdateTexture(buffer, NULL, screenSurface->pixels, screenSurface->pitch);
@@ -471,7 +540,7 @@ void Scene1::Render()
     SDL_RenderCopy(renderer, healthNameTexture, NULL, &healthNameRect);
     SDL_RenderCopy(renderer, ammoTextTexture, NULL, &ammoRect);
     SDL_RenderCopy(renderer, ammoNameTexture, NULL, &ammoNameRect);
-
+    
     SDL_RenderPresent(renderer);
 
     //fix crashes thanks hassan
@@ -480,6 +549,11 @@ void Scene1::Render()
 
     SDL_DestroyTexture(ammoTextTexture);
     SDL_FreeSurface(ammoText);
+}
+
+float Scene1::PointDirection(float x1, float y1, float x2, float y2)
+{
+    return atan2(x2 - x1, y2 - y1) * RADIANS_TO_DEGREES;
 }
 
 void Scene1::HandleEvents(const SDL_Event& event)
@@ -491,21 +565,11 @@ void Scene1::HandleEvents(const SDL_Event& event)
         {
             if (event.jaxis.axis == 1) // Y-axis motion
             {
-                if (event.jaxis.value < -8000)
-                {
-                    player.w = 1;// Handle Y-axis motion (up/down)
-                }
-                else if (event.jaxis.value > 8000)
-                {
-                    player.s = 1;// Handle Y-axis motion (up/down)
-                }
-                else
-                {
-                    player.w = 0;
-                    player.s = 0;
-                }
-
-                
+                yrel = event.jaxis.value;
+            }
+            else if (event.jaxis.axis == 0)
+            {
+                xrel = event.jaxis.value;
             }
             else if (event.jaxis.axis == 2)
             {
@@ -523,9 +587,14 @@ void Scene1::HandleEvents(const SDL_Event& event)
                     player.d = 0;
                 }
             }
+
+           
+
         
             // You can add more conditions for other axes if needed
         }
+
+       
     }
     else if (event.type == SDL_CONTROLLERBUTTONDOWN)
     {
@@ -1452,7 +1521,7 @@ void Scene1::entityTick(Entity* entity, SDL_Texture* entityTexture)
         {
             int rayPos = (int)(((i) / 480.0) * 480); //530 is where the screen starts at the moment
             //if direction of this hits wall of distance greater than sprite
-            if (dist < zBuffer[rayPos]) {
+            if (dist < zBuffer[rayPos] &&  width > 0) {
                 SDL_Rect spriteRect = { screenOffsetX + i, screenOffsetY + 320 / 2 + 4, 1,width };
                 SDL_Rect crop = { int(i - (-width / 2 + xTemp)) * 64 / width,0,  1,  64 };
                 SDL_RenderCopy(renderer, entityTexture, &crop, &spriteRect);
