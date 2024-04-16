@@ -4,6 +4,7 @@
 Lead/Graphics Programming by Yev (Dhafo)
 Gameplay/AI Programming by Ramy
 UI Programming/Art by Peter
+Strafing by Sam (Rogapol Interactive)
 
 Sounds used under Attribution copyright:
 

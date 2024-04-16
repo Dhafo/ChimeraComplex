@@ -170,7 +170,7 @@ bool Scene2::OnCreate()
 
     //for UI
     colorFont = { 238, 233, 138 };
-    font = TTF_OpenFont("Roboto-Regular.ttf", 24);
+    font = TTF_OpenFont("UI/Roboto-Regular.ttf", 24);
     healthName = TTF_RenderText_Solid(font, "Health: ", colorFont);
     healthNameTexture = SDL_CreateTextureFromSurface(renderer, healthName);
     healthNameRect = { screenOffsetX,328 + screenOffsetY,healthName->w,healthName->h };

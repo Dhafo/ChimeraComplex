@@ -31,14 +31,14 @@ bool Scene4::OnCreate() {
     IMG_Init(IMG_INIT_PNG);
 
     colorFont = { 255, 255, 255 };
-    font = TTF_OpenFont("Lato-Regular.ttf", 24);
+    font = TTF_OpenFont("UI/Lato-Regular.ttf", 24);
     
     // Buttons
-    ReplayButton = new Button("ButtonBorder.png", Vec3(15.8, 4.35f, 0.0f), this);
+    ReplayButton = new Button("UI/ButtonBorder.png", Vec3(15.8, 4.35f, 0.0f), this);
     if (!ReplayButton->OnCreate()) {
         return false;
     }
-    QuitButton = new Button("ButtonBorder.png", Vec3(15.8f, 3.379f, 0.0f), this);
+    QuitButton = new Button("UI/ButtonBorder.png", Vec3(15.8f, 3.379f, 0.0f), this);
     if (!QuitButton->OnCreate()) {
         return false;
     }
@@ -53,7 +53,7 @@ bool Scene4::OnCreate() {
     endText = TTF_RenderText_Solid_Wrapped(font, "With unwavering determination, you emerged victorious, the facility now silent, save for your echoing footsteps.", colorFont, 600);
     endTextTexture = SDL_CreateTextureFromSurface(renderer, endText);
 
-    endCredits = TTF_RenderText_Solid(font, "Created by: Yev, Ramy, Peter (Attribution in ReadMe)", colorFont);
+    endCredits = TTF_RenderText_Solid(font, "Created by: Yev, Ramy, Sam, Peter (Attribution in ReadMe)", colorFont);
     endCreditsTexture = SDL_CreateTextureFromSurface(renderer, endCredits);
     
     // Rects
@@ -66,7 +66,7 @@ bool Scene4::OnCreate() {
     background = { 0, 0, 1024,768 };
 
     // Background image
-    backgroundImage = IMG_Load("space.png");
+    backgroundImage = IMG_Load("UI/space.png");
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundImage);
 
    

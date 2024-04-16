@@ -28,23 +28,23 @@ bool Scene0::OnCreate() {
     // Set player image to PacMan
 
     // Buttons
-    buttonStart = new Button("ButtonBorder.png", Vec3(15.8, 4.35f, 0.0f), this);
+    buttonStart = new Button("UI/ButtonBorder.png", Vec3(15.8, 4.35f, 0.0f), this);
     if (!buttonStart->OnCreate()) {
         return false;
     }
-    buttonEnd = new Button("ButtonBorder.png", Vec3(15.8f, 3.379f, 0.0f), this);
+    buttonEnd = new Button("UI/ButtonBorder.png", Vec3(15.8f, 3.379f, 0.0f), this);
     if (!buttonEnd->OnCreate()) {
         return false;
     }
 
-    backgroundImage = IMG_Load("space.png");
+    backgroundImage = IMG_Load("UI/space.png");
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundImage);
 
     background = { 0, 0, 1024,768 };
 
     TTF_Font* font;
 
-    font = TTF_OpenFont("Lato-Regular.ttf", 24);
+    font = TTF_OpenFont("UI/Lato-Regular.ttf", 24);
 
     if (!font) {
         std::cout << "Failed to load" << TTF_GetError() << std::endl;
@@ -88,7 +88,7 @@ bool Scene0::OnCreate() {
         SDL_FreeSurface(text);
     }
     TTF_CloseFont(font);
-    font = TTF_OpenFont("Lato-Regular.ttf", 80);
+    font = TTF_OpenFont("UI/Lato-Regular.ttf", 80);
     if (!font) {
         std::cout << "Failed to load" << TTF_GetError() << std::endl;
     }

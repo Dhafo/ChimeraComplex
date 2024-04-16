@@ -3,18 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Scene0.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Button.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene4.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Scene4.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -29,6 +17,22 @@
     {
       "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Scene1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Scene0.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\Button.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -72,10 +76,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\GameDev\\MathLibrary\\include\\Vector.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|solutionrelative:GAME211_StudentTemplate\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{175479CC-1CED-4F93-A605-F0B2298AEB01}|GAME211_StudentTemplate\\GAME211_StudentTemplate.vcxproj|C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -125,24 +125,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Button.cpp",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.cpp",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Button.cpp",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.cpp",
-              "RelativeToolTip": "GAME211_StudentTemplate\\Button.cpp",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAABoAAAAFAAAA",
+              "DocumentIndex": 2,
+              "Title": "Scene2.cpp",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.cpp",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene2.cpp",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.cpp",
+              "RelativeToolTip": "GAME211_StudentTemplate\\Scene2.cpp",
+              "ViewState": "AQIAAJkAAAAAAAAAAAAAAKwAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2023-12-04T02:10:00.317Z",
+              "WhenOpened": "2023-12-04T02:10:00.303Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 9,
+              "Title": "Scene0.h",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.h",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene0.h",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.h",
+              "RelativeToolTip": "GAME211_StudentTemplate\\Scene0.h",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAAADMAAAATAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2023-12-04T02:10:00.311Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Scene2.h",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.h",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene2.h",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.h",
+              "RelativeToolTip": "GAME211_StudentTemplate\\Scene2.h",
+              "ViewState": "AQIAAFQAAAAAAAAAAAAAAF4AAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2023-12-04T02:10:00.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Scene1.h",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.h",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene1.h",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.h",
+              "RelativeToolTip": "GAME211_StudentTemplate\\Scene1.h",
+              "ViewState": "AQIAAFwAAAAAAAAAAAAIwGUAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2023-12-04T02:10:00.196Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Scene3.h",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene3.h",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene3.h",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene3.h",
+              "RelativeToolTip": "GAME211_StudentTemplate\\Scene3.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAIEAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2023-12-04T04:34:06.245Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GameManager.cpp",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.cpp",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\GameManager.cpp",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.cpp",
+              "RelativeToolTip": "GAME211_StudentTemplate\\GameManager.cpp",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAYwFsAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2023-12-04T02:10:00.301Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "Player.cpp",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Player.cpp",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Player.cpp",
@@ -154,98 +214,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Scene2.cpp",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.cpp",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene2.cpp",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.cpp",
-              "RelativeToolTip": "GAME211_StudentTemplate\\Scene2.cpp",
-              "ViewState": "AQIAAMEBAAAAAAAAAAAYwNQBAAAEAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2023-12-04T02:10:00.303Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Scene0.h",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.h",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene0.h",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.h",
-              "RelativeToolTip": "GAME211_StudentTemplate\\Scene0.h",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAAADMAAAATAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2023-12-04T02:10:00.311Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Scene2.h",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.h",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene2.h",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene2.h",
-              "RelativeToolTip": "GAME211_StudentTemplate\\Scene2.h",
-              "ViewState": "AQIAAFQAAAAAAAAAAAAAAF4AAAAOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2023-12-04T02:10:00.307Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Scene1.h",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.h",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene1.h",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.h",
-              "RelativeToolTip": "GAME211_StudentTemplate\\Scene1.h",
-              "ViewState": "AQIAAFwAAAAAAAAAAAAIwGUAAAA1AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2023-12-04T02:10:00.196Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Scene3.h",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene3.h",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene3.h",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene3.h",
-              "RelativeToolTip": "GAME211_StudentTemplate\\Scene3.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAIEAAAA1AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2023-12-04T04:34:06.245Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Scene3.cpp",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene3.cpp",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene3.cpp",
               "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene3.cpp",
               "RelativeToolTip": "GAME211_StudentTemplate\\Scene3.cpp",
-              "ViewState": "AQIAALUBAAAAAAAAAAAIwNABAAAeAAAA",
+              "ViewState": "AQIAAM0AAAAAAAAAAAAAANgAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2023-12-04T02:23:55.264Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "Scene1.cpp",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.cpp",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene1.cpp",
               "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene1.cpp",
               "RelativeToolTip": "GAME211_StudentTemplate\\Scene1.cpp",
-              "ViewState": "AQIAAK0BAAAAAAAAAAAYwMMBAAAqAAAA",
+              "ViewState": "AQIAAEQBAAAAAAAAAAAAAKAAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2023-12-04T02:10:00.241Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "Scene4.h",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene4.h",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene4.h",
@@ -253,38 +248,49 @@
               "RelativeToolTip": "GAME211_StudentTemplate\\Scene4.h",
               "ViewState": "AQIAACgAAAAAAAAAAAAowEQAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2023-12-04T04:05:07.583Z",
-              "EditorCaption": ""
+              "WhenOpened": "2023-12-04T04:05:07.583Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Scene4.cpp",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene4.cpp",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene4.cpp",
               "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene4.cpp",
               "RelativeToolTip": "GAME211_StudentTemplate\\Scene4.cpp",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAG0AAAAxAAAA",
+              "ViewState": "AQIAAJYAAAAAAAAAAAAAAEQAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2023-12-04T03:02:31.145Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Scene0.cpp",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.cpp",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Scene0.cpp",
               "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Scene0.cpp",
               "RelativeToolTip": "GAME211_StudentTemplate\\Scene0.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAAhAAAA",
+              "ViewState": "AQIAAJ8AAAAAAAAAAAAAAFoAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2023-12-04T02:10:00.308Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
+              "Title": "Button.cpp",
+              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.cpp",
+              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Button.cpp",
+              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.cpp",
+              "RelativeToolTip": "GAME211_StudentTemplate\\Button.cpp",
+              "ViewState": "AQIAABsAAAAAAAAAAAAAABoAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2023-12-04T02:10:00.317Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "Button.h",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Button.h",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Button.h",
@@ -292,12 +298,11 @@
               "RelativeToolTip": "GAME211_StudentTemplate\\Button.h",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAAB8AAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2023-12-04T02:10:00.321Z",
-              "EditorCaption": ""
+              "WhenOpened": "2023-12-04T02:10:00.321Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "Enemy.h",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Enemy.h",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Enemy.h",
@@ -309,7 +314,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "Entity.h",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Entity.h",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Entity.h",
@@ -321,7 +326,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "Vector.h",
               "DocumentMoniker": "C:\\GameDev\\MathLibrary\\include\\Vector.h",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\GameDev\\MathLibrary\\include\\Vector.h",
@@ -345,7 +350,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "Enemy.cpp",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Enemy.cpp",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Enemy.cpp",
@@ -353,12 +358,11 @@
               "RelativeToolTip": "GAME211_StudentTemplate\\Enemy.cpp",
               "ViewState": "AQIAABkAAAAAAAAAAABBwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2023-12-04T08:16:29.263Z",
-              "EditorCaption": ""
+              "WhenOpened": "2023-12-04T08:16:29.263Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "Player.h",
               "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\Player.h",
               "RelativeDocumentMoniker": "GAME211_StudentTemplate\\Player.h",
@@ -367,18 +371,6 @@
               "ViewState": "AQIAAAkAAAAAAAAAAAAAAA0AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2023-12-04T02:10:00.302Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "GameManager.cpp",
-              "DocumentMoniker": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.cpp",
-              "RelativeDocumentMoniker": "GAME211_StudentTemplate\\GameManager.cpp",
-              "ToolTip": "C:\\Users\\krige\\Desktop\\GAME211_StudentTemplate-main\\ChimeraComplex\\GAME211_StudentTemplate\\GameManager.cpp",
-              "RelativeToolTip": "GAME211_StudentTemplate\\GameManager.cpp",
-              "ViewState": "AQIAAMwAAAAAAAAAAAAYwNkAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2023-12-04T02:10:00.301Z"
             },
             {
               "$type": "Document",

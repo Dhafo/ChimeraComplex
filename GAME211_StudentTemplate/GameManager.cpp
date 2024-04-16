@@ -91,7 +91,7 @@ Uint32 GameManager::getChangeScence() {
 void GameManager::Run() {
     
 	timer->Start();
-    //SDL_SetWindowFullscreen(windowPtr->GetSDL_Window(), SDL_WINDOW_FULLSCREEN);
+    SDL_SetWindowFullscreen(windowPtr->GetSDL_Window(), SDL_WINDOW_FULLSCREEN);
     
 	while (isRunning) {
         
