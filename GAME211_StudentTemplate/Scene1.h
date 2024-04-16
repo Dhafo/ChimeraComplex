@@ -42,7 +42,7 @@ private:
     float skulkADelay[4];
     float predADelay;
     float stalkADelay;
-
+    bool shoot = false;
     int screenOffsetX = 16;
     int screenOffsetY = 16;
 

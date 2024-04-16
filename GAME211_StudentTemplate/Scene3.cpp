@@ -4,6 +4,11 @@
 #include <algorithm>
 
 using namespace std;
+float Scene3::PointDirection(float x1, float y1, float x2, float y2)
+{
+    return atan2(x2 - x1, y2 - y1) * RADIANS_TO_DEGREES;
+}
+
 // See notes about this constructor in Scene3.h.
 Scene3::Scene3(SDL_Window* sdlWindow_, GameManager* game_)
 {
@@ -271,6 +276,9 @@ void Scene3::OnDestroy()
     SDL_FreeSurface(screenSurface);
 }
 
+static int yrel = 0;
+static int xrel = 0;
+
 void Scene3::Update(const float deltaTime)
 {
     //sets scene on player death
@@ -279,6 +287,73 @@ void Scene3::Update(const float deltaTime)
         game->LoadScene(0);
         return;
     }
+
+
+    Vec3 dir = Vec3(xrel, yrel, 0.0f);
+    float mag = VMath::mag(dir);
+
+    if (mag > 8000.0f)
+    {
+
+        float angle = PointDirection(0, 0, (float)xrel, -(float)yrel) - player.getOrientation() * RADIANS_TO_DEGREES;
+        float moveDistance = 0.000001f;
+
+        float xDist = cos(angle * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+        float yDist = sin(angle * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+
+        int xSign = 0;
+        if (abs(xDist) > 0.0f)
+        {
+            xSign = xDist / abs(xDist);
+        }
+        int ySign = 0;
+        if (abs(yDist) > 0.0f)
+        {
+            ySign = yDist / abs(yDist);
+        }
+
+        float collisionDist = 14.0f;
+
+        int gxd = floor((player.getPosition().x + xDist + collisionDist * xSign) / 64.0f);
+        int gyd = floor((player.getPosition().y + yDist + collisionDist * ySign) / 64.0f);
+
+        if (mapWalls[gyd * mapWallsX + gxd] == 0)
+        {
+            player.Move(xDist, yDist);
+        }
+        else
+        {
+            /// Angle sweep
+            for (int a = 0; a <= 75; a += 5)
+            {
+                float _ang = angle + a;
+                float xDist = cos(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                float yDist = sin(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                int gxd = floor((player.getPosition().x + xDist + collisionDist * xSign) / 64.0f);
+                int gyd = floor((player.getPosition().y + yDist + collisionDist * ySign) / 64.0f);
+                if (mapWalls[gyd * mapWallsX + gxd] == 0)
+                {
+                    player.Move(xDist, yDist);
+                    break;
+                }
+
+                _ang = angle - a;
+                xDist = cos(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                yDist = sin(_ang * DEGREES_TO_RADIANS) * RADIANS_TO_DEGREES * moveDistance * mag;
+                gxd = floor((player.getPosition().x + xDist + collisionDist * xSign) / 64.0f);
+                gyd = floor((player.getPosition().y + yDist + collisionDist * ySign) / 64.0f);
+                if (mapWalls[gyd * mapWallsX + gxd] == 0)
+                {
+                    player.Move(xDist, yDist);
+                    break;
+                }
+            }
+        }
+
+    }
+
+
+
     if (boss[0]->getHealth() <= 0)
     {
         boss[0]->setExist(false);
@@ -544,6 +619,8 @@ void Scene3::Shoot()
     }
 }
 
+static int cam = 0;
+
 void Scene3::HandleEvents(const SDL_Event& event)
 {
     if (event.type == SDL_CONTROLLERAXISMOTION)
@@ -551,42 +628,33 @@ void Scene3::HandleEvents(const SDL_Event& event)
         // Handle move
         if (event.jaxis.which == 0)
         {
-            if (event.jaxis.axis == 1) // Y-axis motion
+            if (event.jaxis.axis == 0)
             {
-                if (event.jaxis.value < -8000)
-                {
-                    player.w = 1;// Handle Y-axis motion (up/down)
-                }
-                else if (event.jaxis.value > 8000)
-                {
-                    player.s = 1;// Handle Y-axis motion (up/down)
-                }
-                else
-                {
-                    player.w = 0;
-                    player.s = 0;
-                }
-
-
+                xrel = event.jaxis.value;
             }
+
+            else if (event.jaxis.axis == 1) // Y-axis motion
+            {
+                yrel = event.jaxis.value;
+            }
+
             else if (event.jaxis.axis == 2)
             {
-                if (event.jaxis.value < -8000)
-                {
-                    player.a = 1;// Handle Y-axis motion (up/down)
-                }
-                else if (event.jaxis.value > 8000)
-                {
-                    player.d = 1;// Handle Y-axis motion (up/down)
-                }
-                else
-                {
-                    player.a = 0;
-                    player.d = 0;
-                }
+                cam = event.jaxis.value;
             }
 
-            // You can add more conditions for other axes if needed
+            else if (event.jaxis.axis == 5) //trigger right?
+            {
+                if (event.jaxis.value > 8000 && !shoot)
+                {
+                    shoot = true;
+                    Shoot();
+                }
+                else if (event.jaxis.value <= 0)
+                {
+                    shoot = false;
+                }
+            }
         }
     }
     else if (event.type == SDL_CONTROLLERBUTTONDOWN)
@@ -595,22 +663,16 @@ void Scene3::HandleEvents(const SDL_Event& event)
         {
             if (event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) // Check if it's the right trigger
             {
-
                 Shoot();
-                std::cout << "RShoulder\n" << event.cbutton.button;
-
             }
             else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
             {
-
                 Interact();
-                std::cout << "LShoulder\n";
             }
 
             else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
             {
                 Interact();
-                std::cout << "LShoulder\n";
             }
         }
     }
@@ -638,6 +700,7 @@ void Scene3::HandleEvents(const SDL_Event& event)
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
         {
+            Interact();
         }
     }
     if (event.type == SDL_KEYUP)
@@ -851,9 +914,10 @@ bool Scene3::EnemyCanSeePlayer(Enemy* enemy_)
 void Scene3::HandleMovement()
 {
     //if player.a or player.d is 1, we are in the process of turning the player
-    if (player.a == 1)
+    if (cam < -8000)
     {
-        player.setOrientation(player.getOrientation() + 0.030);
+        float normCam = 2 * (cam + 32768.0f) / (32767.0f + 32768.0f) - 1.0f;
+        player.setOrientation(player.getOrientation() - 0.028 * normCam);
         if (player.getOrientation() > 2 * PI)
         {
             player.setOrientation(player.getOrientation() - 2 * PI);
@@ -861,10 +925,28 @@ void Scene3::HandleMovement()
         player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
     }
 
+    else if (cam > 8000)
+    {
+        float normCam = 2 * (cam + 32768.0f) / (32767.0f + 32768.0f) - 1.0f;
+        player.setOrientation(player.getOrientation() - 0.028 * normCam);
+        if (player.getOrientation() < 0)
+        {
+            player.setOrientation(player.getOrientation() + 2 * PI);
+        }
+        player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
+    }
     if (player.d == 1)
     {
-
-        player.setOrientation(player.getOrientation() - 0.030);
+        player.setOrientation(player.getOrientation() - 0.028);
+        if (player.getOrientation() < 0)
+        {
+            player.setOrientation(player.getOrientation() + 2 * PI);
+        }
+        player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
+    }
+    else if (player.a == 1)
+    {
+        player.setOrientation(player.getOrientation() + 0.028);
         if (player.getOrientation() < 0)
         {
             player.setOrientation(player.getOrientation() + 2 * PI);

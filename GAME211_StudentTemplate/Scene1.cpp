@@ -232,7 +232,6 @@ void Scene1::Update(const float deltaTime)
         return;
     }
 
-
     Vec3 dir = Vec3(xrel, yrel, 0.0f);
     float mag = VMath::mag(dir);
 
@@ -556,6 +555,9 @@ float Scene1::PointDirection(float x1, float y1, float x2, float y2)
     return atan2(x2 - x1, y2 - y1) * RADIANS_TO_DEGREES;
 }
 
+
+static int cam = 0;
+
 void Scene1::HandleEvents(const SDL_Event& event)
 {
     if (event.type == SDL_CONTROLLERAXISMOTION)
@@ -563,38 +565,34 @@ void Scene1::HandleEvents(const SDL_Event& event)
         // Handle move
         if (event.jaxis.which == 0) 
         {
-            if (event.jaxis.axis == 1) // Y-axis motion
-            {
-                yrel = event.jaxis.value;
-            }
-            else if (event.jaxis.axis == 0)
+            if (event.jaxis.axis == 0)
             {
                 xrel = event.jaxis.value;
             }
+
+            else if (event.jaxis.axis == 1) // Y-axis motion
+            {
+                yrel = event.jaxis.value;
+            }
+            
             else if (event.jaxis.axis == 2)
             {
-                if (event.jaxis.value < -8000)
-                {
-                    player.a = 1;// Handle Y-axis motion (up/down)
-                }
-                else if (event.jaxis.value > 8000)
-                {
-                    player.d = 1;// Handle Y-axis motion (up/down)
-                }
-                else
-                {
-                    player.a = 0;
-                    player.d = 0;
-                }
+                cam = event.jaxis.value;
             }
 
-           
-
-        
-            // You can add more conditions for other axes if needed
+            else if (event.jaxis.axis == 5) //trigger right?
+            {
+                if(event.jaxis.value > 8000 && !shoot)
+                {
+                    shoot = true;
+                    Shoot();
+                }
+                else if(event.jaxis.value <= 0)
+                {
+                    shoot = false;
+                }
+            }
         }
-
-       
     }
     else if (event.type == SDL_CONTROLLERBUTTONDOWN)
     {
@@ -604,20 +602,17 @@ void Scene1::HandleEvents(const SDL_Event& event)
             {
                
                     Shoot();
-                    std::cout << "RShoulder\n"<< event.cbutton.button;
                
             }
             else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
             {
 
                 Interact();
-                std::cout << "LShoulder\n";
             }
            
             else if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
             {
                 Interact();
-                std::cout << "LShoulder\n";
             }  
         }
     }
@@ -955,9 +950,10 @@ bool Scene1::EnemyCanSeePlayer(Enemy* enemy_)
 void Scene1::HandleMovement()
 {
     //if player.a or player.d is 1, we are in the process of turning the player
-    if (player.a == 1)
+    if (cam < -8000)
     {
-        player.setOrientation(player.getOrientation() + 0.030);
+        float normCam = 2 * (cam + 32768.0f) / (32767.0f + 32768.0f) - 1.0f;
+        player.setOrientation(player.getOrientation() - 0.028 * normCam);
         if (player.getOrientation() > 2 * PI)
         {
             player.setOrientation(player.getOrientation() - 2 * PI);
@@ -965,10 +961,28 @@ void Scene1::HandleMovement()
         player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
     }
 
+    else if  (cam > 8000)
+    {
+        float normCam = 2 * (cam + 32768.0f) / (32767.0f + 32768.0f) - 1.0f;
+        player.setOrientation(player.getOrientation() - 0.028 * normCam);
+        if (player.getOrientation() < 0)
+        {
+            player.setOrientation(player.getOrientation() + 2 * PI);
+        }
+        player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
+    }
     if (player.d == 1)
     {
-
-        player.setOrientation(player.getOrientation() - 0.030);
+        player.setOrientation(player.getOrientation() - 0.028);
+        if (player.getOrientation() < 0)
+        {
+            player.setOrientation(player.getOrientation() + 2 * PI);
+        }
+        player.setvelocity(Vec2(cos(-player.getOrientation()) * 1.75f, sin(-player.getOrientation()) * 1.75));
+    }
+    else if (player.a == 1)
+    {
+        player.setOrientation(player.getOrientation() + 0.028);
         if (player.getOrientation() < 0)
         {
             player.setOrientation(player.getOrientation() + 2 * PI);

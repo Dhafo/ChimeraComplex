@@ -50,9 +50,11 @@ private:
     std::vector<Entity*> entities;
     float skulkADelay[2];
     int centerAttackPhase;
-
+    bool shoot = false;
     int screenOffsetX = 16;
     int screenOffsetY = 16;
+
+    float PointDirection(float, float, float, float);
 
     
 

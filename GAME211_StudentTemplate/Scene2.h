@@ -43,9 +43,11 @@ private:
     std::vector<Entity*> health;
     //Combined array holding each entity
     std::vector<Entity*> entities;
-
+    bool shoot = false;
     int screenOffsetX = 16;
     int screenOffsetY = 16;
+
+    float PointDirection(float, float, float, float);
 
 public:
     // This constructor may be different from what you've seen before
